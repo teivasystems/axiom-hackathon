@@ -1,0 +1,23 @@
+# now-sdk
+.sdk/
+*.token
+now.config.local.json
+
+# Build output
+dist/
+build/
+*.pkg
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+
+# Temporary
+*.tmp
+.cache/
