@@ -128,6 +128,10 @@ Read these before building. Do not override decisions in these docs
 without flagging a conflict to Alex first.
 
 ```
+playbook/WORKFLOW.md                           ← READ FIRST: end-to-end process,
+                                                 Jira lifecycle, handover protocol,
+                                                 dependency map, rules
+
 runs/2026-05_creatorcon/docs/architecture.md   ← Sam's data model, integration spec, build order
                                                   [REQUIRED before any build work begins]
 

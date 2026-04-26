@@ -7,12 +7,13 @@ This directory is independent of any specific hackathon run.
 
 ## What is in here
 
-| Directory | Contents |
+| File / Directory | Contents |
 |---|---|
-| `personas/` | Profile + Claude.ai system prompt for each team member |
-| `process/` | Step-by-step guides for each phase (ideation, architecture, pitch, day-of) |
-| `setup/` | Infrastructure, Claude Code, and Claude.ai configuration guides |
+| `WORKFLOW.md` | **Start here.** End-to-end process: all phases, Jira lifecycle, handover protocol, dependency map, absolute rules |
 | `team_charter.md` | Full persona definitions, operating protocol, handover format |
+| `personas/` | Profile + Claude.ai system prompt for each team member |
+| `process/` | Detailed guides for each phase (ideation, architecture, pitch, day-of) |
+| `setup/` | Infrastructure, Claude Code, and Claude.ai configuration guides |
 
 ---
 
