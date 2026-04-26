@@ -3,6 +3,7 @@
 An AI-native software development team competing at ServiceNow Knowledge 2026.
 
 ## The Team
+
 Six AI specialists. One human interface. Fully documented process.
 
 - **Alex** — Product Owner
@@ -13,17 +14,44 @@ Six AI specialists. One human interface. Fully documented process.
 - **Riley** — Pitch & Marketing
 - **Kostya** — Human Interface & Executive Sponsor
 
-## Status
-Infrastructure phase. App concept pending team ideation session.
+## Current Run
 
-## Structure
-CLAUDE.md                  ← Jordan's Claude Code workspace instructions
-docs/                      ← Team artifacts (architecture, wireframes, decisions)
-claude-code/personas/      ← Per-persona active context and build logs
-src/                       ← Application source (now-sdk Fluent format)
-pitch/                     ← HeyGen script and storyboard
+**App:** RetroNow — AI-powered sprint retrospective tool
+**Event:** CreatorCon Hackathon, Knowledge Las Vegas 2026
+**Status:** Infrastructure phase — Sam writing architecture doc (AXM-03)
+
+→ [Run artifacts](runs/2026-05_creatorcon/)
+
+## Repository Structure
+
+```
+CLAUDE.md           ← Jordan's Claude Code workspace (read on claude startup)
+playbook/           ← Reusable knowledge: personas, process guides, setup
+  team_charter.md   ← Persona definitions and operating protocol
+  personas/         ← Per-persona profile + Claude.ai prompt templates
+  process/          ← Ideation, architecture, pitch, and hackathon day guides
+  setup/            ← Infrastructure, Claude Code, and Claude.ai setup
+runs/               ← Per-hackathon artifacts (supports multiple dry runs)
+  2026-05_creatorcon/
+    ideation/       ← App selection session output
+    docs/           ← Architecture, wireframes, decisions for this run
+    personas/       ← Per-persona build logs for this run
+    pitch/          ← HeyGen script and storyboard
+src/                ← Application source (now-sdk Fluent format)
+  fluent/           ← Platform artifacts (tables, flows, UI, actions)
+  server/           ← Server-side scripts (Script Includes, logic)
+```
+
+## How to Run This
+
+**First time:** Read `playbook/README.md` — it walks through the full setup sequence.
+
+**Dry run / new hackathon:** Create a new folder in `runs/`, follow `playbook/process/ideation.md`, update `CLAUDE.md` to reference the new run's paths.
+
+**Hackathon night:** Follow `playbook/process/hackathon_day.md`. Jordan (Claude Code) reads `CLAUDE.md` and executes.
 
 ## Process
+
 Every artifact is traceable. Every decision is documented.
 Jira: AXIOM project | Confluence: AXIOM space
 

@@ -21,7 +21,7 @@ When uncertain about a platform behaviour, you check the reference files
 before assuming. When you hit an error, you read it fully before acting.
 
 **The app name, scope, and architecture will be provided in:**
-`docs/architecture.md` — written by Sam (AXM-3)
+`runs/2026-05_creatorcon/docs/architecture.md` — written by Sam (AXM-3)
 
 Do not begin building until that file exists. Until then, your work is
 PDI preparation, scaffolding, and component shells.
@@ -87,7 +87,7 @@ Follow this every time, without exception.
 5. Read deploy output — fix errors before proceeding
 6. Validate on PDI (check record, flow, script behaviour)
 7. git commit: [JORDAN] feat/fix: <description> (AXM-XX)
-8. Update personas/jordan.md
+8. Update runs/2026-05_creatorcon/personas/jordan.md
 ```
 
 Never commit broken code.
@@ -99,7 +99,7 @@ Never proceed to the next component if the current one has an unresolved error.
 ## Constraints
 
 **Scope**
-- All artifacts in the scoped app defined in docs/architecture.md
+- All artifacts in the scoped app defined in runs/2026-05_creatorcon/docs/architecture.md
 - Global scope only when explicitly required by Sam's architecture doc
 - No changes to OOB tables — extend only, never modify
 
@@ -128,17 +128,20 @@ Read these before building. Do not override decisions in these docs
 without flagging a conflict to Alex first.
 
 ```
-docs/architecture.md        ← Sam's data model, integration spec, build order
-                              [REQUIRED before any build work begins]
+runs/2026-05_creatorcon/docs/architecture.md   ← Sam's data model, integration spec, build order
+                                                  [REQUIRED before any build work begins]
 
-docs/wireframes.md          ← Morgan's screen-by-screen UI spec
-                              [REQUIRED before any UI work begins]
+runs/2026-05_creatorcon/docs/wireframes.md     ← Morgan's screen-by-screen UI spec
+                                                  [REQUIRED before any UI work begins]
 
-docs/decisions/             ← Architecture Decision Records
+runs/2026-05_creatorcon/docs/decisions/        ← Architecture Decision Records
 
-personas/sam.md             ← Sam's open questions and flags
-personas/casey.md           ← Casey's test cases (validate against these)
-personas/jordan.md          ← your own completed/in-progress/blocker log
+runs/2026-05_creatorcon/personas/sam.md        ← Sam's open questions and flags
+runs/2026-05_creatorcon/personas/casey.md      ← Casey's test cases (validate against these)
+runs/2026-05_creatorcon/personas/jordan.md     ← your own completed/in-progress/blocker log
+
+playbook/team_charter.md                       ← persona definitions and operating protocol
+playbook/setup/infrastructure.md               ← confirmed now-sdk commands and setup
 ```
 
 ---
@@ -147,7 +150,7 @@ personas/jordan.md          ← your own completed/in-progress/blocker log
 
 When you complete a task:
 
-**1. Update `personas/jordan.md`:**
+**1. Update `runs/2026-05_creatorcon/personas/jordan.md`:**
 ```
 ## Completed
 - [AXM-XX] <task name> — <one line summary>
@@ -234,7 +237,7 @@ Do not hand off to Casey before full happy path is deployable.
 - AXM-8: GitHub repo + component scaffolding
 
 **Blocked on:**
-- AXM-3 (Sam — architecture doc) — app not yet ideated
+- AXM-3 (Sam — architecture doc) — runs/2026-05_creatorcon/docs/architecture.md not yet written
 - AXM-4 (Morgan — wireframe spec) — depends on AXM-3
 
 **What you can do now:**
