@@ -1,6 +1,6 @@
 # AXIOM — Claude Code Workspace
 # Jordan | Lead Developer | Team AXIOM
-# ServiceNow Now Platform (Yokohama) | now-sdk 4.6.0
+# ServiceNow Now Platform (Zurich/Australia) | now-sdk 4.6.0
 
 ---
 
@@ -124,28 +124,25 @@ Never proceed to the next component if the current one has an unresolved error.
 
 ## Reference Files
 
-Read these before building. Do not override decisions in these docs
-without flagging a conflict to Alex first.
+Read these before building. Do not override decisions in these docs without flagging a conflict to Alex first.
+
 
 ```
-playbook/WORKFLOW.md                           ← READ FIRST: end-to-end process,
-                                                 Jira lifecycle, handover protocol,
-                                                 dependency map, rules
+playbook/WORKFLOW.md                                    ← READ FIRST: end-to-end process, Jira lifecycle, handover protocol, dependency map, rules
+playbook/skills/platform.md                            ← ServiceNow platform patterns: GlideRecord, scoped app conventions, ACLs, sys_id, Yokohama gotchas
+playbook/skills/flows.md                               ← Flow Designer: trigger types, action steps, subflows, variable naming, error handling
+playbook/skills/integration.md                         ← IntegrationHub REST step, credential alias pattern, Claude API request/response shape
+playbook/skills/ui.md                                  ← UI Builder vs Service Portal decision, widget patterns, client scripts, data binding
+runs/2026-05_creatorcon/docs/architecture.md           ← Sam's data model, integration spec, build order [REQUIRED before any build work begins]
+runs/2026-05_creatorcon/docs/wireframes.md             ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work begins]
+runs/2026-05_creatorcon/docs/decisions/                ← Architecture Decision Records
+runs/2026-05_creatorcon/personas/sam.md                ← Sam's open questions and flags
+runs/2026-05_creatorcon/personas/casey.md              ← Casey's test cases (validate against these)
+runs/2026-05_creatorcon/personas/jordan.md             ← your own completed/in-progress/blocker log
+playbook/team_charter.md                               ← persona definitions and operating protocol
+playbook/setup/infrastructure.md                       ← confirmed now-sdk commands and setup
 
-runs/2026-05_creatorcon/docs/architecture.md   ← Sam's data model, integration spec, build order
-                                                  [REQUIRED before any build work begins]
 
-runs/2026-05_creatorcon/docs/wireframes.md     ← Morgan's screen-by-screen UI spec
-                                                  [REQUIRED before any UI work begins]
-
-runs/2026-05_creatorcon/docs/decisions/        ← Architecture Decision Records
-
-runs/2026-05_creatorcon/personas/sam.md        ← Sam's open questions and flags
-runs/2026-05_creatorcon/personas/casey.md      ← Casey's test cases (validate against these)
-runs/2026-05_creatorcon/personas/jordan.md     ← your own completed/in-progress/blocker log
-
-playbook/team_charter.md                       ← persona definitions and operating protocol
-playbook/setup/infrastructure.md               ← confirmed now-sdk commands and setup
 ```
 
 ---
@@ -234,22 +231,28 @@ Do not hand off to Casey before full happy path is deployable.
 ## Current Sprint
 
 **Sprint:** AXIOM-PREP
-**Status:** Infrastructure setup phase
+**Status:** Skills and runbook phase
 
 **Your active tickets:**
-- AXM-7: PDI pre-configuration checklist
-- AXM-8: GitHub repo + component scaffolding
+- AXM-17: Claude Code Skill Files — `playbook/skills/` (in progress)
+- AXM-19: CLAUDE.md Update — App-Specific Context ([app name]) (blocked on AXM-3)
+
+**Completed this sprint:**
+- AXM-7: PDI pre-configuration checklist ✅ (deferred to hackathon day)
+- AXM-8: now-sdk App Scaffold + PDI Deploy Cycle ✅ (deferred to hackathon day)
+- AXM-11: now-sdk OAuth Credential Setup ✅
+- AXM-12: CLAUDE.md — Jordan's Claude Code Workspace ✅
+- AXM-15: Confirm now-sdk init + transform flags ✅
 
 **Blocked on:**
-- AXM-3 (Sam — architecture doc) — runs/2026-05_creatorcon/docs/architecture.md not yet written
+- AXM-3 (Sam — architecture doc) — `runs/2026-05_creatorcon/docs/architecture.md` not yet written
 - AXM-4 (Morgan — wireframe spec) — depends on AXM-3
+- AXM-19 (CLAUDE.md app-specific update) — depends on AXM-3
 
 **What you can do now:**
-- Confirm PDI plugins and capabilities
-- Verify now-sdk build/deploy cycle works end-to-end
-- Write reusable Script Include shells with JSDoc headers
-- Write ClaudeIntegration.ts shell (Claude API wrapper pattern
-  is known regardless of app — Sam will confirm usage in AXM-3)
+- Complete `playbook/skills/` files (AXM-17)
+- Review and validate skill files against known PDI behaviour
+- App scope name, component list, and integration pattern details deferred to AXM-19 (post-ideation)
 
 ---
 
