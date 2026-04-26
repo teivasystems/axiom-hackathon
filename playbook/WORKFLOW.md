@@ -1,8 +1,11 @@
 # Team AXIOM — End-to-End Workflow
+
 ## The complete operating manual for every AI persona
 
-**Read this document before starting any task.**
-It tells you where the project is, what you must do, how to hand off, and how to update Jira.
+> **Read this document before starting any task.**
+> It tells you where the project is, what you must do, how to hand off,
+> how to update Jira, and how to maintain the logs that keep everyone
+> oriented when time is short.
 
 ---
 
@@ -12,22 +15,28 @@ Before doing anything, answer these three questions:
 
 **1. Which phase is the project in?**
 
-| Phase | Entry condition | End condition |
-|---|---|---|
-| PREP | Repo exists | All pre-hackathon artifacts ready, clock starts |
-| BUILD | Hackathon clock starts | Full app deployed and Casey signs off |
-| PITCH | Casey signs off | Video uploaded |
-| SUBMIT | Video uploaded | Submission confirmed |
+| Phase  | Entry condition                    | End condition                          |
+|--------|------------------------------------|----------------------------------------|
+| PREP   | Repo exists                        | All pre-hackathon artifacts ready, clock starts |
+| BUILD  | Hackathon clock starts             | Full app deployed and Casey signs off  |
+| PITCH  | Casey signs off                    | Video uploaded                         |
+| SUBMIT | Video uploaded                     | Submission confirmed                   |
 
-Check by reading `runs/[run]/README.md` — the artifact index shows what is done and what is pending.
+Check by reading `runs/[run]/README.md` — the artifact index shows what is done
+and what is pending. If README is stale, check `runs/[run]/logs/ACTIVITY.log` —
+the last 10 entries show current state faster than anything else.
 
 **2. Which ticket is yours?**
 
-Check `runs/[run]/README.md` → Ticket Status table. Find your persona's tickets. The ones marked `In Progress` are yours. If none are `In Progress`, check `Backlog` for the next unstarted ticket assigned to your persona.
+Check `runs/[run]/README.md` → Ticket Status table. Find your persona's tickets.
+The ones marked `In Progress` are yours. If none are `In Progress`, check `Backlog`
+for the next unstarted ticket assigned to your persona.
 
 **3. What must exist before you can start?**
 
-Each ticket has entry conditions (listed in the Phase sections below). If an entry condition is not met, do not start — document the block and escalate to Kostya.
+Each ticket has entry conditions (listed in the Phase sections below). If an entry
+condition is not met, do not start — document the block in `ACTIVITY.log` and
+escalate to Kostya.
 
 ---
 
@@ -69,16 +78,130 @@ SUBMIT Phase
 
 ---
 
+## Run Initialisation (do this once, before PREP work begins)
+
+**Who:** Kostya (or Alex if Kostya is unavailable)
+**When:** Before AXM-02 starts. Takes < 5 minutes.
+
+```bash
+# 1. Create the run folder and log directory
+mkdir -p runs/[run]/logs
+
+# 2. Copy log templates into the run
+cp playbook/log-templates/ACTIVITY.log  runs/[run]/logs/ACTIVITY.log
+cp playbook/log-templates/DECISIONS.md  runs/[run]/logs/DECISIONS.md
+cp playbook/log-templates/HANDOVERS.md  runs/[run]/logs/HANDOVERS.md
+
+# 3. Seed the activity log
+echo "[INIT] $(date -u +%Y-%m-%dT%H:%M:%SZ) | Kostya | Run [run] initialised. Repo: https://github.com/teivasystems/axiom-hackathon" \
+  >> runs/[run]/logs/ACTIVITY.log
+
+# 4. Commit
+git add runs/[run]/logs/
+git commit -m "[INIT] Run [run] log infrastructure created"
+git push
+```
+
+**The logs must exist before any persona posts their first Jira comment.**
+If they don't, create them before doing anything else.
+
+---
+
+## Log Files — What They Are and Who Writes Them
+
+Three log files live at `runs/[run]/logs/`. Every persona writes to them.
+They are the authoritative trail when Jira or a session context is unavailable.
+
+### `ACTIVITY.log` — the running heartbeat
+
+One line per event. Append-only. Written by every persona at every meaningful action.
+
+**Format:**
+```
+[TAG] YYYY-MM-DDTHH:MM:SSZ | Persona | Description | Refs
+```
+
+**Tags:**
+
+| Tag         | Used when                                          |
+|-------------|----------------------------------------------------|
+| `[START]`   | Persona begins work on a ticket                    |
+| `[DONE]`    | Ticket or sub-task completed                       |
+| `[HANDOVER]`| Handover posted to Jira and HANDOVERS.md           |
+| `[BLOCKER]` | Blocker raised                                     |
+| `[UNBLOCK]` | Blocker resolved                                   |
+| `[DECISION]`| Decision recorded in DECISIONS.md                 |
+| `[COMMIT]`  | Significant git commit (build milestones only)     |
+| `[DEPLOY]`  | Successful `npm run deploy`                        |
+| `[VALIDATE]`| Casey passes or fails a test case                  |
+| `[SCOPE]`   | Scope change approved                              |
+| `[INIT]`    | Run initialised                                    |
+| `[SUBMIT]`  | Submission action taken                            |
+| `[MILESTONE]`| Phase transition or named checkpoint              |
+
+**Example entries:**
+```
+[START]     2026-05-19T09:00:00Z | Alex    | AXM-02 Ideation started
+[DONE]      2026-05-19T09:45:00Z | Alex    | AXM-02 Ideation complete | runs/[run]/ideation/session.md
+[HANDOVER]  2026-05-19T09:46:00Z | Alex    | Handed AXM-03 to Sam | Jira: AXM-02 comment#4
+[START]     2026-05-19T09:50:00Z | Sam     | AXM-03 Architecture started
+[BLOCKER]   2026-05-19T10:20:00Z | Jordan  | AXM-07 PDI plugin missing: Flow Designer | Escalated to Kostya
+[DECISION]  2026-05-19T10:35:00Z | Kostya  | Use IntegrationHub workaround for Flow | DECISIONS.md#D-003
+[UNBLOCK]   2026-05-19T10:36:00Z | Jordan  | AXM-07 unblocked — continuing
+[COMMIT]    2026-05-19T11:00:00Z | Jordan  | Tables created: AxiomRequest, AxiomResult | sha: a1b2c3d
+[DEPLOY]    2026-05-19T11:05:00Z | Jordan  | Tables deployed to hackathon PDI — clean
+[MILESTONE] 2026-05-19T11:05:00Z | Jordan  | BUILD Hour 2 checkpoint: tables done ✅
+```
+
+**Rules:**
+- Write the entry **at the moment the event happens**, not retrospectively.
+- Keep each line under 200 characters (use refs for detail).
+- Never delete or edit existing entries. Append corrections as new `[CORRECTION]` lines.
+- Commit the log alongside every significant git commit.
+
+---
+
+### `DECISIONS.md` — the decision register
+
+Every decision that changes scope, architecture, or process is recorded here.
+This is the document Kostya and Alex read when something is re-litigated.
+
+**Format:** see `playbook/log-templates/DECISIONS.md`
+
+Decisions are numbered `D-001`, `D-002`, etc. in order of occurrence.
+
+**Who writes it:** The persona who *receives* the decision posts it (usually Jordan or Sam).
+Kostya confirms by replying to the Jira comment with `[DECISION LOGGED] D-NNN`.
+
+---
+
+### `HANDOVERS.md` — the full handover archive
+
+Every handover note is copied here in addition to being posted to Jira.
+This is the single source of truth when Jira comments are hard to scan.
+
+**Format:** see `playbook/log-templates/HANDOVERS.md`
+
+Handovers are numbered `H-001`, `H-002`, etc. in order of occurrence.
+
+**Who writes it:** The *sending* persona appends their handover note immediately
+after posting it to Jira.
+
+---
+
 ## Phase 1 — PREP
 
 ### AXM-02 — Ideation Session (Alex)
 
 **Entry conditions:**
-- Infrastructure complete (AXM-11, AXM-15 done)
-- Jira and Confluence set up (AXM-14)
-- Hackathon categories and judge criteria known
+
+* Infrastructure complete (AXM-11, AXM-15 done)
+* Jira and Confluence set up (AXM-14)
+* Hackathon categories and judge criteria known
+* `runs/[run]/logs/` initialised (see Run Initialisation above)
 
 **What Alex does:**
+
 1. Opens session with scoring framework and brief to each persona
 2. Collects proposals: Sam (2), Morgan (2), Riley (2)
 3. Evaluates against scoring framework
@@ -89,23 +212,62 @@ SUBMIT Phase
 
 **Output:** `runs/[run]/ideation/session.md`
 
-**Jira actions:**
-- On start: transition AXM-02 → `In Progress`, comment: `[AXM-02] Ideation session started. Collecting proposals from Sam, Morgan, Riley.`
-- On complete: transition AXM-02 → `Done`, paste output file URL into Artifact Link field
-- Open new tickets from decision: AXM-03 (Sam), AXM-04 (Morgan), AXM-05 (Casey), AXM-06 (Riley) — set status `In Progress` for Sam, `Backlog` for the rest
-
-**Handover (Alex → Sam):**
+**Log entries to write:**
 ```
-FROM: Alex
-TO: Sam
-TICKET: AXM-03
-STATUS: Ready to start
-ARTIFACT: runs/[run]/ideation/session.md
-SUMMARY: App selected: [name]. Scope locked — see Step 5 of ideation session.
+[START]  | Alex | AXM-02 Ideation started
+[DONE]   | Alex | AXM-02 complete | runs/[run]/ideation/session.md
+[HANDOVER] | Alex | → Sam (AXM-03) | Jira: AXM-02 comment#N | HANDOVERS.md#H-001
+```
+
+**Jira actions:**
+
+* On start: transition AXM-02 → `In Progress`, post comment:
+
+```
+[AXM-02] Starting — Ideation session open.
+Entry conditions met: AXM-11 ✅  AXM-15 ✅  AXM-14 ✅
+Expected output: runs/[run]/ideation/session.md
+Activity log: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
+```
+
+* On complete: transition AXM-02 → `Done`, post handover comment (see template below),
+  paste output file URL into Artifact Link field.
+* Open new tickets from decision: AXM-03 (Sam), AXM-04 (Morgan), AXM-05 (Casey),
+  AXM-06 (Riley) — set status `In Progress` for Sam, `Backlog` for the rest.
+
+**Jira handover comment (AXM-02 → AXM-03):**
+
+```
+[AXM-02] Complete — handing to Sam (AXM-03)
+
+FROM:          Alex
+TO:            Sam
+TICKET:        AXM-03
+STATUS:        Ready to start — all entry conditions met
+
+ARTIFACT:      runs/[run]/ideation/session.md
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/ideation/session.md
+COMMIT:        [short SHA — run: git log --oneline -1]
+BRANCH:        main
+
+RELATED_FILES:
+  - playbook/WORKFLOW.md (Section AXM-03)
+  - process/architecture.md (Sam's detailed steps)
+
+SUMMARY:
+  App selected: [name]. Scope locked — see Step 5 of ideation/session.md.
   Sam's task: produce architecture doc. Confirm table schema, Flow Designer
   triggers, Claude integration pattern, and build sequence.
-OPEN ITEMS: [any PDI capability questions Alex flagged]
-DEPENDENCIES: Morgan starts AXM-04 only after AXM-03 is complete.
+
+OPEN ITEMS:
+  - [List any PDI capability questions Alex flagged]
+
+DEPENDENCIES:
+  Morgan starts AXM-04 ONLY after AXM-03 is complete.
+  Jordan starts AXM-08 ONLY after AXM-03 is complete.
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
+ACTIVITY LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
 ```
 
 ---
@@ -113,10 +275,12 @@ DEPENDENCIES: Morgan starts AXM-04 only after AXM-03 is complete.
 ### AXM-03 — Architecture Doc (Sam)
 
 **Entry conditions:**
-- AXM-02 complete — `runs/[run]/ideation/session.md` exists
-- App name, scope, and accepted/rejected features are clear
+
+* AXM-02 complete — `runs/[run]/ideation/session.md` exists and is committed
+* App name, scope, and accepted/rejected features are clear
 
 **What Sam does:**
+
 1. Reads ideation/session.md fully — especially Alex's scope lock
 2. Assesses every in-scope feature for platform feasibility
 3. Designs table schema, flow triggers, Claude integration, Script Includes
@@ -127,25 +291,75 @@ DEPENDENCIES: Morgan starts AXM-04 only after AXM-03 is complete.
 
 **Output:** `runs/[run]/docs/architecture.md`
 
-**Jira actions:**
-- On start: transition AXM-03 → `In Progress`, comment: `[AXM-03] Architecture doc started. Working from ideation/session.md. Will flag any scope concerns before completing.`
-- If a scope item is unbuildable: transition AXM-03 → `Blocked`, comment: `[CONFLICT] [item] cannot be built as scoped because [reason]. Alex to decide: cut, defer, or simplify. Blocking AXM-03 and AXM-04.`
-- On complete: transition AXM-03 → `Done`, update Artifact Link field with file URL
-- Transition AXM-04 from `Backlog` → `In Progress` (Morgan can now start)
-
-**Handover (Sam → Jordan and Morgan):**
+**Log entries to write:**
 ```
-FROM: Sam
-TO: Jordan (primary), Morgan (secondary)
-TICKET: AXM-03 complete. Unblocks AXM-04 and AXM-08.
-STATUS: Complete
-ARTIFACT: runs/[run]/docs/architecture.md
-SUMMARY: [App name] architecture complete. [N] custom tables. Claude integration
-  via IntegrationHub REST. Build sequence in Section 9 — follow it exactly.
+[START]    | Sam | AXM-03 Architecture started
+[DONE]     | Sam | AXM-03 complete | runs/[run]/docs/architecture.md
+[HANDOVER] | Sam | → Jordan (AXM-08) and Morgan (AXM-04) | HANDOVERS.md#H-002
+```
+
+**Jira actions:**
+
+* On start: transition AXM-03 → `In Progress`, post comment:
+
+```
+[AXM-03] Starting — Architecture doc.
+Entry conditions met: ideation/session.md ✅
+Source artifact: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/ideation/session.md
+Will flag scope concerns before completing. Expected output: runs/[run]/docs/architecture.md
+```
+
+* If a scope item is unbuildable:
+
+```
+[BLOCKER] AXM-03 blocked — scope conflict.
+Item: [feature name]
+Constraint: [exact technical reason it cannot be built as specified]
+Tried: [what was investigated]
+Options: (A) cut feature  (B) defer  (C) simplify to [alternative]
+Decision needed from: Kostya / Alex
+Blocking: AXM-03 and AXM-04
+```
+
+  Then: transition AXM-03 → `Blocked`, append `[BLOCKER]` to ACTIVITY.log.
+
+* On complete: transition AXM-03 → `Done`, update Artifact Link field.
+  Transition AXM-04 from `Backlog` → `In Progress`.
+  Post handover comment:
+
+```
+[AXM-03] Complete — handing to Jordan (AXM-08) and Morgan (AXM-04)
+
+FROM:          Sam
+TO:            Jordan (primary), Morgan (secondary)
+TICKETS:       AXM-08 (Jordan), AXM-04 (Morgan)
+STATUS:        Complete — both tickets now unblocked
+
+ARTIFACT:      runs/[run]/docs/architecture.md
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/docs/architecture.md
+COMMIT:        [short SHA]
+BRANCH:        main
+
+RELATED_FILES:
+  - runs/[run]/ideation/session.md  (scope source — read if anything is ambiguous)
+  - process/architecture.md         (Sam's detailed process notes)
+  - playbook/WORKFLOW.md            (Jordan: Section AXM-08 | Morgan: Section AXM-04)
+
+SUMMARY:
+  [App name] architecture complete. [N] custom tables. Claude integration via
+  IntegrationHub REST. Build sequence in Section 9 — Jordan must follow it exactly.
   [Any plugin dependency that needs PDI confirmation before build.]
-OPEN ITEMS: [list any open questions or risks Jordan and Morgan need to know]
-DEPENDENCIES: Jordan: do not build until this doc is read.
+
+OPEN ITEMS:
+  - [List any open questions or risks Jordan and Morgan need to act on]
+  - Jordan: confirm [plugin name] is available on PDI before starting tables
+
+DEPENDENCIES:
+  Jordan: do not build until this doc is fully read.
   Morgan: data available for display is in Section 7.
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
+DECISIONS LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/DECISIONS.md
 ```
 
 ---
@@ -153,11 +367,13 @@ DEPENDENCIES: Jordan: do not build until this doc is read.
 ### AXM-04 — UX Wireframe Spec (Morgan)
 
 **Entry conditions:**
-- AXM-03 complete — `runs/[run]/docs/architecture.md` exists
-- Section 7 (UI components) of architecture doc is readable
-- AXM-13 (Figma) is set up
+
+* AXM-03 complete — `runs/[run]/docs/architecture.md` exists
+* Section 7 (UI components) of architecture doc is readable
+* AXM-13 (Figma) is set up
 
 **What Morgan does:**
+
 1. Reads architecture doc Section 7 — understand what data is available
 2. Designs every screen: layout, components, labels, CTAs, empty states, error states
 3. Specifies the demo storyboard: what judges see in 90 seconds
@@ -165,22 +381,57 @@ DEPENDENCIES: Jordan: do not build until this doc is read.
 
 **Output:** `runs/[run]/docs/wireframes.md`
 
-**Jira actions:**
-- On start: transition AXM-04 → `In Progress`
-- On complete: transition AXM-04 → `Done`, update Artifact Link
-
-**Handover (Morgan → Jordan):**
+**Log entries to write:**
 ```
-FROM: Morgan
-TO: Jordan
-TICKET: AXM-04 complete. Jordan can now start UI (after tables and flows are done).
-STATUS: Complete
-ARTIFACT: runs/[run]/docs/wireframes.md
-SUMMARY: [N] screens specified. Figma file has the same screens. The centrepiece
-  interaction is [describe demo wow moment]. Claude output appears on [screen name]
-  as [visual treatment — e.g. distinct card, coloured border].
-OPEN ITEMS: [any screen that needs a decision Jordan must make]
-DEPENDENCIES: Implement exactly as spec'd. Do not redesign without flagging to Morgan.
+[START]    | Morgan | AXM-04 Wireframe spec started
+[DONE]     | Morgan | AXM-04 complete | runs/[run]/docs/wireframes.md + Figma URL
+[HANDOVER] | Morgan | → Jordan (unblocks UI build) | HANDOVERS.md#H-003
+```
+
+**Jira actions:**
+
+* On start: transition AXM-04 → `In Progress`, post comment:
+
+```
+[AXM-04] Starting — UX wireframe spec.
+Entry conditions met: architecture.md ✅  Figma ✅
+Source artifact: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/docs/architecture.md
+Expected output: runs/[run]/docs/wireframes.md + Figma link
+```
+
+* On complete: transition AXM-04 → `Done`, update Artifact Link. Post handover comment:
+
+```
+[AXM-04] Complete — handing to Jordan (UI build, after flows are tested)
+
+FROM:          Morgan
+TO:            Jordan
+TICKET:        AXM-04 → unblocks UI build in BUILD phase
+STATUS:        Complete
+
+ARTIFACT:      runs/[run]/docs/wireframes.md
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/docs/wireframes.md
+FIGMA:         [Figma file URL]
+COMMIT:        [short SHA]
+BRANCH:        main
+
+RELATED_FILES:
+  - runs/[run]/docs/architecture.md Section 7  (data contract — do not deviate)
+  - playbook/WORKFLOW.md Section AXM-04
+
+SUMMARY:
+  [N] screens specified. Figma file mirrors these exactly. The centrepiece
+  interaction is [describe demo wow moment]. Claude output appears on [screen
+  name] as [visual treatment — e.g. distinct card, coloured border].
+
+OPEN ITEMS:
+  - [Any screen where Jordan must make a call]
+
+DEPENDENCIES:
+  Jordan: implement exactly as spec'd. Do not redesign without flagging to Morgan.
+  Jordan: UI build cannot start before flows are tested (BUILD hour 4:00).
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
 ```
 
 ---
@@ -188,79 +439,137 @@ DEPENDENCIES: Implement exactly as spec'd. Do not redesign without flagging to M
 ### AXM-05 — Test Case Draft (Casey)
 
 **Entry conditions:**
-- AXM-02 complete — Alex's scope lock is the acceptance criteria
-- Can be started in parallel with AXM-03 (does not need architecture)
+
+* AXM-02 complete — Alex's scope lock is the acceptance criteria
+* Can be started in parallel with AXM-03
 
 **What Casey does:**
+
 1. Reads Alex's scope lock from ideation/session.md
 2. Writes one test case per in-scope feature
 3. Includes happy path AND at least one edge/negative case per feature
-4. Flags anything that requires infrastructure confirmation (e.g. plugin must be present)
+4. Flags anything requiring infrastructure confirmation
 
-**Output:** Test cases documented in `runs/[run]/personas/casey.md`
+**Output:** `runs/[run]/personas/casey.md`
+
+**Log entries to write:**
+```
+[START] | Casey | AXM-05 Test case draft started
+[DONE]  | Casey | AXM-05 complete — [N] test cases written | runs/[run]/personas/casey.md
+```
 
 **Jira actions:**
-- On start: transition AXM-05 → `In Progress`
-- On complete: transition AXM-05 → `Done`
-- Casey does not execute tests until Jordan hands off the build (BUILD phase)
+
+* On start: transition AXM-05 → `In Progress`.
+* On complete: transition AXM-05 → `Done`. Post comment:
+
+```
+[AXM-05] Complete — test cases ready. [N] cases written covering [N] features.
+Artifact: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/personas/casey.md
+Note: execution blocked until Jordan hands off happy path (BUILD ~hour 5:30).
+Infrastructure flags: [list any plugin/PDI preconditions Casey is watching]
+```
 
 ---
 
 ### AXM-06 — Pitch Outline (Riley)
 
 **Entry conditions:**
-- AXM-02 complete — app name, problem statement, and meta-story connection known
-- Can be started in parallel with AXM-03 (Sections 1 and 3 do not need architecture)
+
+* AXM-02 complete — app name, problem statement, meta-story connection known
+* Sections 1 and 3 can be started in parallel with AXM-03
 
 **What Riley does:**
-1. Reads Alex's decision including the draft elevator pitch and meta-story note
-2. Writes Sections 1 and 3 (problem + team story, vision + close) — can be finalised now
-3. Writes Section 2 as a placeholder — will be updated after Casey validates the build
+
+1. Reads Alex's decision including draft elevator pitch and meta-story note
+2. Writes Sections 1 and 3 (problem + team story, vision + close) — finalisable now
+3. Writes Section 2 as a placeholder — updated after Casey validates the build
 4. Evaluates against the pitch scoring checklist in `process/pitch.md`
 
 **Output:** `runs/[run]/pitch/script_draft.md`
 
+**Log entries to write:**
+```
+[START] | Riley | AXM-06 Pitch outline started (Sections 1 + 3)
+[DONE]  | Riley | AXM-06 Sections 1+3 complete, Section 2 placeholder | runs/[run]/pitch/script_draft.md
+```
+
 **Jira actions:**
-- On start: transition AXM-06 → `In Progress`
-- On complete (Sections 1 + 3 done, Section 2 placeholder): transition AXM-06 → `In Review` (not Done — Section 2 pending)
-- On Section 2 finalised (BUILD phase, hour 7): transition AXM-06 → `Done`
+
+* On start: transition AXM-06 → `In Progress`.
+* On Sections 1+3 done: transition AXM-06 → `In Review` (not Done — Section 2 pending). Post:
+
+```
+[AXM-06] In Review — Sections 1 and 3 complete. Section 2 placeholder written.
+Artifact: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/pitch/script_draft.md
+Awaiting: Casey's validation log (BUILD ~hour 6:30) to finalise Section 2.
+```
+
+* On Section 2 finalised (BUILD phase, hour 7): transition AXM-06 → `Done`.
 
 ---
 
 ### AXM-07 — PDI Pre-configuration (Jordan)
 
 **Entry conditions:**
-- AXM-11 complete (OAuth configured)
-- AXM-15 complete (now-sdk flags confirmed)
-- Can run in parallel with AXM-02, AXM-03
+
+* AXM-11 and AXM-15 complete
+* Can run in parallel with AXM-02, AXM-03
 
 **What Jordan does:**
+
 1. Confirms plugins available on the PDI (check against Sam's architecture when available)
 2. Verifies now-sdk build/deploy cycle end-to-end
 3. Confirms `application was null` error is not reproducible (or documents workaround)
-4. Confirms ATF approach (no now-sdk runner — Casey validates via PDI UI)
+4. Confirms ATF approach
 
-**Output:** Checklist section updated in `runs/[run]/personas/jordan.md`
+**Output:** Checklist updated in `runs/[run]/personas/jordan.md`
+
+**Log entries to write:**
+```
+[START]  | Jordan | AXM-07 PDI pre-config started
+[DEPLOY] | Jordan | AXM-07 build/deploy verified clean | PDI: [instance URL]
+[DONE]   | Jordan | AXM-07 complete | runs/[run]/personas/jordan.md
+```
 
 ---
 
 ### AXM-08 — Component Scaffolding (Jordan)
 
 **Entry conditions:**
-- AXM-03 complete — architecture doc exists (Jordan needs build sequence)
-- AXM-07 complete — PDI is confirmed working
+
+* AXM-03 complete — architecture doc exists and is committed
+* AXM-07 complete — PDI confirmed working
 
 **What Jordan does:**
-1. Reads architecture doc fully — especially Sections 2, 6, and 9 (schema, Script Includes, build sequence)
-2. Creates empty Fluent and server file shells in `src/` — no logic yet, just structure
-3. Writes `ClaudeIntegration.ts` shell with JSDoc header (pattern is known regardless of app)
-4. Confirms all file names match the `sys_name` values in Sam's schema
+
+1. Reads architecture doc fully — Sections 2, 6, and 9 (schema, Script Includes, build sequence)
+2. Creates empty Fluent and server file shells — no logic, just structure
+3. Writes `ClaudeIntegration.ts` shell with JSDoc header
+4. Confirms all file names match `sys_name` values in Sam's schema
 
 **Output:** Scaffolded files in `src/fluent/` and `src/server/`
 
+**Log entries to write:**
+```
+[START]  | Jordan | AXM-08 Scaffolding started
+[COMMIT] | Jordan | AXM-08 scaffold complete — [N] shells created | sha: [SHA]
+[DEPLOY] | Jordan | AXM-08 scaffold deployed clean | PDI: [instance URL]
+[DONE]   | Jordan | AXM-08 complete | runs/[run]/personas/jordan.md updated
+```
+
 **Jira actions:**
-- On complete: transition AXM-08 → `Done`
-- Jordan updates `runs/[run]/personas/jordan.md`: what is scaffolded, what is blocked
+
+* On complete: transition AXM-08 → `Done`. Post comment:
+
+```
+[AXM-08] Complete — scaffold deployed to hackathon PDI.
+Artifact: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/personas/jordan.md
+Commit: https://github.com/teivasystems/axiom-hackathon/commit/[SHA]
+Files scaffolded: [list src/ paths]
+PDI instance: [URL — confirm app is visible in System Applications → My Company Applications]
+Blocked items: [anything that could not be scaffolded and why]
+```
 
 ---
 
@@ -271,24 +580,33 @@ The 8-hour clock. Jordan is primary. Everyone else is on call.
 ### State at clock start
 
 Before the first commit, Jordan confirms:
+
 ```
-[ ] now-sdk auth --use axiom-hackathon     ← switched to hackathon instance
-[ ] now-sdk auth --list                    ← axiom-hackathon is default
-[ ] npm run build                          ← clean (zero errors)
-[ ] npm run deploy                         ← scaffold is on hackathon instance
+[ ] now-sdk auth --use axiom-hackathon    ← switched to hackathon instance
+[ ] now-sdk auth --list                   ← axiom-hackathon is default
+[ ] npm run build                         ← clean (zero errors)
+[ ] npm run deploy                        ← scaffold is on hackathon instance
 [ ] PDI: app visible in System Applications → My Company Applications
 [ ] Credential: Claude API key confirmed in SN Credential Store
 [ ] CLAUDE.md: architecture and wireframe paths point to correct run folder
 [ ] Sam's architecture doc: fully read — Section 9 build sequence memorised
 [ ] Morgan's wireframe spec: fully read — every screen understood
 [ ] Casey's test cases: skimmed — know what the acceptance criteria are
+[ ] ACTIVITY.log: entry posted — [MILESTONE] BUILD clock started
 ```
 
-If any item is red: stop. Fix it. Do not begin the build loop until the environment is confirmed.
+If any item is red: stop. Fix it. Do not begin the build loop until the environment
+is confirmed.
+
+**Log entry at clock start:**
+```
+[MILESTONE] YYYY-MM-DDTHH:MM:SSZ | Jordan | BUILD phase clock started — environment confirmed clean
+```
 
 ### Jordan's mandatory build loop
 
 For every single component, without exception:
+
 ```
 1. Write or modify source file (src/fluent/ or src/server/)
 2. npm run build         ← read ENTIRE output. Fix all errors before step 3.
@@ -296,13 +614,30 @@ For every single component, without exception:
 4. Validate on PDI       ← open the browser. Check the record, flow, or script.
 5. git commit            ← [JORDAN] feat: <what was built> (AXM-XX)
 6. Update jordan.md      ← move item from "In Progress" to "Completed"
+7. Append to ACTIVITY.log ← [COMMIT] + [DEPLOY] entries
 ```
 
 Never commit broken code. Never skip step 4. Never proceed with an unresolved error.
 
+### Hour checkpoint log entries
+
+Jordan posts these at each hour mark — they are the heartbeat Kostya reads remotely:
+
+```
+[MILESTONE] HH:MM | Jordan | Hour 2 checkpoint: tables ✅ / Script Includes ✅ — on track
+[MILESTONE] HH:MM | Jordan | Hour 4 checkpoint: flows ✅ — Claude call tested independently ✅
+[MILESTONE] HH:MM | Jordan | Hour 5:30 checkpoint: UI [N/N screens] — handing to Casey
+```
+
+If behind:
+```
+[MILESTONE] HH:MM | Jordan | Hour 4 checkpoint: BEHIND — [flow X] not complete. Flagging to Kostya.
+```
+
 ### Build sequence
 
 Follow Sam's architecture doc Section 9 exactly. General order:
+
 ```
 Hour 0:30–2:00  Tables first — nothing else works without the data model
                 Script Includes — logic before anything that calls it
@@ -322,37 +657,89 @@ Hour 4:00–5:30  UI components (Now Experience or Service Portal)
 When Jordan hits a blocker:
 
 1. **Stop.** Do not work around it silently. Do not skip to the next item.
-2. **Document:** What is the exact error? What was tried? What specifically is blocked?
-3. **Escalate immediately** — flag to Kostya. Do not wait. A 15-minute blocker becomes a 2-hour one if it sits.
-4. **Kostya decides:** cut the feature / defer to known issues / simplify the requirement.
-5. **Alex confirms** if the decision changes in-scope items.
-6. **Jordan continues** with the decision in hand. Decision is final — no revisiting.
-
-Blocker comment in Jira: `[BLOCKER] [error description]. Tried: [what was attempted]. Blocked: [what cannot proceed]. Decision needed from: Kostya / Alex.`
+2. **Document in ACTIVITY.log first:**
+   ```
+   [BLOCKER] HH:MM | Jordan | [error in one line] | AXM-XX | Escalating to Kostya
+   ```
+3. **Post Jira comment:**
+   ```
+   [BLOCKER] [error description]
+   Tried: [what was attempted — be specific]
+   Blocked: [what cannot proceed]
+   Decision needed from: Kostya / Alex
+   Activity log: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
+   ```
+4. **Escalate immediately** to Kostya. A 15-minute blocker becomes a 2-hour one if it sits.
+5. **Kostya decides:** cut / defer / simplify. Posts decision to Jira.
+6. **Record decision in DECISIONS.md** (see format in template). Post `[DECISION LOGGED] D-NNN` in Jira.
+7. **Alex confirms** if the decision changes in-scope items.
+8. **Jordan posts:**
+   ```
+   [UNBLOCKED] Decision: [what was decided — ref D-NNN in DECISIONS.md]. Continuing.
+   ```
+   And appends to ACTIVITY.log:
+   ```
+   [UNBLOCK]   HH:MM | Jordan | [blocker] resolved — D-NNN | Continuing AXM-XX
+   [DECISION]  HH:MM | Jordan | D-NNN logged | runs/[run]/logs/DECISIONS.md
+   ```
 
 ### Scope triage if behind
 
-| Hour check | If behind | Action |
-|---|---|---|
-| Hour 2 | Tables or Script Includes incomplete | Drop one Script Include feature — flag to Alex |
-| Hour 4 | Flows not tested | Cut the lowest-priority flow — confirm with Alex |
-| Hour 5:30 | UI incomplete | Cut lowest-priority screen — confirm with Morgan which one |
-| Hour 6 | Happy path not running | Run Casey's test on core flow only. Everything else → known issues |
+| Hour check | If behind                          | Action                                              |
+|------------|------------------------------------|-----------------------------------------------------|
+| Hour 2     | Tables or Script Includes incomplete | Drop one Script Include feature — flag to Alex    |
+| Hour 4     | Flows not tested                   | Cut lowest-priority flow — confirm with Alex        |
+| Hour 5:30  | UI incomplete                      | Cut lowest-priority screen — confirm with Morgan which one |
+| Hour 6     | Happy path not running             | Run Casey's test on core flow only. Everything else → known issues |
 
 **Do not add features after hour 4.** If ahead of schedule: polish existing features.
 
+Every scope cut is recorded in DECISIONS.md and ACTIVITY.log with a `[SCOPE]` tag.
+
 ### Handover (Jordan → Casey) at hour 5:30
 
+**Log entry:**
 ```
-FROM: Jordan
-TO: Casey
-TICKET: BUILD validation
-STATUS: Ready for validation (or: Partially ready — [feature X] is deferred)
-ARTIFACT: Live on hackathon PDI instance [instance URL]
-SUMMARY: Core happy path is deployable. [N] of [N] in-scope features implemented.
-  [List any deferred features and reason.]
-OPEN ITEMS: [Anything Casey should not test — known broken or deliberately deferred]
-DEPENDENCIES: Casey must complete validation before Riley records Section 2.
+[HANDOVER] HH:MM | Jordan | → Casey (BUILD validation) | HANDOVERS.md#H-NNN
+```
+
+**Jira comment on BUILD ticket:**
+
+```
+[BUILD] Handing to Casey — validation ready (or: partial — see below)
+
+FROM:          Jordan
+TO:            Casey
+TICKET:        BUILD validation (AXM-05 execution)
+STATUS:        Ready for validation [or: Partially ready — [feature X] deferred]
+
+PDI INSTANCE:  [https://instance.service-now.com]
+CREDENTIALS:   [how Casey logs in — or reference to secure store]
+DEMO USER:     [username / role to use for testing]
+
+ARTIFACT:      runs/[run]/personas/jordan.md (build log — validated features listed)
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/personas/jordan.md
+LAST_COMMIT:   [SHA] https://github.com/teivasystems/axiom-hackathon/commit/[SHA]
+BRANCH:        main
+
+RELATED_FILES:
+  - runs/[run]/personas/casey.md   (Casey's test cases — run these)
+  - runs/[run]/docs/architecture.md Section 9  (build sequence — explains what was built)
+  - runs/[run]/logs/DECISIONS.md   (scope changes — explains what was cut and why)
+
+SUMMARY:
+  Core happy path deployable. [N] of [N] in-scope features implemented.
+  Deferred: [list + reason for each]. Jordan available for hotfixes during hour 6.
+
+OPEN ITEMS:
+  - [Anything Casey should not test — known broken or deliberately deferred]
+  - [Any test that requires a specific data state to be set up first]
+
+DEPENDENCIES:
+  Casey must complete validation and sign off before Riley records Section 2.
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
+ACTIVITY LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
 ```
 
 ---
@@ -360,29 +747,73 @@ DEPENDENCIES: Casey must complete validation before Riley records Section 2.
 ### Casey's validation (hour 5:30–6:30)
 
 **Entry conditions:**
-- Jordan has handed off — happy path is deployable
-- Casey's test cases (AXM-05) exist
+
+* Jordan has handed off — happy path is deployable
+* Casey's test cases (AXM-05) exist and are committed
 
 **What Casey does:**
+
 1. Runs every test case against the live PDI
-2. Records: Pass / Fail / Deferred for each
+2. Records Pass / Fail / Deferred for each (directly in casey.md)
 3. Documents actual vs expected result for failures
-4. Attempts to get Jordan to fix failures immediately (Casey stays active during hour 6 polish)
+4. Works with Jordan on immediate fixes during hour 6 polish
 5. Produces validation log and signed-off feature list
 
-**Casey does NOT sign off on untested features.** If Jordan says "it probably works" — it is not on the validated list.
+**Log entries Casey writes:**
+```
+[VALIDATE] HH:MM | Casey | TC-001 [feature name] — PASS
+[VALIDATE] HH:MM | Casey | TC-004 [feature name] — FAIL: [actual vs expected in one line]
+[VALIDATE] HH:MM | Casey | TC-007 [feature name] — DEFERRED (feature cut per D-NNN)
+[MILESTONE] HH:MM | Casey | Validation complete. [N] pass / [N] fail / [N] deferred
+```
+
+**Casey does NOT sign off on untested features.** "It probably works" is not validated.
 
 **Handover (Casey → Riley) at hour 6:30:**
+
+**Log entry:**
 ```
-FROM: Casey
-TO: Riley
-TICKET: AXM-06 Section 2 update
-STATUS: Validation complete
-ARTIFACT: runs/[run]/personas/casey.md (validation log)
-SUMMARY: Validated features: [list]. Deferred: [list]. Happy path: [pass/fail + notes].
-OPEN ITEMS: Riley may only pitch validated features. Deferred features must be labelled
-  "(if live)" or omitted entirely.
-DEPENDENCIES: Riley updates Section 2 script before Kostya records.
+[HANDOVER] HH:MM | Casey | → Riley (AXM-06 Section 2 update) | HANDOVERS.md#H-NNN
+```
+
+**Jira comment on AXM-06:**
+
+```
+[AXM-06] Validation complete — handing to Riley (Section 2 update)
+
+FROM:          Casey
+TO:            Riley
+TICKET:        AXM-06 (Section 2 finalisation)
+STATUS:        Validation complete — feature list is final
+
+ARTIFACT:      runs/[run]/personas/casey.md (validation log — Section: Validation Results)
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/personas/casey.md
+COMMIT:        [SHA]
+BRANCH:        main
+
+RELATED_FILES:
+  - runs/[run]/pitch/script_draft.md  (Riley's current draft — Section 2 is placeholder)
+  - runs/[run]/logs/DECISIONS.md      (scope cuts — features Riley cannot pitch)
+  - runs/[run]/logs/ACTIVITY.log      (full build trail if Riley needs context)
+
+VALIDATED FEATURES (Riley may pitch these):
+  - [feature 1]
+  - [feature 2]
+  - [feature N]
+
+DEFERRED FEATURES (label "(future)" or omit):
+  - [feature A] — reason: [one line]
+
+HAPPY PATH: [PASS / FAIL + one-line note if fail]
+
+OPEN ITEMS:
+  Riley may only pitch validated features. Deferred features must be labelled
+  "(if live)" or omitted entirely. No exceptions.
+
+DEPENDENCIES:
+  Riley must update Section 2 before Kostya records at hour 7:15.
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
 ```
 
 ---
@@ -392,35 +823,71 @@ DEPENDENCIES: Riley updates Section 2 script before Kostya records.
 ### Riley's Section 2 update (hour 7:00–7:15)
 
 **Entry conditions:**
-- Casey's validation log exists — validated feature list is final
-- Sections 1 and 3 of script are already written (done in PREP)
+
+* Casey's validation log exists and is committed — validated feature list is final
+* Sections 1 and 3 of script are already written (done in PREP)
 
 **What Riley does:**
-1. Reads Casey's validation log
-2. Updates Section 2 (demo narration) to match the actual live demo sequence
-3. Removes or labels any feature Casey has not validated
-4. Hands final script to Kostya
+
+1. Reads Casey's validation log (casey.md, Validation Results section)
+2. Reads DECISIONS.md — knows what was cut and why
+3. Updates Section 2 (demo narration) to match actual live demo sequence
+4. Removes or labels any feature Casey has not validated
+5. Hands final script to Kostya
 
 **Output:** Updated `runs/[run]/pitch/script_draft.md`
 
-**Handover (Riley → Kostya):**
+**Log entries:**
 ```
-FROM: Riley
-TO: Kostya
-TICKET: AXM-09 recording
-STATUS: Script ready
-ARTIFACT: runs/[run]/pitch/script_draft.md
-SUMMARY: Full script is final. Sections 1 and 3 are unchanged. Section 2
-  reflects validated demo flow. [N]-minute runtime.
-OPEN ITEMS: [Any timing notes or emphasis instructions for Kostya's delivery]
+[START]    | Riley | Section 2 update started — working from casey.md validation log
+[DONE]     | Riley | AXM-06 Section 2 final | runs/[run]/pitch/script_draft.md
+[HANDOVER] | Riley | → Kostya (recording) | HANDOVERS.md#H-NNN
+```
+
+**Jira comment on AXM-09:**
+
+```
+[AXM-06] Section 2 final — handing to Kostya for recording
+
+FROM:          Riley
+TO:            Kostya
+TICKET:        AXM-09 (recording)
+STATUS:        Script ready — all three sections final
+
+ARTIFACT:      runs/[run]/pitch/script_draft.md
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/pitch/script_draft.md
+COMMIT:        [SHA]
+BRANCH:        main
+
+RELATED_FILES:
+  - runs/[run]/personas/casey.md   (validated feature list — what demo shows)
+
+SUMMARY:
+  Full script final. Sections 1 and 3 unchanged from PREP. Section 2 reflects
+  validated demo flow only. [N]-minute runtime.
+
+OPEN ITEMS:
+  - [Timing notes or emphasis instructions for Kostya's delivery]
+  - [Any slide / screen transitions to note]
+
+DEPENDENCIES:
+  Kostya records immediately. Casey validates video plays through before upload.
+
+HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
 ```
 
 ### Kostya records (hour 7:15–7:30)
 
-1. Record Section 2 in HeyGen (narration, screen recording overlay)
+1. Record Section 2 in HeyGen (narration + screen recording overlay)
 2. Assemble all three sections in HeyGen project
 3. Export and confirm video plays through completely
 4. Upload to submission platform or host for URL submission
+
+**Log entries:**
+```
+[MILESTONE] HH:MM | Kostya | HeyGen recording complete — video assembled
+[MILESTONE] HH:MM | Kostya | Video confirmed playable — handing to Casey + submit
+```
 
 ---
 
@@ -429,22 +896,26 @@ OPEN ITEMS: [Any timing notes or emphasis instructions for Kostya's delivery]
 ### Casey + Kostya (hour 7:30–8:00)
 
 **Entry conditions:**
-- Video is ready
-- App is live on hackathon instance
-- Casey's validation log is complete
+
+* Video is ready and playable
+* App is live on hackathon instance (confirm URL works)
+* Casey's validation log is complete
 
 Casey produces:
-- Store listing description (max 150 words, problem-first)
-- README / judge notes (what to look at, how to demo it)
-- Known issues log (honest — do not omit)
+
+* Store listing description (max 150 words, problem-first)
+* README / judge notes (what to look at, how to demo it)
+* Known issues log (honest — do not omit)
 
 Kostya executes:
-- Submission form: app name, description, category, team members
-- Video upload or URL
-- README / documentation upload
-- Screenshots upload
+
+* Submission form: app name, description, category, team members
+* Video upload or URL
+* README / documentation upload
+* Screenshots upload
 
 **Submission checklist:**
+
 ```
 [ ] App live on hackathon instance (confirm URL works)
 [ ] Submission form filled completely
@@ -452,12 +923,21 @@ Kostya executes:
 [ ] Store listing description attached
 [ ] README / judge notes attached
 [ ] Known issues documented (not hidden)
+[ ] DECISIONS.md committed and pushed
+[ ] HANDOVERS.md committed and pushed
+[ ] ACTIVITY.log committed and pushed (final [SUBMIT] entry present)
 [ ] Jira: all AXM tickets transitioned to Done
 [ ] Git: all changes committed and pushed to main
 [ ] Screenshot the submission confirmation page
 ```
 
 Casey signs off on the submission. If anything in the checklist is unchecked at 7:55 — Casey makes the call on what to drop to hit the deadline.
+
+**Final log entry (Casey writes this):**
+```
+[SUBMIT]    YYYY-MM-DDTHH:MM:SSZ | Casey | Submission confirmed. Screenshot at runs/[run]/submit/confirmation.png
+[MILESTONE] YYYY-MM-DDTHH:MM:SSZ | Casey | AXIOM hackathon run [run] complete ✅
+```
 
 ---
 
@@ -468,110 +948,171 @@ Casey signs off on the submission. If anything in the checklist is unchecked at 
 ```
 Backlog → In Progress → In Review → Done
                 ↓
-            Blocked (escalate to Kostya immediately)
+            Blocked  (escalate to Kostya immediately)
 ```
 
 ### What to do at each transition
 
-| Transition | Who | Required actions |
-|---|---|---|
-| Backlog → In Progress | Persona starting the work | Post comment: `[AXM-XX] Starting. Entry conditions met: [list]. Expected output: [file path].` |
-| In Progress → In Review | Persona completing draft | Post artifact URL. Ask specific reviewer to confirm. |
-| In Review → Done | Receiving persona confirms | Post: `[AXM-XX] Accepted. [One line on what was confirmed.]` Transition to Done. Update Artifact Link field. |
-| In Progress → Blocked | Persona hitting a blocker | Post: `[BLOCKER] [description]. Tried: [X]. Decision needed from: [Kostya/Alex].` Tag Kostya. |
-| Blocked → In Progress | After Kostya decides | Post: `[UNBLOCKED] Decision: [what was decided]. Continuing.` |
+| Transition             | Who                       | Required actions |
+|------------------------|---------------------------|------------------|
+| Backlog → In Progress  | Persona starting the work | Post start comment with entry conditions and expected output file path. Write `[START]` to ACTIVITY.log. |
+| In Progress → In Review | Persona completing draft  | Post artifact URL + commit SHA. Ask specific reviewer. |
+| In Review → Done       | Receiving persona confirms | Post acceptance comment. Transition. Update Artifact Link. Write `[DONE]` to ACTIVITY.log. |
+| In Progress → Blocked  | Persona hitting a blocker  | Post `[BLOCKER]` comment. Write `[BLOCKER]` to ACTIVITY.log. Tag Kostya. |
+| Blocked → In Progress  | After Kostya decides       | Post `[UNBLOCKED]` comment with decision ref. Write `[UNBLOCK]` + `[DECISION]` to logs. |
 
 ### Required Jira fields per ticket
 
-| Field | Set when |
-|---|---|
-| Persona | On ticket creation (do not change) |
-| Phase | On ticket creation (PREP / BUILD / PITCH / SUBMIT) |
-| Artifact Link | When output file is committed to repo — paste GitHub URL |
-| Handover Note | On Done transition — paste the full handover note text |
+| Field          | Set when                                                                        |
+|----------------|---------------------------------------------------------------------------------|
+| Persona        | On ticket creation (do not change)                                              |
+| Phase          | On ticket creation (PREP / BUILD / PITCH / SUBMIT)                              |
+| Artifact Link  | When output file is committed — paste GitHub blob URL                           |
+| Handover Note  | On Done transition — paste full handover comment text                           |
+
+### Required content in every Jira handover comment
+
+Every handover comment must include:
+
+```
+ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/[path]
+COMMIT:        [short SHA]
+BRANCH:        main
+RELATED_FILES: [at minimum: the docs the receiver must read before starting]
+HANDOVER LOG:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
+ACTIVITY LOG:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
+```
+
+A handover without direct links is not a handover. The receiver must be able to
+click through to everything they need without searching.
 
 ### Comment discipline
 
-Every Jira comment must start with `[AXM-XX]` and the current status tag:
-- `[AXM-XX] Starting — ...`
-- `[AXM-XX] In progress — ...`
-- `[AXM-XX] Complete — artifact at [URL]`
-- `[BLOCKER] ...`
-- `[CONFLICT] ...`
-- `[UNBLOCKED] ...`
-- `[SCOPE CHANGE] Approved by Alex: [what changed]`
+Every Jira comment starts with `[AXM-XX]` and a status tag:
+
+| Tag             | When to use                                   |
+|-----------------|-----------------------------------------------|
+| `[AXM-XX] Starting —` | Beginning work, entry conditions met  |
+| `[AXM-XX] In progress —` | Interim update during long tasks   |
+| `[AXM-XX] Complete —` | Artifact committed, handover posted    |
+| `[BLOCKER]`     | Blocking issue raised                         |
+| `[CONFLICT]`    | Scope or design conflict requiring decision   |
+| `[UNBLOCKED]`   | After Kostya resolves a blocker               |
+| `[SCOPE CHANGE]` | Approved scope change, per Alex              |
+| `[DECISION LOGGED]` | After writing to DECISIONS.md            |
+| `[STATUS CHECK]` | When state is unclear — ask Kostya           |
 
 ---
 
 ## Handover Protocol (full specification)
 
-Every handover between personas is a structured document. No informal hand-offs. No "hey it's done." The structured format is what allows the next persona to start immediately without re-reading everything.
+Every handover between personas is a structured document. No informal hand-offs.
+The structured format — plus direct repo links — is what allows the next persona
+to start immediately without re-reading the entire project.
 
 ### Full format
 
 ```
-FROM:         [Persona name]
-TO:           [Persona name]
-TICKET:       [AXM-XX]
-STATUS:       Complete / Blocked / In Review
-ARTIFACT:     [GitHub file path or description]
-SUMMARY:      [2-3 sentences: what was decided or built, and why it matters for the receiver]
-OPEN ITEMS:   [Anything the receiver needs to decide before or during their work]
-DEPENDENCIES: [What the receiver must not start without — be explicit]
+FROM:          [Persona name]
+TO:            [Persona name]
+TICKET:        [AXM-XX]
+STATUS:        Complete / Blocked / In Review
+
+ARTIFACT:      [repo-relative file path]
+ARTIFACT_URL:  [full GitHub blob URL]
+COMMIT:        [short SHA — get from: git log --oneline -1]
+BRANCH:        main
+
+RELATED_FILES:
+  - [path 1] — [one-line note on what the receiver needs from it]
+  - [path 2] — [one-line note]
+
+SUMMARY:       [2–3 sentences: what was decided or built, why it matters for the receiver]
+OPEN ITEMS:    [Anything the receiver must decide or act on — be explicit]
+DEPENDENCIES:  [What the receiver must not start without]
+
+HANDOVER LOG:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/HANDOVERS.md
+ACTIVITY LOG:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/ACTIVITY.log
+DECISIONS LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[run]/logs/DECISIONS.md
 ```
 
-### Where it goes
+### Where it goes (three places, in this order)
 
-1. Posted as a Jira comment on the ticket (with `[AXM-XX] Complete — handing to [persona]`)
-2. Copied into the SENDER's persona log in `runs/[run]/personas/[sender].md`
-3. If the receiver has a Claude.ai session open: paste as the first message of their next turn
+1. **Append to `runs/[run]/logs/HANDOVERS.md`** — the archive.
+   Do this first, get the handover number (H-NNN).
+2. **Post to Jira** as a comment on the outgoing ticket.
+   Reference the handover number: `HANDOVER LOG: … #H-NNN`.
+3. **Append `[HANDOVER]` entry to `ACTIVITY.log`** with the Jira comment link.
+4. **If the receiver has a Claude.ai session open:** paste the handover note as
+   the first message of their next turn.
 
 ### Rules
 
-- **Do not hand off broken work.** If it is not working, status is Blocked — not Complete.
-- **Do not hand off without the artifact existing.** "I'll commit it shortly" is not a handover.
-- **Do not hand off with open scope decisions.** Resolve them with Alex first, or list them explicitly in OPEN ITEMS for the receiver to escalate.
-- **Do not accept a handover that is missing dependencies.** If you are the receiver and the artifact does not exist, reply with: `[AXM-XX] Cannot start — [artifact] not present at [expected path].`
+* **Do not hand off broken work.** Status is Blocked — not Complete.
+* **Do not hand off without the artifact committed and pushed.** "I'll push it shortly" is not a handover.
+* **Do not hand off with unresolved scope decisions.** Resolve with Alex first, or list explicitly in OPEN ITEMS.
+* **Do not accept a handover missing its artifact URL or commit.** Reply: `[AXM-XX] Cannot start — ARTIFACT_URL missing from handover comment.`
+* **Do not accept a handover whose artifact is not present at the stated URL.** Reply: `[AXM-XX] Cannot start — [file] not found at [URL]. Sender to confirm commit and push.`
 
 ---
 
-## Agent State Awareness
+## Agent State Awareness and Recovery
 
-When a persona starts a new session (in Claude.ai or Claude Code), they must orient themselves before doing anything.
+When a persona starts a new session in Claude.ai or Claude Code, orient before acting.
+This procedure recovers full context in under 2 minutes.
 
 ### Orientation checklist (run at the start of every session)
 
 ```
-1. Read runs/[run]/README.md
+1. Read runs/[run]/logs/ACTIVITY.log (last 20 lines)
    → What is the current phase?
-   → Which tickets are Done / In Progress / Blocked?
+   → What is the last completed item?
+   → Are there open [BLOCKER] entries without a matching [UNBLOCK]?
 
-2. Read my persona's log: runs/[run]/personas/[me].md
+2. Read runs/[run]/README.md
+   → Confirm ticket status table matches ACTIVITY.log
+
+3. Read my persona's log: runs/[run]/personas/[me].md
    → What did I complete last session?
    → What was I in the middle of?
    → What blockers did I log?
 
-3. Read the handover note addressed to me (in Jira or in my log)
+4. Read runs/[run]/logs/HANDOVERS.md (last entry addressed to me)
    → What does the sender say I need to know?
-   → What are my open items?
+   → Follow the RELATED_FILES links — read those files.
+   → Check OPEN ITEMS — what must I decide before starting?
 
-4. Confirm my entry conditions are met (see Phase sections above)
-   → If not: document the gap and escalate before starting
+5. Read runs/[run]/logs/DECISIONS.md
+   → Have any scope changes affected my work?
+   → Are there decisions I need to respect?
 
-5. Check the clock (BUILD phase only)
+6. Confirm my entry conditions are met (see Phase sections above)
+   → If not: write [BLOCKER] to ACTIVITY.log and escalate before starting.
+
+7. CHECK THE CLOCK (BUILD phase only)
    → What hour is it?
    → Am I behind the hour-by-hour plan?
-   → If behind: flag to Kostya, triage scope before continuing
+   → If behind: write [MILESTONE BEHIND] to ACTIVITY.log, flag to Kostya.
 ```
 
-### What to do if the state is unclear
+### Recovery order when state is uncertain
 
-If `runs/[run]/README.md` is out of date and you cannot determine where the project is:
+Use this order — each step is faster and more reliable than the next:
 
-1. Read Jira — the ticket statuses are authoritative
-2. Read `git log --oneline -20` — recent commits show what Jordan has built
-3. Read `runs/[run]/personas/jordan.md` — Jordan's build log shows current state
-4. If still unclear: post a `[STATUS CHECK]` comment on the most recent in-progress Jira ticket and ask Kostya to confirm
+| Priority | Source | Why |
+|----------|--------|-----|
+| 1st | `runs/[run]/logs/ACTIVITY.log` | Append-only, chronological, always current |
+| 2nd | `runs/[run]/logs/HANDOVERS.md` | Full context of what was passed and what is expected |
+| 3rd | `runs/[run]/logs/DECISIONS.md` | Scope and design changes that override earlier docs |
+| 4th | Jira ticket statuses | Authoritative for current status, but harder to scan than logs |
+| 5th | `git log --oneline -20` | Shows what Jordan has actually built and committed |
+| 6th | `runs/[run]/personas/jordan.md` | Jordan's build log — most detailed view of current build state |
+
+If after all six sources the state is still unclear:
+```
+Post [STATUS CHECK] on the most recent In Progress Jira ticket.
+Ask Kostya to confirm. Do not start work until confirmed.
+```
 
 ---
 
@@ -599,7 +1140,7 @@ AXM-02 (Ideation)
                   ↓
                   Kostya: Record   ← cannot start before Section 2 script is final
                     ↓
-                    SUBMIT         ← cannot start before video is assembled
+                    SUBMIT         ← cannot start before video assembled
 
 AXM-05 (Test cases — Casey)        ← starts after AXM-02, parallel with AXM-03/04
 AXM-06 (Pitch outline — Riley)     ← starts after AXM-02, parallel with AXM-03/04
@@ -616,28 +1157,33 @@ AXM-10 (Claude credential — Sam/K) ← parallel with all PREP work
 
 ### Scope conflict (a feature is unbuildable as specified)
 
-1. Jordan or Sam raises it — immediately, not at hour 5
+1. Jordan or Sam raises it immediately — not at hour 5
 2. Transition relevant ticket → `Blocked`
-3. Post `[CONFLICT]` comment with: the constraint, why it blocks, 2-3 options
+3. Post `[BLOCKER]` / `[CONFLICT]` comment with: the constraint, why it blocks, 2–3 options
 4. Kostya reads and decides
 5. Alex confirms if scope changes
-6. Kostya posts decision as `[SCOPE CHANGE] Approved by Alex: [decision]`
-7. All affected personas note the decision and continue
+6. Kostya posts: `[SCOPE CHANGE] Approved by Alex: [decision]`
+7. Record in DECISIONS.md with tag `SCOPE`. Post `[DECISION LOGGED] D-NNN` in Jira.
+8. All affected personas note the decision and continue
+9. Casey updates test cases. Riley notes in pitch.
 
 ### Persona conflict (two personas disagree on a design decision)
 
-1. Each persona states their position in a Jira comment — briefly and with rationale
-2. Escalate to Kostya: `[CONFLICT] Jordan and Morgan disagree on [topic]. Positions: [A] vs [B]. Kostya to decide.`
-3. Kostya's decision is posted as `[DECISION] [decision]. Final — not revisited.`
-4. Both personas proceed with the decision
+1. Each persona states their position briefly in a Jira comment with rationale
+2. Escalate: `[CONFLICT] Jordan and Morgan disagree on [topic]. Positions: [A] vs [B]. Kostya to decide.`
+3. Kostya posts: `[DECISION] [decision]. Final — not revisited.`
+4. Record in DECISIONS.md with tag `DESIGN`.
+5. Both personas proceed.
 
 ### Clock conflict (Jordan is behind and the plan cannot be saved)
 
-1. Jordan flags to Kostya at the hour mark: "I am [N] components behind plan."
-2. Kostya and Jordan agree what to cut (Alex confirms scope change)
-3. Casey updates test cases: removed tests for cut features
-4. Riley notes which features are cut: removed from pitch or labelled "(future)"
-5. Everyone continues on the reduced scope — no grief, no revisiting
+1. Jordan flags at hour mark in ACTIVITY.log: `[MILESTONE BEHIND]` with specifics
+2. Jordan flags to Kostya
+3. Kostya and Jordan agree on what to cut — Alex confirms scope change
+4. Record in DECISIONS.md with tag `SCOPE`. Post `[SCOPE CHANGE]` in Jira.
+5. Casey removes tests for cut features (note in casey.md and ACTIVITY.log)
+6. Riley notes which features are cut — remove or label "(future)"
+7. Everyone continues on reduced scope — no revisiting
 
 ---
 
@@ -650,8 +1196,36 @@ These are absolute. No exceptions, no edge cases, no "just this once."
 3. **Never pitch a feature Casey has not validated.** Riley only pitches the validated list.
 4. **Never hardcode credentials or API keys.** Claude API key lives in SN Credential Store only.
 5. **Never modify OOB tables.** Extend only.
-6. **Never make scope decisions unilaterally.** Alex owns scope. All scope questions go to Alex.
+6. **Never make scope decisions unilaterally.** Alex owns scope. All questions go to Alex.
 7. **Never hand off broken work.** Status is Blocked, not Complete.
-8. **Never work around a blocker silently.** Escalate immediately.
-9. **Never add features after hour 4.** Polish only.
-10. **The submission deadline is absolute.** If it is not done by hour 8, it does not ship.
+8. **Never hand off without the artifact committed and the URL in the Jira comment.**
+9. **Never work around a blocker silently.** Escalate immediately.
+10. **Never add features after hour 4.** Polish only.
+11. **Always write to ACTIVITY.log at every significant action.** If it is not logged, it did not happen.
+12. **The submission deadline is absolute.** If it is not done by hour 8, it does not ship.
+
+---
+
+## Quick Reference — Persona Log Write Points
+
+| Event                      | Tag           | Who writes it    |
+|----------------------------|---------------|------------------|
+| Starting a ticket          | `[START]`     | That persona     |
+| Ticket / sub-task complete | `[DONE]`      | That persona     |
+| Handover posted            | `[HANDOVER]`  | Sending persona  |
+| Blocker raised             | `[BLOCKER]`   | Blocking persona |
+| Blocker resolved           | `[UNBLOCK]`   | Receiving resolution |
+| Decision made              | `[DECISION]`  | Persona who posts DECISIONS.md entry |
+| Git commit (milestones)    | `[COMMIT]`    | Jordan           |
+| Successful deploy          | `[DEPLOY]`    | Jordan           |
+| Test result                | `[VALIDATE]`  | Casey            |
+| Scope change               | `[SCOPE]`     | Alex or Kostya   |
+| Hour checkpoint            | `[MILESTONE]` | Jordan (hourly)  |
+| Phase transition           | `[MILESTONE]` | Relevant persona |
+| Submission action          | `[SUBMIT]`    | Casey            |
+
+---
+
+*Maintained by Casey — QA & Documentation*
+*Last revised: 2026-04-26*
+*For changes to this document: raise a Jira comment on AXM-01 tagging Casey.*

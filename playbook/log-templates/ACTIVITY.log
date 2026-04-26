@@ -1,0 +1,30 @@
+# AXIOM ACTIVITY LOG — Run [RUN_ID]
+# ============================================================
+# Format:  [TAG] YYYY-MM-DDTHH:MM:SSZ | Persona | Description | Refs
+# Rules:   Append-only. Never edit existing lines.
+#          Corrections → new [CORRECTION] line.
+#          Commit this file with every significant git commit.
+#          This is the FIRST file to read when orienting after a session drop.
+# ============================================================
+# Tags:
+#   [INIT]       Run initialised
+#   [START]      Ticket / sub-task started
+#   [DONE]       Ticket / sub-task completed
+#   [HANDOVER]   Handover posted (Jira + HANDOVERS.md)
+#   [BLOCKER]    Blocker raised
+#   [UNBLOCK]    Blocker resolved
+#   [DECISION]   Decision recorded in DECISIONS.md
+#   [COMMIT]     Significant git commit
+#   [DEPLOY]     Successful npm run deploy
+#   [VALIDATE]   Casey test result
+#   [SCOPE]      Scope change approved
+#   [MILESTONE]  Phase transition or hour checkpoint
+#   [SUBMIT]     Submission action
+#   [CORRECTION] Correction to a prior line
+# ============================================================
+
+[INIT]      YYYY-MM-DDTHH:MM:SSZ | Kostya  | Run [RUN_ID] initialised. Repo: https://github.com/teivasystems/axiom-hackathon
+
+# ── PREP Phase ──────────────────────────────────────────────
+# Add entries below as work proceeds.
+
