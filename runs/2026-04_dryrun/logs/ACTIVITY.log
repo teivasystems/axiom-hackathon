@@ -1,0 +1,14 @@
+# AXIOM ACTIVITY LOG — Run 2026-04_dryrun
+# ============================================================
+# Format:  [TAG] YYYY-MM-DDTHH:MM:SSZ | Persona | Description | Refs
+# Rules:   Append-only. Never edit existing lines.
+#          Corrections → new [CORRECTION] line.
+#          Commit this file with every significant git commit.
+#          This is the FIRST file to read when orienting after a session drop.
+# ============================================================
+
+[INIT]      2026-04-29T00:00:00Z | Kostya  | Run 2026-04_dryrun initialised. Repo: https://github.com/teivasystems/axiom-hackathon
+[MILESTONE] 2026-04-29T00:00:00Z | Alex    | PREP phase started — dry run of full AXIOM process
+[START]     2026-04-29T00:01:00Z | Alex    | AXM-DR-02 Ideation session started
+[DONE]      2026-04-29T00:10:00Z | Alex    | AXM-DR-02 Ideation complete | runs/2026-04_dryrun/ideation/session.md
+[HANDOVER]  2026-04-29T00:10:00Z | Alex    | → Sam (AXM-DR-03) | HANDOVERS.md#H-001
