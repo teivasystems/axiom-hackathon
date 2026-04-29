@@ -12,3 +12,6 @@
 [START]     2026-04-29T00:01:00Z | Alex    | AXM-DR-02 Ideation session started
 [DONE]      2026-04-29T00:10:00Z | Alex    | AXM-DR-02 Ideation complete | runs/2026-04_dryrun/ideation/session.md
 [HANDOVER]  2026-04-29T00:10:00Z | Alex    | → Sam (AXM-DR-03) | HANDOVERS.md#H-001
+[START]     2026-04-29T00:11:00Z | Sam     | AXM-DR-03 Architecture doc started
+[DONE]      2026-04-29T00:30:00Z | Sam     | AXM-DR-03 Architecture complete | runs/2026-04_dryrun/docs/architecture.md
+[HANDOVER]  2026-04-29T00:30:00Z | Sam     | → Jordan (AXM-DR-08) and Morgan (AXM-DR-04) | HANDOVERS.md#H-002
