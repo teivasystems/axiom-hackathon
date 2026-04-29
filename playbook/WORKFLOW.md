@@ -1202,7 +1202,11 @@ These are absolute. No exceptions, no edge cases, no "just this once."
 9. **Never work around a blocker silently.** Escalate immediately.
 10. **Never add features after hour 4.** Polish only.
 11. **Always write to ACTIVITY.log at every significant action.** If it is not logged, it did not happen.
-12. **The submission deadline is absolute.** If it is not done by hour 8, it does not ship.
+12. NEVER transition a ticket to Done, Closed, or Won't Do without first posting
+    a closure comment per playbook/skills/jira.md. The comment is mandatory and
+    must include WORKED BY, KEY TAKEAWAYS, BLOCKERS HIT, ARTIFACT_URL, and COMMIT.
+    Order: closure comment → ACTIVITY.log entry → transition. Not the other way.
+13. **The submission deadline is absolute.** If it is not done by hour 8, it does not ship.
 
 ---
 

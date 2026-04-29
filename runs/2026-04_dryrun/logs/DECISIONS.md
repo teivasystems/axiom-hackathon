@@ -55,4 +55,8 @@ IMPACT:
 JIRA REF:    AXM-25 comment#40134
 ACTIVITY REF: 2026-04-29T01:00:00Z
 STATUS:      Active — awaiting Kostya action
+
+NOTE: CLAUDE.md updated to reflect per-run app folder structure.
+  SDK app must be initialised at runs/<run>/app/ not repo root.
+  now-sdk init must be run from runs/2026-04_dryrun/app/ once scope is known.
 ```

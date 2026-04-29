@@ -28,7 +28,79 @@ PDI preparation, scaffolding, and component shells.
 
 ---
 
+## Run Folder Structure
+
+**Each hackathon run has its own self-contained now-sdk app under its run folder.**
+The repo root contains no SDK app. All build commands run from `runs/<run>/app/`.
+
+```
+axiom-hackathon/
+├── runs/
+│   ├── 2026-04_dryrun/
+│   │   ├── app/              ← now-sdk app lives here (package.json, now.config.json, src/)
+│   │   │   ├── now.config.json
+│   │   │   ├── package.json
+│   │   │   ├── src/
+│   │   │   │   ├── fluent/   ← platform artifacts (tables, flows, UI, actions)
+│   │   │   │   └── server/   ← server-side scripts (Script Includes, logic)
+│   │   │   ├── dist/         ← build output (gitignored)
+│   │   │   └── node_modules/ ← gitignored
+│   │   ├── docs/             ← architecture.md, wireframes.md
+│   │   ├── ideation/
+│   │   ├── logs/
+│   │   └── personas/
+│   └── 2026-05_creatorcon/
+│       └── app/              ← separate SDK app for hackathon night
+├── playbook/
+└── CLAUDE.md
+```
+
+**Why per-run:** each run targets a different PDI with a different system-assigned scope
+prefix. Sharing a single app across runs is not possible.
+
+**gitignore additions required per run folder** (`runs/<run>/app/.gitignore`):
+```
+node_modules/
+dist/
+target/
+*.token
+```
+
+---
+
+## Initialising a New Run App
+
+Do this once per run, **after** Kostya has created the app in AES and confirmed the
+system-assigned scope name.
+
+```bash
+# 1. Create and enter the app folder
+mkdir -p runs/<run>/app && cd runs/<run>/app
+
+# 2. Scaffold (scope and name must match AES exactly)
+now-sdk init \
+  --appName "<App Display Name>" \
+  --scopeName "<x_prefix_appname>" \
+  --template typescript.basic \
+  --auth axiom-pdi          # or axiom-hackathon on the night
+
+# 3. Verify build is clean from the app folder
+npm run build
+
+# 4. Deploy (app must already exist in AES before this works)
+npm run deploy
+
+# 5. Confirm in PDI: Studio → My Company Applications
+```
+
+The scope prefix (`x_<prefix>`) is **system-assigned by the PDI** — never invent it.
+Get it from Kostya after AES app creation. Total scope length ≤ 18 characters.
+
+---
+
 ## Your Tools
+
+Run all commands from `runs/<run>/app/`. Never from the repo root.
 
 ```bash
 # Build
@@ -51,8 +123,8 @@ now-sdk auth --list                    # check active credential
 now-sdk auth --use axiom-pdi           # switch to dev PDI
 now-sdk auth --use axiom-hackathon     # switch to hackathon instance (night of)
 
-# Git
-git add -A
+# Git (always from repo root, not app subfolder)
+git add runs/<run>/app/src/
 git commit -m "[JORDAN] feat: <what was built> (AXM-XX)"
 git push origin main
 ```
@@ -61,33 +133,29 @@ git push origin main
 
 ## Source Structure
 
-Standard now-sdk 4.6.0 typescript.basic layout.
-App-specific directories will be added once Sam's architecture doc is complete.
+All source files go in `runs/<run>/app/src/`. Never create source outside this path.
 
 ```
-src/
+runs/<run>/app/src/
 ├── fluent/            ← platform artifacts (tables, flows, UI, actions)
 └── server/            ← server-side scripts (Script Includes, logic)
 ```
-
-All new files go into one of these two locations.
-Do not create files outside this structure without a documented reason.
 
 ---
 
 ## Build Loop
 
-Follow this every time, without exception.
+Follow this every time, without exception. Run from `runs/<run>/app/`.
 
 ```
-1. Write or modify source file in src/fluent/ or src/server/
-2. npm run build
-3. Read build output — fix errors before proceeding
-4. npm run deploy
-5. Read deploy output — fix errors before proceeding
-6. Validate on PDI (check record, flow, script behaviour)
-7. git commit: [JORDAN] feat/fix: <description> (AXM-XX)
-8. Update runs/2026-05_creatorcon/personas/jordan.md
+1. cd runs/<run>/app
+2. Write or modify source file in src/fluent/ or src/server/
+3. npm run build       — read ENTIRE output, fix all errors before step 4
+4. npm run deploy      — read ENTIRE output, fix all errors before step 5
+5. Validate on PDI (check record, flow, script behaviour)
+6. cd <repo root>
+7. git add runs/<run>/app/src/   git commit: [JORDAN] feat/fix: <description> (AXM-XX)
+8. Update runs/<run>/personas/jordan.md
 ```
 
 Never commit broken code.
@@ -128,22 +196,23 @@ Read these before building. Do not override decisions in these docs without flag
 
 
 ```
-playbook/WORKFLOW.md                                    ← READ FIRST: end-to-end process, Jira lifecycle, handover protocol, dependency map, rules
-playbook/skills/platform.md                            ← ServiceNow platform patterns: GlideRecord, scoped app conventions, ACLs, sys_id, Yokohama gotchas
-playbook/skills/flows.md                               ← Flow Designer: trigger types, action steps, subflows, variable naming, error handling
-playbook/skills/integration.md                         ← IntegrationHub REST step, credential alias pattern, Claude API request/response shape
-playbook/skills/ui.md                                  ← UI Builder vs Service Portal decision, widget patterns, client scripts, data binding
-runs/2026-05_creatorcon/docs/architecture.md           ← Sam's data model, integration spec, build order [REQUIRED before any build work begins]
-runs/2026-05_creatorcon/docs/wireframes.md             ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work begins]
-runs/2026-05_creatorcon/docs/decisions/                ← Architecture Decision Records
-runs/2026-05_creatorcon/personas/sam.md                ← Sam's open questions and flags
-runs/2026-05_creatorcon/personas/casey.md              ← Casey's test cases (validate against these)
-runs/2026-05_creatorcon/personas/jordan.md             ← your own completed/in-progress/blocker log
-playbook/team_charter.md                               ← persona definitions and operating protocol
-playbook/setup/infrastructure.md                       ← confirmed now-sdk commands and setup
-
-
+playbook/WORKFLOW.md                          ← READ FIRST: end-to-end process, Jira lifecycle, handover protocol, dependency map, rules
+playbook/skills/platform.md                  ← ServiceNow platform patterns: GlideRecord, scoped app conventions, ACLs, sys_id
+playbook/skills/flows.md                     ← Flow Designer: trigger types, action steps, subflows, variable naming, error handling
+playbook/skills/integration.md               ← IntegrationHub REST step, credential alias pattern, Claude API request/response shape
+playbook/skills/ui.md                        ← UI Builder vs Service Portal decision, widget patterns, client scripts, data binding
+runs/<run>/docs/architecture.md              ← Sam's data model, integration spec, build order [REQUIRED before any build work begins]
+runs/<run>/docs/wireframes.md                ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work begins]
+runs/<run>/logs/DECISIONS.md                 ← Architecture Decision Records — read before building, scope cuts live here
+runs/<run>/personas/sam.md                   ← Sam's open questions and flags
+runs/<run>/personas/casey.md                 ← Casey's test cases (validate against these)
+runs/<run>/personas/jordan.md                ← your own completed/in-progress/blocker log
+runs/<run>/logs/ACTIVITY.log                 ← running heartbeat — orient here first after any session drop
+playbook/team_charter.md                     ← persona definitions and operating protocol
+playbook/setup/infrastructure.md             ← confirmed now-sdk commands and setup
 ```
+
+Replace `<run>` with the current run folder name (e.g. `2026-04_dryrun`, `2026-05_creatorcon`).
 
 ---
 
@@ -151,7 +220,7 @@ playbook/setup/infrastructure.md                       ← confirmed now-sdk com
 
 When you complete a task:
 
-**1. Update `runs/2026-05_creatorcon/personas/jordan.md`:**
+**1. Update `runs/<run>/personas/jordan.md`:**
 ```
 ## Completed
 - [AXM-XX] <task name> — <one line summary>
@@ -192,14 +261,17 @@ now-sdk auth --use axiom-hackathon
 # 2. Verify
 now-sdk auth --list
 
-# 3. Confirm build is clean
+# 3. Enter the run app folder (created during PREP)
+cd runs/2026-05_creatorcon/app
+
+# 4. Confirm build is clean
 npm run build
 
-# 4. Deploy scaffold to hackathon instance
+# 5. Deploy scaffold to hackathon instance
 npm run deploy
 
-# 5. Kostya confirms app exists in PDI:
-#    System Applications → My Company Applications
+# 6. Kostya confirms app exists in PDI:
+#    Studio → My Company Applications
 ```
 
 Build order on the night (from Sam's architecture doc):
@@ -220,7 +292,8 @@ Do not hand off to Casey before full happy path is deployable.
 | Error | Likely cause | Action |
 |---|---|---|
 | `application was null` on deploy | App not registered on PDI | Create app in AES first, then deploy |
-| `Invalid scope` | scopeName mismatch | Check now.config.json scope vs AES app |
+| `Could not find package.json` | Running build from wrong directory | `cd runs/<run>/app` then retry |
+| `Invalid scope` | scopeName mismatch | Check now.config.json scope vs AES-assigned scope — never guess the prefix |
 | `Cannot find module '@servicenow/sdk'` | Missing dependencies | `npm run types` then `npm install` |
 | `Type error: any` | Strict mode violation | Add explicit type or comment with reason |
 | `Credential not found` | API key not in SN store | Kostya adds credential in PDI |
