@@ -18,3 +18,6 @@
 [DONE]      2026-04-29T00:45:00Z | Jordan  | Jira tickets created: AXM-21 (ideation/Done) AXM-22 (arch/Done) AXM-23 (wireframes/In Progress) AXM-24 (test cases/In Progress) AXM-25 (build/In Progress)
 [DONE]      2026-04-29T00:50:00Z | Jordan  | Persona field set on all tickets; AXM-21→Alex AXM-22→Sam AXM-23→Morgan AXM-24→Casey AXM-25→Jordan
 [BLOCKER]   2026-04-29T00:51:00Z | Jordan  | AXM-25 blocked — PDI not accessible, now-sdk auth not switched | Escalated to Kostya | Jira: AXM-25 comment#40133
+[UNBLOCK]   2026-04-29T01:00:00Z | Jordan  | Auth unblocked — axiom-pdi active, build clean | New blocker found on deploy
+[BLOCKER]   2026-04-29T01:00:00Z | Jordan  | AXM-25 blocked — scope prefix is PDI-bound, x_axiom_kudos invalid | Escalated to Kostya | D-001 | Jira: AXM-25 comment#40134
+[DECISION]  2026-04-29T01:00:00Z | Jordan  | D-001 logged — scope must be assigned via AES, architecture.md + now.config.json need update

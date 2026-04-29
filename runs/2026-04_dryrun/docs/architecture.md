@@ -7,8 +7,12 @@
 ## 1. App Scope
 
 **App name:** Team Kudos
-**Scope (sys_name):** `x_axiom_kudos`
+**Scope (sys_name):** `x_<pdi_prefix>_kudos` — ⚠️ PREFIX IS PDI-ASSIGNED (see D-001)
 **Display name:** Team Kudos
+
+> **D-001 OPEN:** Scope prefix is bound to the PDI namespace identifier and cannot be
+> freely chosen. Kostya must create the app in App Engine Studio on dev390976.service-now.com,
+> note the system-assigned scope, and update this doc + now.config.json before Jordan builds.
 
 **What it does:**
 - Employees submit peer kudos (giver, receiver, message, category)
