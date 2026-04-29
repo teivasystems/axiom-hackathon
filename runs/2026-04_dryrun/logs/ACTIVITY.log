@@ -16,3 +16,5 @@
 [DONE]      2026-04-29T00:30:00Z | Sam     | AXM-DR-03 Architecture complete | runs/2026-04_dryrun/docs/architecture.md
 [HANDOVER]  2026-04-29T00:30:00Z | Sam     | → Jordan (AXM-DR-08) and Morgan (AXM-DR-04) | HANDOVERS.md#H-002
 [DONE]      2026-04-29T00:45:00Z | Jordan  | Jira tickets created: AXM-21 (ideation/Done) AXM-22 (arch/Done) AXM-23 (wireframes/In Progress) AXM-24 (test cases/In Progress) AXM-25 (build/In Progress)
+[DONE]      2026-04-29T00:50:00Z | Jordan  | Persona field set on all tickets; AXM-21→Alex AXM-22→Sam AXM-23→Morgan AXM-24→Casey AXM-25→Jordan
+[BLOCKER]   2026-04-29T00:51:00Z | Jordan  | AXM-25 blocked — PDI not accessible, now-sdk auth not switched | Escalated to Kostya | Jira: AXM-25 comment#40133
