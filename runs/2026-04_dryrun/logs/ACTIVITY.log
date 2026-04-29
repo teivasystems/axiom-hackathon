@@ -15,3 +15,4 @@
 [START]     2026-04-29T00:11:00Z | Sam     | AXM-DR-03 Architecture doc started
 [DONE]      2026-04-29T00:30:00Z | Sam     | AXM-DR-03 Architecture complete | runs/2026-04_dryrun/docs/architecture.md
 [HANDOVER]  2026-04-29T00:30:00Z | Sam     | → Jordan (AXM-DR-08) and Morgan (AXM-DR-04) | HANDOVERS.md#H-002
+[DONE]      2026-04-29T00:45:00Z | Jordan  | Jira tickets created: AXM-21 (ideation/Done) AXM-22 (arch/Done) AXM-23 (wireframes/In Progress) AXM-24 (test cases/In Progress) AXM-25 (build/In Progress)
