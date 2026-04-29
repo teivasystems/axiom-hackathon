@@ -21,3 +21,6 @@
 [UNBLOCK]   2026-04-29T01:00:00Z | Jordan  | Auth unblocked — axiom-pdi active, build clean | New blocker found on deploy
 [BLOCKER]   2026-04-29T01:00:00Z | Jordan  | AXM-25 blocked — scope prefix is PDI-bound, x_axiom_kudos invalid | Escalated to Kostya | D-001 | Jira: AXM-25 comment#40134
 [DECISION]  2026-04-29T01:00:00Z | Jordan  | D-001 logged — scope must be assigned via AES, architecture.md + now.config.json need update
+[UNBLOCK]   2026-04-29T01:15:00Z | Jordan  | D-001 resolved — vendor prefix 9274, scope x_9274_kudos confirmed
+[COMMIT]    2026-04-29T01:15:00Z | Jordan  | App scaffolded: runs/2026-04_dryrun/app/ — now.config.json scope x_9274_kudos
+[DEPLOY]    2026-04-29T01:15:00Z | Jordan  | Scaffold deployed clean to dev390976 | https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3

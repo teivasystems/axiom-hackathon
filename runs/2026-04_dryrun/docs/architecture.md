@@ -7,12 +7,14 @@
 ## 1. App Scope
 
 **App name:** Team Kudos
-**Scope (sys_name):** `x_<pdi_prefix>_kudos` — ⚠️ PREFIX IS PDI-ASSIGNED (see D-001)
+**Scope (sys_name):** `x_9274_kudos`
+**Scope ID:** `8f59e7b4aa4a42c79236d248bd1672a3`
 **Display name:** Team Kudos
+**PDI:** `https://dev390976.service-now.com`
+**App URL:** `https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3`
 
-> **D-001 OPEN:** Scope prefix is bound to the PDI namespace identifier and cannot be
-> freely chosen. Kostya must create the app in App Engine Studio on dev390976.service-now.com,
-> note the system-assigned scope, and update this doc + now.config.json before Jordan builds.
+> **D-001 RESOLVED:** Vendor prefix `9274` confirmed from PDI. Scope `x_9274_kudos` assigned.
+> App scaffolded via `now-sdk init`, deployed clean. now.config.json is source of truth.
 
 **What it does:**
 - Employees submit peer kudos (giver, receiver, message, category)
@@ -29,7 +31,7 @@
 
 ## 2. Table Schema
 
-### `x_axiom_kudos_entry`
+### `x_9274_kudos_entry`
 
 **Display name:** Kudos Entry
 **Parent table:** `task` (extends task — gives us sys_id, number, state, assignment for free)
@@ -66,9 +68,9 @@ No OOB table modifications. Notifications are created programmatically — we do
 | Property | Value |
 |----------|-------|
 | **Name** | Kudos Submitted Notification |
-| **Sys name** | `x_axiom_kudos_notification_flow` |
-| **Trigger** | Record Created — table: `x_axiom_kudos_entry` — condition: always (no filter) |
-| **Scope** | `x_axiom_kudos` |
+| **Sys name** | `x_9274_kudos_notification_flow` |
+| **Trigger** | Record Created — table: `x_9274_kudos_entry` — condition: always (no filter) |
+| **Scope** | `x_9274_kudos` |
 
 **Actions (in order):**
 
@@ -95,9 +97,9 @@ No OOB table modifications. Notifications are created programmatically — we do
 | Property | Value |
 |----------|-------|
 | **Name** | Generate Team Kudos Digest |
-| **Sys name** | `x_axiom_kudos_digest_flow` |
-| **Trigger** | Service Catalog Item OR manual "Run Flow" — table: `x_axiom_kudos_entry` is the data source but trigger is a Record action on a dummy "Digest Request" record. **Simplification for dry run:** trigger is a manually-runnable flow (no trigger table) — Jordan triggers it via Flow Designer UI for validation |
-| **Scope** | `x_axiom_kudos` |
+| **Sys name** | `x_9274_kudos_digest_flow` |
+| **Trigger** | Service Catalog Item OR manual "Run Flow" — table: `x_9274_kudos_entry` is the data source but trigger is a Record action on a dummy "Digest Request" record. **Simplification for dry run:** trigger is a manually-runnable flow (no trigger table) — Jordan triggers it via Flow Designer UI for validation |
+| **Scope** | `x_9274_kudos` |
 
 **Actions (in order):**
 
@@ -168,8 +170,8 @@ No OOB table modifications. Notifications are created programmatically — we do
 - Output format: plain text, no markdown headers (easier to display in Service Portal)
 
 **Output handling:**
-- Parsed text stored in `x_axiom_kudos_entry.u_digest_text` on a designated "digest record"
-- **Simpler approach for dry run:** store digest in a single global System Property `x_axiom_kudos.latest_digest` — no extra table needed. Widget reads this property.
+- Parsed text stored in `x_9274_kudos_entry.u_digest_text` on a designated "digest record"
+- **Simpler approach for dry run:** store digest in a single global System Property `x_9274_kudos.latest_digest` — no extra table needed. Widget reads this property.
 
 ---
 
@@ -180,7 +182,7 @@ No OOB table modifications. Notifications are created programmatically — we do
 | Property | Value |
 |----------|-------|
 | **Name** | KudosService |
-| **Scope** | `x_axiom_kudos` |
+| **Scope** | `x_9274_kudos` |
 | **Accessible from** | This application scope only (no cross-scope calls needed) |
 | **Extends** | AbstractAjaxProcessor (for potential AJAX calls from widget client script) |
 
@@ -214,7 +216,7 @@ getRecentKudos(days)
 sendNotification(receiverSysId, giverName, message, categoryLabel)
 
 /**
- * Stores the Claude digest in System Property x_axiom_kudos.latest_digest.
+ * Stores the Claude digest in System Property x_9274_kudos.latest_digest.
  * @param {string} digestText
  * @returns {boolean}
  */
@@ -236,7 +238,7 @@ getDigest()
 | Property | Value |
 |----------|-------|
 | **Name** | ClaudeDigest |
-| **Scope** | `x_axiom_kudos` |
+| **Scope** | `x_9274_kudos` |
 | **Accessible from** | This application scope only |
 | **Extends** | (none — plain Script Include) |
 
@@ -270,9 +272,9 @@ parseResponse(responseBody, statusCode)
 | Property | Value |
 |----------|-------|
 | **Name** | Kudos Submit Widget |
-| **Sys name** | `x_axiom_kudos_submit_widget` |
+| **Sys name** | `x_9274_kudos_submit_widget` |
 | **Type** | Service Portal Widget |
-| **Data source** | `sys_user` (receiver lookup) + `x_axiom_kudos_entry` (write) |
+| **Data source** | `sys_user` (receiver lookup) + `x_9274_kudos_entry` (write) |
 | **Fields displayed** | Receiver (reference field / people picker), Message (textarea), Category (dropdown) |
 | **User role** | `snc_internal` (any logged-in employee) |
 | **Wireframe cross-ref** | Screen 1 — Submit Kudo Form (Morgan AXM-DR-04) |
@@ -284,9 +286,9 @@ parseResponse(responseBody, statusCode)
 | Property | Value |
 |----------|-------|
 | **Name** | Kudos Feed Widget |
-| **Sys name** | `x_axiom_kudos_feed_widget` |
+| **Sys name** | `x_9274_kudos_feed_widget` |
 | **Type** | Service Portal Widget |
-| **Data source** | `x_axiom_kudos_entry` (read, last 30 records) + System Property for digest |
+| **Data source** | `x_9274_kudos_entry` (read, last 30 records) + System Property for digest |
 | **Fields displayed** | Giver name, Receiver name, Message, Category badge, Created date; Claude Digest block |
 | **User role** | `snc_internal` (any logged-in employee) |
 | **Wireframe cross-ref** | Screen 2 — Team Feed + Claude Digest (Morgan AXM-DR-04) |
@@ -315,7 +317,7 @@ No Store apps required.
 Jordan builds in this order exactly. Do not skip ahead.
 
 ```
-1.  Table: x_axiom_kudos_entry
+1.  Table: x_9274_kudos_entry
     - Define schema in src/fluent/ per Section 2
     - Extend task, add all u_ fields
     - npm run build && npm run deploy
@@ -347,11 +349,11 @@ Jordan builds in this order exactly. Do not skip ahead.
     - TEST CLAUDE CALL INDEPENDENTLY before wiring: run a REST test from IntegrationHub
     - Wire flows only after independent test passes
     - Trigger manually from Flow Designer
-    - Validate: System Property x_axiom_kudos.latest_digest has content from Claude
+    - Validate: System Property x_9274_kudos.latest_digest has content from Claude
 
 6.  Widget: Submit Kudo (Screen 1)
     - Implement per Section 7 and Morgan's wireframe
-    - Validate: submit form → record appears in x_axiom_kudos_entry → notification fires
+    - Validate: submit form → record appears in x_9274_kudos_entry → notification fires
 
 7.  Widget: Team Kudos Feed (Screen 2)
     - Implement per Section 7 and Morgan's wireframe

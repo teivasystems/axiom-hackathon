@@ -54,9 +54,13 @@ IMPACT:
 
 JIRA REF:    AXM-25 comment#40134
 ACTIVITY REF: 2026-04-29T01:00:00Z
-STATUS:      Active — awaiting Kostya action
+STATUS:      Resolved ✅
 
-NOTE: CLAUDE.md updated to reflect per-run app folder structure.
-  SDK app must be initialised at runs/<run>/app/ not repo root.
-  now-sdk init must be run from runs/2026-04_dryrun/app/ once scope is known.
+RESOLUTION:
+  Vendor prefix queried from PDI sys_properties (glide.appcreator.company.code = 9274).
+  Scope x_9274_kudos confirmed (12 chars, within 18-char limit).
+  App scaffolded via: now-sdk init --appName "Team Kudos" --scopeName "x_9274_kudos" --template typescript.basic --auth axiom-pdi
+  Build clean. Deployed to https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3
+  architecture.md updated — all x_axiom_kudos references replaced with x_9274_kudos.
+  CLAUDE.md updated — per-run app folder structure documented, scope prefix procedure added.
 ```

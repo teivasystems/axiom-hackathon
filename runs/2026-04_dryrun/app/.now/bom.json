@@ -1,0 +1,41 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "serialNumber": "urn:uuid:0860a2d0-03bc-49af-bf60-6de5c77aa06e",
+  "metadata": {
+    "timestamp": "2026-04-29T21:41:52.941Z",
+    "tools": {
+      "components": [
+        {
+          "type": "library",
+          "name": "sdk-build-plugins",
+          "group": "@servicenow",
+          "version": "4.6.0",
+          "author": "ServiceNow"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "name": "team-kudos",
+      "version": "0.0.1",
+      "bom-ref": "pkg:servicenow/team-kudos@0.0.1?sys_scope_id=8f59e7b4aa4a42c79236d248bd1672a3",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNLICENSED"
+          }
+        }
+      ],
+      "purl": "pkg:servicenow/team-kudos@0.0.1?sys_scope_id=8f59e7b4aa4a42c79236d248bd1672a3"
+    }
+  },
+  "components": [],
+  "dependencies": [
+    {
+      "ref": "pkg:servicenow/team-kudos@0.0.1?sys_scope_id=8f59e7b4aa4a42c79236d248bd1672a3"
+    }
+  ]
+}
