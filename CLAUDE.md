@@ -196,20 +196,18 @@ Read these before building. Do not override decisions in these docs without flag
 
 
 ```
-playbook/WORKFLOW.md                          ← READ FIRST: end-to-end process, Jira lifecycle, handover protocol, dependency map, rules
-playbook/skills/platform.md                  ← ServiceNow platform patterns: GlideRecord, scoped app conventions, ACLs, sys_id
-playbook/skills/flows.md                     ← Flow Designer: trigger types, action steps, subflows, variable naming, error handling
-playbook/skills/integration.md               ← IntegrationHub REST step, credential alias pattern, Claude API request/response shape
-playbook/skills/ui.md                        ← UI Builder vs Service Portal decision, widget patterns, client scripts, data binding
-runs/<run>/docs/architecture.md              ← Sam's data model, integration spec, build order [REQUIRED before any build work begins]
-runs/<run>/docs/wireframes.md                ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work begins]
-runs/<run>/logs/DECISIONS.md                 ← Architecture Decision Records — read before building, scope cuts live here
-runs/<run>/personas/sam.md                   ← Sam's open questions and flags
+playbook/cards/jordan.md                     ← READ FIRST: your operation card — commands, build loop, blocker protocol, handover format
+runs/<run>/personas/jordan.md                ← your session state — completed, in-progress, blockers (orient here after session drop)
+runs/<run>/docs/architecture.md              ← Sam's data model, integration spec, build manifest [REQUIRED before any build work]
+runs/<run>/docs/wireframes.md                ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work]
+runs/<run>/logs/DECISIONS.md                 ← scope cuts and architecture changes — read before building
+runs/<run>/logs/ACTIVITY.log                 ← running heartbeat — read last [CHECKPOINT] line after session drop
 runs/<run>/personas/casey.md                 ← Casey's test cases (validate against these)
-runs/<run>/personas/jordan.md                ← your own completed/in-progress/blocker log
-runs/<run>/logs/ACTIVITY.log                 ← running heartbeat — orient here first after any session drop
-playbook/team_charter.md                     ← persona definitions and operating protocol
-playbook/setup/infrastructure.md             ← confirmed now-sdk commands and setup
+playbook/skills/platform.md                  ← ServiceNow platform patterns (load when needed)
+playbook/skills/flows.md                     ← Flow Designer patterns (load when needed)
+playbook/skills/integration.md               ← IntegrationHub + Claude API patterns (load when needed)
+playbook/skills/ui.md                        ← UI patterns (load when needed)
+playbook/WORKFLOW.md                          ← full reference — dependency map, conflict resolution (load only when card doesn't cover it)
 ```
 
 Replace `<run>` with the current run folder name (e.g. `2026-04_dryrun`, `2026-05_creatorcon`).

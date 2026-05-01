@@ -1,11 +1,14 @@
 # Team AXIOM — End-to-End Workflow
 
-## The complete operating manual for every AI persona
+## Reference document — personas use their operation cards, not this file
 
-> **Read this document before starting any task.**
-> It tells you where the project is, what you must do, how to hand off,
-> how to update Jira, and how to maintain the logs that keep everyone
-> oriented when time is short.
+> **Personas:** do NOT read this document at session start.
+> Read your operation card in `playbook/cards/<your-name>.md` instead.
+> It contains everything you need in 150–200 lines.
+>
+> **This document** is the authoritative reference for the full process,
+> dependency map, conflict resolution protocol, and submission checklist.
+> Read it when your card doesn't cover a specific situation.
 
 ---
 
