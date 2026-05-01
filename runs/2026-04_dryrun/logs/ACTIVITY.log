@@ -28,5 +28,8 @@
 [START]      2026-05-01T00:01:00Z | Jordan  | AXM-25 BUILD Row 1 — Table x_9274_kudos_entry
 [BLOCKER]    2026-05-01T00:05:00Z | Jordan  | Deploy blocked — axiom-pdi OAuth token expired | Escalating to Kostya
 [UNBLOCK]    2026-05-01T00:10:00Z | Jordan  | Re-auth complete — axiom-pdi basic auth active
-[COMMIT]     2026-05-01T00:10:00Z | Jordan  | Row 1 Table x_9274_kudos_entry built | sha: pending
+[COMMIT]     2026-05-01T00:10:00Z | Jordan  | Row 1 Table x_9274_kudos_entry built | sha: 48578f7
 [DEPLOY]     2026-05-01T00:10:00Z | Jordan  | Row 1 deployed clean | https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3
+[COMMIT]     2026-05-02T00:00:00Z | Jordan  | Rows 2-8 built — KudosService, ClaudeDigest, Notification Flow, Digest Flow, Submit Widget, Feed Widget
+[DEPLOY]     2026-05-02T00:00:00Z | Jordan  | Rows 2-8 deployed clean | notification flow active; digest flow awaits manual trigger; Row 4 Claude REST pending credential setup
+[CHECKPOINT] 2026-05-02T00:00:00Z | Jordan  | Phase: BUILD complete (7/8 rows) | Row 4 blocked on Claude API credential alias | Next: Kostya configures credential, then wire REST step in digest flow
