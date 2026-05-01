@@ -24,3 +24,9 @@
 [UNBLOCK]   2026-04-29T01:15:00Z | Jordan  | D-001 resolved — vendor prefix 9274, scope x_9274_kudos confirmed
 [COMMIT]    2026-04-29T01:15:00Z | Jordan  | App scaffolded: runs/2026-04_dryrun/app/ — now.config.json scope x_9274_kudos
 [DEPLOY]    2026-04-29T01:15:00Z | Jordan  | Scaffold deployed clean to dev390976 | https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3
+[CHECKPOINT] 2026-05-01T00:00:00Z | Jordan  | Phase: BUILD | Done: scaffold deployed | Next: Row 1 Table x_9274_kudos_entry | Blockers: None
+[START]      2026-05-01T00:01:00Z | Jordan  | AXM-25 BUILD Row 1 — Table x_9274_kudos_entry
+[BLOCKER]    2026-05-01T00:05:00Z | Jordan  | Deploy blocked — axiom-pdi OAuth token expired | Escalating to Kostya
+[UNBLOCK]    2026-05-01T00:10:00Z | Jordan  | Re-auth complete — axiom-pdi basic auth active
+[COMMIT]     2026-05-01T00:10:00Z | Jordan  | Row 1 Table x_9274_kudos_entry built | sha: pending
+[DEPLOY]     2026-05-01T00:10:00Z | Jordan  | Row 1 deployed clean | https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3
