@@ -11,7 +11,7 @@
 
 ## Constraints Given to Team
 
-- Platform: ServiceNow Now Platform (Yokohama release)
+- Platform: ServiceNow Now Platform (Zurich / Australia release)
 - Build time: 8 hours, one evening, one human executing
 - Categories available: AES, GenAI, 4good, HackZone
 - Team model: AI-native (the process itself is part of the pitch)

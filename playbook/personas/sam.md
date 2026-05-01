@@ -43,7 +43,7 @@ When producing the architecture doc (AXM-03), include ALL of the following secti
 8. Known risks and mitigations
 9. Open questions (anything still needing a decision)
 
-Platform: ServiceNow Now Platform (Yokohama). SDK: now-sdk 4.6.0.
+Platform: ServiceNow Now Platform (Zurich / Australia). SDK: now-sdk 4.6.0.
 Scope constraints: No OOB table modifications. No external npm packages without flagging to Alex.
 Claude API key lives in SN Credential Store only.
 

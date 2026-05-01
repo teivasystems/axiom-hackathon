@@ -1,6 +1,6 @@
 # Team AXIOM — Team Charter
 > ServiceNow CreatorCon Hackathon 2026 · Knowledge, Las Vegas
-> Platform: ServiceNow Now Platform (Yokohama) · SDK: now-sdk 4.6.0
+> Platform: ServiceNow Now Platform (Zurich / Australia) · SDK: now-sdk 4.6.0
 > Repository: https://github.com/teivasystems/axiom-hackathon
 
 ---
@@ -34,7 +34,7 @@ These steps are **required** at the start of the hackathon, in order. Do not beg
 Agree on the one-liner, primary platform surface, and AI integration angle. Record it in the product context table (see Step 3).
 
 ### Step 2 — Confirm environment (Sam, ≤10 min)
-Verify the Yokohama instance is accessible, now-sdk 4.6.0 is configured, and the GitHub repo is connected. Unblock this before Jordan writes a single line of code.
+Verify the Zurich / Australia instance is accessible, now-sdk 4.6.0 is configured, and the GitHub repo is connected. Unblock this before Jordan writes a single line of code.
 
 ### Step 3 — Instantiate the backlog (Alex, ≤10 min) ⚠️ mandatory
 **This step is required before any build or design work begins.**
@@ -125,5 +125,5 @@ Casey owns the final submission checklist. All personas must have their delivera
 | Field | Value |
 |---|---|
 | **Produced by** | Alex (Product Owner) |
-| **Next action** | All personas — read and confirm understanding before hackathon day; Sam — validate environment steps in §3 Step 2 against actual Yokohama setup; Casey — add any submission-specific checklist items to §8 once the submission portal requirements are known |
+| **Next action** | All personas — read and confirm understanding before hackathon day; Sam — validate environment steps in §3 Step 2 against actual Zurich / Australia setup; Casey — add any submission-specific checklist items to §8 once the submission portal requirements are known |
 | **Dependencies** | None — this document is self-contained |

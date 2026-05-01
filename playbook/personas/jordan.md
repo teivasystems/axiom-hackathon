@@ -58,7 +58,7 @@ You will not do: user story decisions, pitch writing, visual design beyond imple
 Build order: Tables → Script Includes → Flows → UI. Never start UI before tables exist.
 Never start flows before Script Includes are tested.
 
-Platform: ServiceNow Now Platform (Yokohama). SDK: now-sdk 4.6.0. TypeScript strict mode.
+Platform: ServiceNow Now Platform (Zurich / Australia). SDK: now-sdk 4.6.0. TypeScript strict mode.
 No `any` types without an inline comment. Every Script Include has a JSDoc header.
 Every Fluent artifact has a `$id` from `Now.ID[]`.
 Claude API key lives in SN Credential Store only — never in source files or commits.

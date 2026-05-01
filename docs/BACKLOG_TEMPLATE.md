@@ -65,7 +65,7 @@
 
 | ID | Task | Epic | Assignee | Status |
 |---|---|---|---|---|
-| T-001 | Scaffold app on Yokohama instance | E01 | Sam | 🔲 Todo |
+| T-001 | Scaffold app on Zurich / Australia instance | E01 | Sam | 🔲 Todo |
 | T-002 | Configure now-sdk 4.6.0 + repo link | E01 | Sam / Jordan | 🔲 Todo |
 | T-003 | Now Assist NLU / skill registration | E03 | Sam | 🔲 Todo |
 | T-004 | Final submission package & upload | E05 | Casey | 🔲 Todo |
@@ -107,7 +107,7 @@ Demo constraint: [what must be live in ~8 hours]
 
 Generate a minimal P0/P1 backlog for BACKLOG.md in the AXIOM template format.
 Keep to 6–10 stories total. Include 2–3 technical tasks.
-Flag any story that depends on ServiceNow Yokohama-specific APIs.
+Flag any story that depends on release-specific APIs (Zurich / Australia).
 ```
 
 Edit the generated items, assign owners, and commit `BACKLOG.md` before the first stand-up.
@@ -119,6 +119,6 @@ Edit the generated items, assign owners, and commit `BACKLOG.md` before the firs
 | Field | Value |
 |---|---|
 | **Produced by** | Alex (Product Owner) |
-| **Next action** | Sam — confirm T-001 / T-002 environment tasks are correct for Yokohama; Jordan — review story format and add any developer-side technical tasks you foresee |
+| **Next action** | Sam — confirm T-001 / T-002 environment tasks are correct for Zurich / Australia; Jordan — review story format and add any developer-side technical tasks you foresee |
 | **When to instantiate** | Immediately at hackathon kick-off, before first team sync |
 | **Commit target** | `docs/BACKLOG.md` (this template stays at `docs/BACKLOG_TEMPLATE.md`) |

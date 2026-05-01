@@ -234,7 +234,7 @@ Correct pattern:
 
 ---
 
-## Yokohama IntegrationHub Gotchas
+## Zurich / Australia — IntegrationHub Gotchas
 
 | Issue | Detail |
 |---|---|
@@ -243,6 +243,7 @@ Correct pattern:
 | Request body as flow variable | Build JSON string in a Run Script step, pass as flow variable to REST step body |
 | Response body encoding | Always a String — always `JSON.parse()` before accessing fields |
 | Empty response | `stop_reason: "max_tokens"` means response was truncated — increase max_tokens |
+| IH spoke versions | Zurich / Australia may ship updated spoke versions — if a spoke action shape changes, check the spoke release notes before assuming your config is correct |
 
 ---
 

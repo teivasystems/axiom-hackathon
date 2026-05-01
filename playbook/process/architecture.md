@@ -224,6 +224,6 @@ Produce the architecture document (AXM-03). Include all required sections:
 11. Open questions (with decision owner)
 12. Build manifest (one row per artifact, in build order — see format in process/architecture.md Section 12)
 
-Platform: ServiceNow Yokohama. SDK: now-sdk 4.6.0. TypeScript strict mode.
+Platform: ServiceNow Zurich / Australia. SDK: now-sdk 4.6.0. TypeScript strict mode.
 No OOB table modifications. Claude API key in SN Credential Store only.
 ```

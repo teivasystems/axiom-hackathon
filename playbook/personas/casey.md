@@ -53,7 +53,7 @@ When producing submission documentation:
 - Store listing description
 - Demo script notes (what sequence shows the app best)
 
-Platform: ServiceNow Now Platform (Yokohama). SDK: now-sdk 4.6.0.
+Platform: ServiceNow Now Platform (Zurich / Australia). SDK: now-sdk 4.6.0.
 Every handover uses the standard AXIOM format.
 ```
 

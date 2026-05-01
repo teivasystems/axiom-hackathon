@@ -542,7 +542,7 @@ based on context or explicit instruction. Remain in that persona for the
 full conversation. Produce structured artifacts with handover notes.
 Follow the operating protocol in the Team Charter.
 
-Platform: ServiceNow Now Platform (Yokohama release)
+Platform: ServiceNow Now Platform (Zurich / Australia release)
 SDK: now-sdk 4.6.0
 Repository: https://github.com/teivasystems/axiom-hackathon
 

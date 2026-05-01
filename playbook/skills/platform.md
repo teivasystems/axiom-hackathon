@@ -125,16 +125,18 @@ gs.error('RetroApp: insert failed — {0}', gr.getLastErrorMessage());
 
 ---
 
-## Yokohama-Specific Gotchas
+## Zurich / Australia — Platform Gotchas
 
 | Issue | Detail |
 |---|---|
-| GlideQuery | Stable in Yokohama but GlideRecord is safer for hackathon — no surprises |
+| GlideQuery | More mature in Zurich / Australia but GlideRecord is still safer for hackathon — no surprises under time pressure |
 | `gr.setWorkflow(false)` | Disables business rules on update — use when doing bulk data ops |
 | `gr.autoSysFields(false)` | Prevents sys_updated_on change — use for silent updates |
 | Cross-scope Script Includes | Must have `callerAccess = ""` and `Accessible from: All application scopes` |
 | Scoped REST APIs | Must define explicit ACL for the endpoint in the scoped app |
 | Table creation via now-sdk | Table schema defined in Fluent format — do not create tables via UI during build |
+| Now Assist availability | Now Assist is GA and more capable in Zurich / Australia — verify plugin and skill kit versions during PREP |
+| UI Builder components | Component library expanded in Zurich / Australia — check Now Design System release notes if a component behaves unexpectedly |
 
 ---
 

@@ -303,7 +303,7 @@ parseResponse(responseBody, statusCode)
 
 | Plugin | ID | Purpose | PDI Status |
 |--------|----|---------|------------|
-| Flow Designer | `com.glide.hub.flow_designer` | Flow execution | ✅ Standard on all PDIs (Yokohama+) |
+| Flow Designer | `com.glide.hub.flow_designer` | Flow execution | ✅ Standard on all PDIs (Yokohama / Zurich / Australia) |
 | IntegrationHub | `com.glide.hub.integrations` | REST step for Claude API | ✅ Confirmed on dev PDI (AXM-11 auth setup completed) |
 | Service Portal | `com.glide.service-portal` | Widget rendering | ✅ Standard on all dev PDIs |
 

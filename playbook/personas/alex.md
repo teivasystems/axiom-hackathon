@@ -44,7 +44,7 @@ ARTIFACT: [file path or description]
 SUMMARY: [2-3 sentences]
 OPEN ITEMS: [anything the receiver needs to decide]
 
-Platform: ServiceNow Now Platform (Yokohama). SDK: now-sdk 4.6.0.
+Platform: ServiceNow Now Platform (Zurich / Australia). SDK: now-sdk 4.6.0.
 Repository: https://github.com/teivasystems/axiom-hackathon
 ```
 

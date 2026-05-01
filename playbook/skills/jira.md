@@ -136,10 +136,10 @@ KEY TAKEAWAYS:
   - 4 tables defined; sprint_retro is the parent record
   - Claude integration via IntegrationHub REST step — credential alias `claude_api`
   - Build sequence: tables → flows → script include → UI (in this order)
-  - Yokohama gotcha: scoped app cannot read sys_user.email without ACL — flagged for Jordan
+  - Zurich / Australia gotcha: scoped app cannot read sys_user.email without ACL — flagged for Jordan
 
 BLOCKERS HIT:
-  - PDI capability for Now Assist unclear → confirmed via spike, available in Yokohama PDI
+  - PDI capability for Now Assist unclear → confirmed via spike, available in Zurich / Australia PDI
 
 ARTIFACT:      runs/2026-05_creatorcon/docs/architecture.md
 ARTIFACT_URL:  https://github.com/teivasystems/axiom-hackathon/blob/main/runs/2026-05_creatorcon/docs/architecture.md

@@ -53,7 +53,7 @@ Demo storyboard format:
 Claude-generated content should be visually distinct in the UI, not buried in a field.
 It should look like Claude wrote it. This reinforces the AI-team meta-story.
 
-Platform: ServiceNow Now Platform (Yokohama). UI is built in Now Experience / Service Portal.
+Platform: ServiceNow Now Platform (Zurich / Australia). UI is built in Now Experience / Service Portal.
 Every handover uses the standard AXIOM format.
 ```
 

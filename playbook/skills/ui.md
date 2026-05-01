@@ -254,7 +254,7 @@ On error:   Show error toast
 
 ---
 
-## Yokohama UI Gotchas
+## Zurich / Australia — UI Gotchas
 
 | Issue | Detail |
 |---|---|
@@ -262,9 +262,11 @@ On error:   Show error toast
 | Service Portal scope | Portal and pages are typically in global scope — widgets in your app scope |
 | Anonymous access | Service Portal supports it natively; UI Builder requires explicit role assignment |
 | Mobile | Service Portal is more mobile-friendly out of the box |
-| Component library | UI Builder uses Now Design System components — don't import external CSS |
+| Component library | UI Builder uses Now Design System (NDS) components — Zurich / Australia NDS may have new components; check release notes before assuming a component doesn't exist |
 | Deployment | UI Builder pages deploy via now-sdk Fluent format in `src/fluent/` |
 | Portal widgets | Deploy as XML via `src/fluent/` — widget server/client/HTML/CSS in separate fields |
+| Now Assist sidebar | GA in Zurich / Australia Workspaces — enable via Workspace config, no custom code required for OOB summarisation |
+| Employee Center version | EC receives UX updates per release — verify theme and topic card config against the actual Zurich / Australia EC version on the PDI during PREP |
 
 ---
 
@@ -320,7 +322,7 @@ Workspace
 **Plugin check (PREP):**
 ```javascript
 gs.info('UI Builder active: ' + GlidePluginManager.isActive('com.glide.ui-builder'));
-// Workspaces require UI Builder — always present on Yokohama PDI
+// Workspaces require UI Builder — always present on Zurich / Australia PDI
 ```
 
 **Gotcha:** Workspace data resources use the Table API or a scripted data resource — they do not call Script Includes directly. Pass data via a REST API endpoint or Scripted Data Resource defined in your scoped app.
