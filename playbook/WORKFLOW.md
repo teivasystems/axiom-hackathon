@@ -803,6 +803,27 @@ When Jordan hits a blocker:
    [DECISION]  HH:MM | Jordan | D-NNN logged | runs/[run]/logs/DECISIONS.md
    ```
 
+### Platform fallback decision protocol
+
+When a PDI lacks a plugin or capability that the architecture depends on (e.g., IntegrationHub not installed, ATF plugin inactive, Service Portal missing):
+
+1. **Detect early.** Run the PREP plugin checklist (`playbook/skills/platform.md`) before build night. Discovering gaps mid-build wastes time under the clock.
+2. **Stop — do not implement a workaround silently.** A silent fallback is a scope change. Alex must know.
+3. **Log the gap immediately:**
+   ```
+   [BLOCKER] HH:MM | Jordan | <plugin> not available on PDI — arch assumes it | AXM-XX | Escalating to Alex
+   ```
+4. **State the exact decision needed:** "IntegrationHub REST spoke is not installed. Architecture spec uses IH REST step for Claude API. Options: (a) request IH installation, (b) approve sn_ws.RESTMessageV2 fallback in ClaudeDigest SI, (c) cut Claude integration from scope."
+5. **Wait for Alex's call.** Do not begin implementing option (b) while waiting — the decision may be (c).
+6. **If Alex approves fallback:** document it as a DECISION, update architecture.md to match the actual implementation, then build. No surprises for Casey's test cases.
+
+**Common approved fallbacks:**
+| Missing | Approved fallback |
+|---|---|
+| IntegrationHub REST spoke | `sn_ws.RESTMessageV2` in Script Include, credential read via `sn_cc.ConnectionCredentialsUtil` |
+| ATF plugin inactive | Skip ATF — do not build test files that cannot run |
+| Service Portal not installed | Confirm with Morgan — may switch to UI Builder or cut the widget scope |
+
 ### Scope triage if behind
 
 | Hour check | If behind                          | Action                                              |

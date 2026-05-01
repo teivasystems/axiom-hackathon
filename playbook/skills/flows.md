@@ -4,6 +4,144 @@
 
 ---
 
+## Fluent SDK — Flow DSL (REQUIRED READING before writing any flow)
+
+> **Use this section when building flows via now-sdk source files.** The GUI section below applies when editing in Flow Designer after deploy.
+
+### Correct imports
+
+```typescript
+// ALL flow primitives come from @servicenow/sdk/automation — NOT /core
+import { Flow, wfa, trigger, action } from '@servicenow/sdk/automation'
+```
+
+Do not import `Flow` from `@servicenow/sdk/core` — it does not exist there.
+
+### Minimal working flow
+
+```typescript
+import { Flow, wfa, trigger, action } from '@servicenow/sdk/automation'
+
+export const my_flow = Flow(
+    {
+        $id: Now.ID['fl0'],
+        name: 'My Flow Name',
+        description: 'One-line description.',
+        runAs: 'system',
+    },
+    wfa.trigger(trigger.record.created, { $id: Now.ID['fl0_trig'] }, {
+        table: 'x_9274_kudos_entry',   // exact table sys_name — NOT table_name
+        run_on_extended: 'false',
+        run_flow_in: 'background',
+    }),
+    (_params) => {
+        wfa.action(action.core.log, { $id: Now.ID['fl0_log'] }, {
+            log_level: 'info',
+            log_message: `Value: ${wfa.dataPill(_params.trigger.current.u_my_field, 'string')}`,
+        })
+    }
+)
+```
+
+### FlowConfigProps — valid fields only
+
+```typescript
+{
+    $id: Now.ID['fl0'],
+    name: 'string',
+    description: 'string',
+    runAs: 'system' | 'initiator',
+    runWithRoles: ['role_name'],   // optional
+    flowPriority: 'low' | 'normal' | 'high',  // optional
+    protection: 'none' | 'protected',          // optional
+}
+```
+
+`active` is **not** a valid FlowConfigProps field — the SDK will error. Activate the flow manually in Flow Designer after deploy.
+
+### wfa.trigger() — 3-arg signature
+
+```typescript
+wfa.trigger(
+    trigger.record.created,           // trigger definition
+    { $id: Now.ID['fl0_trig'] },      // config object with $id — REQUIRED, not optional
+    {
+        table: 'x_9274_kudos_entry',  // 'table' not 'table_name'
+        run_on_extended: 'false',
+        run_flow_in: 'background',
+    }
+)
+```
+
+For **manual-only** flow (no trigger): pass `undefined` as the second argument to `Flow()` instead of `wfa.trigger(...)`.
+
+### wfa.action() — 3-arg signature
+
+```typescript
+wfa.action(
+    action.core.log,           // action definition from action.core.*
+    { $id: Now.ID['fl0_log'] }, // config with $id — REQUIRED
+    {                           // action inputs (specific to the action type)
+        log_level: 'info',
+        log_message: 'text',
+    }
+)
+```
+
+The return value of `wfa.action()` is the action's output — use it to chain datapills:
+
+```typescript
+const results = wfa.action(action.core.lookUpRecords, { $id: Now.ID['fl_lu'] }, {
+    table: 'x_9274_kudos_entry',
+    conditions: 'active=true',
+    max_results: 200,
+})
+// results.Count, results.Records available as datapills
+```
+
+### wfa.dataPill() — REQUIRED for all field references
+
+```typescript
+// ANY trigger or action output referenced in another step MUST be wrapped
+wfa.dataPill(_params.trigger.current.u_category, 'string')
+wfa.dataPill(_params.trigger.current.sys_id, 'string')
+wfa.dataPill(results.Count, 'integer')
+
+// Do NOT access fields directly — causes TS build error:
+// "must be inside wfa.dataPill call"
+```
+
+### Flow body — NO destructuring
+
+```typescript
+// WRONG — causes TS206 error
+Flow(..., ({ trigger: t }) => { ... })
+
+// CORRECT — always use plain parameter name
+Flow(..., (_params) => { ... })
+```
+
+### Run types before using custom tables in triggers
+
+After deploying a new custom table, the type defs are stale. Before referencing the table in a trigger:
+
+```bash
+npm run types   # downloads updated Now.Internal.Tables from live PDI
+npm run build
+```
+
+### When in doubt: check the SDK explain command
+
+```bash
+npx @servicenow/sdk explain wfa-flow-guide --format=raw
+```
+
+This is the authoritative DSL reference. Run it before guessing API shapes.
+
+---
+
+---
+
 ## Trigger Types
 
 | Trigger | When to use | Key config |
@@ -173,7 +311,7 @@ Field: sys_mod_count | is | 1   // only on first update to this state
 
 ---
 
-## Yokohama Flow Designer Notes
+## Flow Designer Notes
 
 | Item | Detail |
 |---|---|

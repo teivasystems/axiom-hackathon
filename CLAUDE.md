@@ -21,7 +21,7 @@ When uncertain about a platform behaviour, you check the reference files
 before assuming. When you hit an error, you read it fully before acting.
 
 **The app name, scope, and architecture will be provided in:**
-`runs/2026-05_creatorcon/docs/architecture.md` — written by Sam (AXM-3)
+`runs/<run>/docs/architecture.md` — written by Sam (AXM-3)
 
 Do not begin building until that file exists. Until then, your work is
 PDI preparation, scaffolding, and component shells.
@@ -285,6 +285,18 @@ Do not hand off to Casey before full happy path is deployable.
 
 ---
 
+## Known PDI Gotchas
+
+**ATF (Automated Test Framework) — `now-sdk install` does NOT deploy ATF test records.**
+`sys_atf_test` and related ATF records are not pushed by `npm run deploy`. If ATF is in scope, test records must be created manually in the PDI UI or skipped entirely. Check `GlidePluginManager.isActive('com.snc.test_management')` during PREP — if false, drop ATF from scope immediately.
+
+**IntegrationHub REST spoke — not always installed on PDI.**
+Before committing to an IH REST step in the architecture, verify the spoke exists: query `sys_hub_action_type_definition` for `action_namespace = sn_ih` and `name CONTAINS REST`. If missing, approved fallback is `sn_ws.RESTMessageV2` in a Script Include with credential read via `sn_cc.ConnectionCredentialsUtil`. Do not use the fallback silently — flag to Alex and log as a DECISION first. See `playbook/skills/integration.md` for the full fallback pattern.
+
+**Platform fallback rule:** Never implement a workaround for a missing platform capability without Alex's approval. A silent workaround is an undocumented scope change. Flag → Decision → Implement.
+
+---
+
 ## Error Reference
 
 | Error | Likely cause | Action |
@@ -296,6 +308,11 @@ Do not hand off to Casey before full happy path is deployable.
 | `Type error: any` | Strict mode violation | Add explicit type or comment with reason |
 | `Credential not found` | API key not in SN store | Kostya adds credential in PDI |
 | `Flow not triggering` | Table name mismatch | Verify table sys_name matches flow trigger |
+| `Flow import from wrong module` | `Flow` imported from `@servicenow/sdk/core` | Import from `@servicenow/sdk/automation` |
+| `active is not valid in FlowConfigProps` | Unsupported field in Flow config | Remove `active` — activate manually in Flow Designer after deploy |
+| `must be inside wfa.dataPill call` | Trigger/action output accessed directly | Wrap all field references: `wfa.dataPill(expr, 'type')` |
+| `Unknown instance type` on `wfa.action()` | Config arg wrong shape | Config must be `{$id: Now.ID['...']}` — not a raw string |
+| Custom table not found in trigger types | Type defs stale before `npm run types` | Run `npm run types` after deploying a new table, then rebuild |
 
 ---
 
@@ -316,7 +333,7 @@ Do not hand off to Casey before full happy path is deployable.
 - AXM-15: Confirm now-sdk init + transform flags ✅
 
 **Blocked on:**
-- AXM-3 (Sam — architecture doc) — `runs/2026-05_creatorcon/docs/architecture.md` not yet written
+- AXM-3 (Sam — architecture doc) — `runs/<run>/docs/architecture.md` not yet written
 - AXM-4 (Morgan — wireframe spec) — depends on AXM-3
 - AXM-19 (CLAUDE.md app-specific update) — depends on AXM-3
 

@@ -138,6 +138,43 @@ gs.error('RetroApp: insert failed — {0}', gr.getLastErrorMessage());
 
 ---
 
+## PREP Phase — Plugin Availability Checklist
+
+Run these checks during PREP (dry run), not build night. Discovering a missing plugin during a timed hackathon costs the whole session.
+
+**IntegrationHub REST spoke:**
+
+```javascript
+// Scripts-Background on PDI
+var gr = new GlideRecord('sys_hub_action_type_definition');
+gr.addQuery('action_namespace', 'sn_ih');
+gr.addQuery('name', 'CONTAINS', 'REST');
+gr.query();
+gs.info('IH REST spoke rows: ' + gr.getRowCount());
+// Expected: > 0. If 0: flag to Alex, prepare sn_ws fallback.
+```
+
+**ATF (Automated Test Framework):**
+
+```javascript
+// Scripts-Background on PDI
+gs.info('ATF plugin active: ' + GlidePluginManager.isActive('com.snc.test_management'));
+// Expected: true. If false: ATF tests cannot run on this PDI.
+```
+
+**Note on now-sdk install + ATF:** `now-sdk install` (and `npm run deploy`) does NOT deploy `sys_atf_test` records to the PDI. ATF test definitions live only in local source files and must be set up separately. Skip ATF work if the plugin is inactive on the PDI — it blocks build progress for no benefit.
+
+**Service Portal:**
+
+```javascript
+gs.info('Service Portal active: ' + GlidePluginManager.isActive('com.glide.service-portal'));
+// Expected: true for widget-based UIs.
+```
+
+**Record all results in `runs/<run>/logs/ACTIVITY.log`** under a `[CHECKPOINT]` line. If anything is inactive, escalate to Alex before committing to an architecture that depends on it.
+
+---
+
 ## Encoded Query Reference
 
 ```javascript

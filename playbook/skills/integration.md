@@ -243,3 +243,68 @@ Correct pattern:
 | Request body as flow variable | Build JSON string in a Run Script step, pass as flow variable to REST step body |
 | Response body encoding | Always a String — always `JSON.parse()` before accessing fields |
 | Empty response | `stop_reason: "max_tokens"` means response was truncated — increase max_tokens |
+
+---
+
+## IH Availability Check — Do This at PREP, Not Build Night
+
+IntegrationHub (and its REST spoke `sn_ih`) is **not always installed on PDI instances.** If it is missing, the IH REST step will not appear as an action type in Flow Designer and cannot be used in Fluent SDK flows.
+
+**Check during PREP:**
+
+```bash
+# Run in Scripts-Background on the PDI
+var gr = new GlideRecord('sys_hub_action_type_definition');
+gr.addQuery('action_namespace', 'sn_ih');
+gr.addQuery('name', 'CONTAINS', 'REST');
+gr.query();
+gs.info('IH REST step records: ' + gr.getRowCount());
+```
+
+If `getRowCount()` returns 0: IntegrationHub REST is not available. Flag to Alex immediately — either request IH installation or approve the fallback pattern below.
+
+**Fallback: sn_ws.RESTMessageV2 in Script Include**
+
+When IH is not available, implement the HTTP call directly in a Script Include and call it from a flow RunScript step or a Fluent RunScript action.
+
+```javascript
+// ClaudeDigest.js — direct HTTP pattern (no IH required)
+var rm = new sn_ws.RESTMessageV2();
+rm.setHttpMethod('POST');
+rm.setEndpoint('https://api.anthropic.com/v1/messages');
+
+// Read API key from Connection & Credential Alias (not hardcoded)
+try {
+    var credUtil = new sn_cc.ConnectionCredentialsUtil();
+    var connInfo = credUtil.getCredentialsByConnectionAlias('<alias_sys_id>');
+    var apiKey = connInfo.getAttribute('password') || connInfo.getAttribute('api_key') || '';
+    rm.setRequestHeader('x-api-key', apiKey);
+} catch (credErr) {
+    gs.warn('Credential lookup failed: ' + credErr.message);
+    // fallback to sys_property — only if alias approach fails
+    rm.setRequestHeader('x-api-key', gs.getProperty('x_9274_kudos.claude_api_key', ''));
+}
+
+rm.setRequestHeader('anthropic-version', '2023-06-01');
+rm.setRequestHeader('content-type', 'application/json');
+rm.setRequestBody(JSON.stringify({ model: '...', max_tokens: 512, messages: [...] }));
+rm.setHttpTimeout(45000);
+
+var response = rm.execute();
+var statusCode = String(response.getStatusCode());
+var body = response.getBody();
+```
+
+**Reading the credential alias sys_id:**
+
+The `sys_id` of the Connection & Credential Alias record is used to read it programmatically. Kostya creates the alias record in PDI → Connections & Credentials → Connection & Credential Aliases, then provides the sys_id. Pass it as a literal string to `getCredentialsByConnectionAlias()`.
+
+```javascript
+// connInfo.getAttribute() field names depend on credential type:
+//   API Key credential type: 'api_key' or 'password'
+//   Basic Auth: 'user_name', 'password'
+// Try both to be safe (attribute name varies by SN version)
+var apiKey = connInfo.getAttribute('password') || connInfo.getAttribute('api_key') || '';
+```
+
+**Do not use `sn_ws.RESTMessageV2` as the primary architecture choice** — flag the IH gap to Alex and get it approved before build night. `sn_ws` is a fallback when IH is genuinely unavailable, not a preference.

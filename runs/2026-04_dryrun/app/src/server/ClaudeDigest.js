@@ -54,6 +54,62 @@ ClaudeDigest.prototype = {
     },
 
     /**
+     * Fetches recent kudos, calls Claude API, stores digest via KudosService.
+     * Uses connection alias sys_id for credentials (no IH REST step required).
+     * @returns {{ success: boolean, text: string, error: string }}
+     */
+    generateDigest: function () {
+        var ks = new x_9274_kudos.KudosService();
+        var kudosJson = ks.getRecentKudos(30);
+        var promptText = this.buildPrompt(kudosJson);
+
+        var body = JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 512,
+            system: 'You are an internal recognition analyst. Produce concise, warm team digest summaries.',
+            messages: [{ role: 'user', content: promptText }],
+        });
+
+        var rm = new sn_ws.RESTMessageV2();
+        rm.setHttpMethod('POST');
+        rm.setEndpoint('https://api.anthropic.com/v1/messages');
+
+        // Resolve API key from connection alias (sys_id: 6ebf2a5683a4031048f69496feaad39b)
+        try {
+            var credUtil = new sn_cc.ConnectionCredentialsUtil();
+            var connInfo = credUtil.getCredentialsByConnectionAlias('6ebf2a5683a4031048f69496feaad39b');
+            var apiKey = connInfo.getAttribute('password') || connInfo.getAttribute('api_key') || '';
+            rm.setRequestHeader('x-api-key', apiKey);
+        } catch (credErr) {
+            gs.warn('ClaudeDigest.generateDigest: credential lookup failed — ' + credErr.message);
+            // Fall back to sys_property if credential alias access fails
+            rm.setRequestHeader('x-api-key', gs.getProperty('x_9274_kudos.claude_api_key', ''));
+        }
+
+        rm.setRequestHeader('anthropic-version', '2023-06-01');
+        rm.setRequestHeader('content-type', 'application/json');
+        rm.setRequestBody(body);
+        rm.setHttpTimeout(45000);
+
+        var result;
+        try {
+            var response = rm.execute();
+            result = this.parseResponse(response.getBody(), String(response.getStatusCode()));
+        } catch (httpErr) {
+            result = { success: false, text: '', error: 'HTTP call failed: ' + httpErr.message };
+        }
+
+        if (result.success) {
+            ks.storeDigest(result.text);
+        } else {
+            gs.error('ClaudeDigest.generateDigest: ' + result.error);
+            ks.storeDigest('Digest unavailable — Claude API error.');
+        }
+
+        return result;
+    },
+
+    /**
      * Parses the raw Claude API response.
      * @param {string} responseBody  raw JSON string from REST step
      * @param {string} statusCode    HTTP status code string
