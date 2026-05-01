@@ -1,55 +1,80 @@
 # Team AXIOM — Playbook
 
-Reusable knowledge for running an AI-native hackathon team.
+Reusable knowledge for running an AI-native hackathon team.  
 This directory is independent of any specific hackathon run.
 
 ---
 
 ## What is in here
 
-| File / Directory | Contents |
+| Path | Contents |
 |---|---|
-| `WORKFLOW.md` | **Start here.** End-to-end process: all phases, Jira lifecycle, handover protocol, dependency map, absolute rules |
-| `team_charter.md` | Full persona definitions, operating protocol, handover format |
-| `personas/` | Profile + Claude.ai system prompt for each team member |
-| `process/` | Detailed guides for each phase (ideation, architecture, pitch, day-of) |
-| `setup/` | Infrastructure, Claude Code, and Claude.ai configuration guides |
+| `WORKFLOW.md` | **Full process reference.** All phases, Jira lifecycle, handover protocol, dependency map, blocker escalation, platform fallback decisions. Load when a card doesn't cover your situation. |
+| `cards/` | **Per-persona operation cards.** Load your card at session start instead of WORKFLOW.md — they cover 95% of what you need with ~60% less context. |
+| `personas/` | Persona profiles and Claude.ai system prompt templates. Load one file per session to initialise a persona in Claude.ai. |
+| `skills/` | Domain-specific build references. Jordan loads these as needed during BUILD. |
+| `process/` | Phase-by-phase guides for each major activity. |
+| `log-templates/` | Blank templates — copy into `runs/<run>/logs/` at run initialisation. |
+| `setup/` | Infrastructure, Claude Code, and Claude.ai configuration guides. |
+
+---
+
+## Skills files
+
+| File | What it covers |
+|---|---|
+| `skills/platform.md` | GlideRecord, Script Includes, scoped app conventions, ACLs, logging |
+| `skills/flows.md` | Fluent SDK flow DSL (imports, trigger, action, dataPill), Flow Designer patterns |
+| `skills/integration.md` | IntegrationHub REST, Claude API request/response, sn_ws fallback, credential alias pattern |
+| `skills/ui.md` | UX channel routing (D-002), SP widgets, Employee Center, UI Builder Workspaces, Now Assist |
+| `skills/jira.md` | Jira ticket lifecycle, START/DONE comment format, closure protocol, API usage |
+
+---
+
+## Process guides
+
+| File | What it covers |
+|---|---|
+| `process/ideation.md` | Multi-phase app ideation session (Alex-led) |
+| `process/architecture.md` | Architecture document template and checklist (Sam-led) |
+| `process/hackathon_day.md` | Hour-by-hour day-of guide |
+| `process/pitch.md` | HeyGen script and pitch structure (Riley-led) |
+| `process/retrospective.md` | Post-run retrospective process (Casey-led) |
 
 ---
 
 ## How to use this for a new hackathon
 
-**1. Read `team_charter.md` first.** Understand the team model, handover format, and operating protocol.
+**1. Read `docs/TEAM_CHARTER.md` first.** Understand the team model, handover format, and operating protocol. All other documents assume you know this.
 
-**2. Set up infrastructure.** Follow `setup/infrastructure.md`. This covers now-sdk, GitHub, Jira, Confluence, Figma, HeyGen, and API keys.
+**2. Set up infrastructure.** Follow `setup/infrastructure.md`. Covers now-sdk, GitHub, Jira + API token, Confluence, Figma, HeyGen, and Credential Store setup.
 
-**3. Configure your AI tools.** Follow `setup/claude_ai.md` to create a Claude.ai Project. Follow `setup/claude_code.md` to prepare Jordan's workspace.
+**3. Configure AI tools.** Follow `setup/claude_ai.md` (Claude.ai Project) and `setup/claude_code.md` (Jordan's workspace).
 
-**4. Create a run folder.** Copy the structure from an existing run in `../runs/` or start fresh:
-```
-runs/
-  YYYY-MM_eventname/
-    ideation/
-    docs/
-    personas/
-    pitch/
-```
+**4. Create a run folder.** See `runs/README.md` for the exact structure to copy.
 
-**5. Run ideation.** Follow `process/ideation.md`. Output goes into `runs/YYYY-MM_eventname/ideation/session.md`.
+**5. Initialise logs.** Copy templates from `log-templates/` into `runs/<run>/logs/`. Fill the ACTIVITY.log header, commit.
 
-**6. Architecture and wireframes.** Sam produces `docs/architecture.md`. Morgan produces `docs/wireframes.md`. Follow the templates in `process/architecture.md`.
+**6. Run ideation.** Alex follows `process/ideation.md`. Output → `runs/<run>/ideation/session.md`.
 
-**7. Pitch prep.** Follow `process/pitch.md`. Output goes into `runs/YYYY-MM_eventname/pitch/`.
+**7. Architecture and wireframes.** Sam produces `docs/architecture.md`. Morgan produces `docs/wireframes.md`. Templates in `process/architecture.md`.
 
-**8. Hackathon day.** Follow `process/hackathon_day.md`. Jordan's build log goes into `runs/YYYY-MM_eventname/personas/jordan.md`.
+**8. Build.** Jordan reads `CLAUDE.md` and follows the build manifest in architecture.md. Skills files available on demand.
+
+**9. Validate.** Casey runs test cases from `personas/casey.md`. Blocks pitch hand-off until happy path passes.
+
+**10. Pitch.** Riley scripts and assembles in HeyGen. Follows `process/pitch.md`.
+
+**11. Retrospective.** Casey facilitates within 48 hours of run end. Template: `log-templates/RETRO.md`. Process: `process/retrospective.md`.
 
 ---
 
 ## Run history
 
-| Run | Event | App | Result |
-|---|---|---|---|
-| [2026-05_creatorcon](../runs/2026-05_creatorcon/) | CreatorCon Hackathon, Knowledge Las Vegas 2026 | RetroNow | TBD |
+| Run | Event | App | Platform | Result |
+|---|---|---|---|---|
+| [2026-04_dryrun](../runs/2026-04_dryrun/) | Full dry run — AXIOM process rehearsal | Team Kudos | Yokohama | ✅ Complete |
+| [2026-05_creatorcon](../runs/2026-05_creatorcon/) | CreatorCon Hackathon, Knowledge Las Vegas 2026 | RetroNow | Zurich / Australia | TBD |
 
 ---
 

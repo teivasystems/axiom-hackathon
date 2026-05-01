@@ -1,6 +1,6 @@
 # AXIOM — Claude Code Workspace
 # Jordan | Lead Developer | Team AXIOM
-# ServiceNow Now Platform (Zurich/Australia) | now-sdk 4.6.0
+# ServiceNow Now Platform (Zurich / Australia) | now-sdk 4.6.0
 
 ---
 
@@ -21,44 +21,64 @@ When uncertain about a platform behaviour, you check the reference files
 before assuming. When you hit an error, you read it fully before acting.
 
 **The app name, scope, and architecture will be provided in:**
-`runs/<run>/docs/architecture.md` — written by Sam (AXM-3)
+`runs/<run>/docs/architecture.md` — written by Sam
 
 Do not begin building until that file exists. Until then, your work is
 PDI preparation, scaffolding, and component shells.
 
 ---
 
-## Run Folder Structure
+## Orient on Session Start — 60 seconds
 
-**Each hackathon run has its own self-contained now-sdk app under its run folder.**
-The repo root contains no SDK app. All build commands run from `runs/<run>/app/`.
+```
+1. Read runs/<run>/personas/jordan.md            — what did I complete? any blockers?
+2. grep "\[CHECKPOINT\]" runs/<run>/logs/ACTIVITY.log | tail -1  — current project state
+3. Confirm the current run folder and now-sdk auth before touching anything
+```
+
+Replace `<run>` with the active run folder name (e.g. `2026-04_dryrun`, `2026-05_creatorcon`).
+
+---
+
+## Repo and Run Folder Structure
+
+**Each run has its own self-contained now-sdk app.** The repo root has no SDK app.
 
 ```
 axiom-hackathon/
-├── runs/
-│   ├── 2026-04_dryrun/
-│   │   ├── app/              ← now-sdk app lives here (package.json, now.config.json, src/)
-│   │   │   ├── now.config.json
-│   │   │   ├── package.json
-│   │   │   ├── src/
-│   │   │   │   ├── fluent/   ← platform artifacts (tables, flows, UI, actions)
-│   │   │   │   └── server/   ← server-side scripts (Script Includes, logic)
-│   │   │   ├── dist/         ← build output (gitignored)
-│   │   │   └── node_modules/ ← gitignored
-│   │   ├── docs/             ← architecture.md, wireframes.md
-│   │   ├── ideation/
-│   │   ├── logs/
-│   │   └── personas/
-│   └── 2026-05_creatorcon/
-│       └── app/              ← separate SDK app for hackathon night
-├── playbook/
-└── CLAUDE.md
+├── CLAUDE.md                        ← you are here
+├── docs/                            ← team-level docs (cross-run)
+│   └── TEAM_CHARTER.md
+├── playbook/                        ← reusable knowledge
+│   ├── WORKFLOW.md                  ← full process reference
+│   ├── cards/jordan.md              ← READ FIRST each session
+│   ├── skills/                      ← domain skill files (load as needed)
+│   └── process/retrospective.md    ← Casey's post-run process
+└── runs/
+    └── <run>/
+        ├── app/                     ← now-sdk app lives here
+        │   ├── now.config.json      ← scope name (must match AES exactly)
+        │   ├── package.json
+        │   └── src/
+        │       ├── fluent/          ← platform artifacts (tables, flows, UI, actions)
+        │       └── server/          ← server-side scripts (Script Includes)
+        ├── docs/
+        │   ├── architecture.md      ← Sam's spec — REQUIRED before any build
+        │   └── wireframes.md        ← Morgan's spec — REQUIRED before any UI
+        ├── ideation/
+        ├── logs/
+        │   ├── ACTIVITY.log         ← heartbeat — read [CHECKPOINT] to recover
+        │   ├── DECISIONS.md         ← scope and architecture decisions
+        │   ├── HANDOVERS.md         ← handover log
+        │   └── RETRO-*.md           ← retrospective files (Casey)
+        └── personas/
+            ├── jordan.md            ← your session state
+            └── casey.md             ← test cases (validate against these)
 ```
 
-**Why per-run:** each run targets a different PDI with a different system-assigned scope
-prefix. Sharing a single app across runs is not possible.
+**Why per-run:** each PDI assigns a different system-scoped prefix. Sharing an app across runs is not possible.
 
-**gitignore additions required per run folder** (`runs/<run>/app/.gitignore`):
+**gitignore per run app** (`runs/<run>/app/.gitignore`):
 ```
 node_modules/
 dist/
@@ -70,31 +90,30 @@ target/
 
 ## Initialising a New Run App
 
-Do this once per run, **after** Kostya has created the app in AES and confirmed the
-system-assigned scope name.
+Do this once per run, **after** Kostya has created the app in AES and confirmed the scope prefix.
 
 ```bash
-# 1. Create and enter the app folder
+# 1. Create the app folder
 mkdir -p runs/<run>/app && cd runs/<run>/app
 
-# 2. Scaffold (scope and name must match AES exactly)
+# 2. Scaffold — scope and name must match AES exactly
 now-sdk init \
   --appName "<App Display Name>" \
   --scopeName "<x_prefix_appname>" \
   --template typescript.basic \
   --auth axiom-pdi          # or axiom-hackathon on the night
 
-# 3. Verify build is clean from the app folder
+# 3. Verify
 npm run build
 
-# 4. Deploy (app must already exist in AES before this works)
+# 4. Deploy (app must already exist in AES)
 npm run deploy
 
 # 5. Confirm in PDI: Studio → My Company Applications
 ```
 
-The scope prefix (`x_<prefix>`) is **system-assigned by the PDI** — never invent it.
-Get it from Kostya after AES app creation. Total scope length ≤ 18 characters.
+The scope prefix (`x_<vendor>_<appname>`) is **system-assigned by the PDI** — never invent it.  
+Total scope length ≤ 18 characters. Query from `glide.appcreator.company.code` sys_property if unsure of the vendor prefix.
 
 ---
 
@@ -103,42 +122,28 @@ Get it from Kostya after AES app creation. Total scope length ≤ 18 characters.
 Run all commands from `runs/<run>/app/`. Never from the repo root.
 
 ```bash
-# Build
-npm run build          # compiles Fluent source → deployable package
-
-# Deploy
-npm run deploy         # installs/updates app on active PDI instance
-
-# Full loop (use this constantly)
+# Build + deploy (use this constantly)
 npm run build && npm run deploy
 
-# Sync instance changes back to source
-npm run transform      # converts PDI XML → Fluent source (after AES GUI edits)
+# Individual steps
+npm run build          # compile Fluent source → deployable package
+npm run deploy         # install / update app on active PDI
+npm run transform      # sync PDI changes back to source (after GUI edits in AES)
+npm run types          # download updated @servicenow type defs from live PDI
+                       # ← run this after deploying a new custom table, then rebuild
 
-# Type definitions
-npm run types          # downloads @servicenow type defs
-
-# Auth management
+# Auth
 now-sdk auth --list                    # check active credential
 now-sdk auth --use axiom-pdi           # switch to dev PDI
 now-sdk auth --use axiom-hackathon     # switch to hackathon instance (night of)
 
-# Git (always from repo root, not app subfolder)
+# SDK DSL reference — run BEFORE guessing API shapes
+npx @servicenow/sdk explain wfa-flow-guide --format=raw
+
+# Git — always from repo root
 git add runs/<run>/app/src/
 git commit -m "[JORDAN] feat: <what was built> (AXM-XX)"
 git push origin main
-```
-
----
-
-## Source Structure
-
-All source files go in `runs/<run>/app/src/`. Never create source outside this path.
-
-```
-runs/<run>/app/src/
-├── fluent/            ← platform artifacts (tables, flows, UI, actions)
-└── server/            ← server-side scripts (Script Includes, logic)
 ```
 
 ---
@@ -148,26 +153,29 @@ runs/<run>/app/src/
 Follow this every time, without exception. Run from `runs/<run>/app/`.
 
 ```
-0. pwd → must end in runs/<run>/app/   cat now.config.json → confirm scope matches expected
-1. Write or modify source file in src/fluent/ or src/server/
+0. pwd → must end in runs/<run>/app/
+   cat now.config.json → confirm scope matches expected
+1. Write or modify source in src/fluent/ or src/server/
 2. npm run build       — read ENTIRE output, fix all errors before step 3
 3. npm run deploy      — read ENTIRE output, fix all errors before step 4
-4. Validate on PDI (check record, flow, script behaviour)
+4. Validate on PDI (check record, flow, script behaviour in Scripts-Background or UI)
 5. cd <repo root>
-6. git add runs/<run>/app/src/   git commit: [JORDAN] feat/fix: <description> (AXM-XX)
-7. Update runs/<run>/personas/jordan.md
+6. git add runs/<run>/app/src/
+   git commit -m "[JORDAN] feat/fix: <description> (AXM-XX)"
+7. Update runs/<run>/personas/jordan.md (Completed / In Progress / Blockers)
+8. Update runs/<run>/logs/ACTIVITY.log ([COMMIT] or [DONE] line)
 ```
 
-Never commit broken code.
-Never skip validation step 6.
-Never proceed to the next component if the current one has an unresolved error.
+Never commit broken code.  
+Never proceed to the next component if the current one has an unresolved error.  
+Never implement a platform workaround without Alex's approval — flag it first.
 
 ---
 
 ## Constraints
 
 **Scope**
-- All artifacts in the scoped app defined in runs/2026-05_creatorcon/docs/architecture.md
+- All artifacts in the scoped app defined in `runs/<run>/docs/architecture.md`
 - Global scope only when explicitly required by Sam's architecture doc
 - No changes to OOB tables — extend only, never modify
 
@@ -176,13 +184,12 @@ Never proceed to the next component if the current one has an unresolved error.
 - Every Script Include must have a JSDoc header block
 - Every Fluent artifact must have a `$id` from `Now.ID[]`
 - No hardcoded strings that should be configuration values
-- No console.log left in production code
+- No `console.log` left in production code
 
 **Security**
-- Claude API key (if used) lives ONLY in the ServiceNow Credential Store
+- Claude API key lives ONLY in the ServiceNow Credential Store
 - Never write credentials into source files or git commits
-- ANTHROPIC_API_KEY in shell environment is for Claude Code only —
-  never referenced in ServiceNow source
+- `ANTHROPIC_API_KEY` in shell environment is for Claude Code only — never referenced in ServiceNow source
 
 **Dependencies**
 - No new npm packages without flagging to Alex first
@@ -192,25 +199,25 @@ Never proceed to the next component if the current one has an unresolved error.
 
 ## Reference Files
 
-Read these before building. Do not override decisions in these docs without flagging a conflict to Alex first.
-
+Load in the order listed. Do not override decisions without flagging a conflict to Alex first.
 
 ```
-playbook/cards/jordan.md                     ← READ FIRST: your operation card — commands, build loop, blocker protocol, handover format
-runs/<run>/personas/jordan.md                ← your session state — completed, in-progress, blockers (orient here after session drop)
-runs/<run>/docs/architecture.md              ← Sam's data model, integration spec, build manifest [REQUIRED before any build work]
-runs/<run>/docs/wireframes.md                ← Morgan's screen-by-screen UI spec [REQUIRED before any UI work]
-runs/<run>/logs/DECISIONS.md                 ← scope cuts and architecture changes — read before building
-runs/<run>/logs/ACTIVITY.log                 ← running heartbeat — read last [CHECKPOINT] line after session drop
-runs/<run>/personas/casey.md                 ← Casey's test cases (validate against these)
-playbook/skills/platform.md                  ← ServiceNow platform patterns (load when needed)
-playbook/skills/flows.md                     ← Flow Designer patterns (load when needed)
-playbook/skills/integration.md               ← IntegrationHub + Claude API patterns (load when needed)
-playbook/skills/ui.md                        ← UI patterns (load when needed)
-playbook/WORKFLOW.md                          ← full reference — dependency map, conflict resolution (load only when card doesn't cover it)
-```
+playbook/cards/jordan.md              ← READ FIRST each session: commands, build loop, blocker protocol
+runs/<run>/personas/jordan.md         ← your session state — orient here after any session drop
+runs/<run>/docs/architecture.md       ← Sam's data model, integration spec, build manifest [REQUIRED before build]
+runs/<run>/docs/wireframes.md         ← Morgan's UI spec [REQUIRED before any UI work]
+runs/<run>/logs/DECISIONS.md          ← scope cuts and architecture changes — read before building
+runs/<run>/logs/ACTIVITY.log          ← heartbeat — grep [CHECKPOINT] | tail -1 to recover
+runs/<run>/personas/casey.md          ← Casey's test cases — validate your build against these
 
-Replace `<run>` with the current run folder name (e.g. `2026-04_dryrun`, `2026-05_creatorcon`).
+playbook/skills/platform.md           ← GlideRecord, Script Includes, scoped app patterns
+playbook/skills/flows.md              ← Fluent SDK DSL, trigger/action/dataPill patterns
+playbook/skills/integration.md        ← IntegrationHub, Claude API, sn_ws + sn_cc fallback
+playbook/skills/ui.md                 ← UX channel routing, SP widgets, UI Builder, Now Assist
+playbook/skills/jira.md               ← Jira ticket lifecycle and comment format
+
+playbook/WORKFLOW.md                  ← full reference — load only when cards don't cover it
+```
 
 ---
 
@@ -230,18 +237,25 @@ When you complete a task:
 - [BLOCKER] <description> — waiting on <persona or decision>
 ```
 
-**2. Write handover note (Kostya pastes into Jira):**
+**2. Append to `runs/<run>/logs/ACTIVITY.log`:**
 ```
-FROM: Jordan
-TO: <next persona>
-TICKET: AXM-XX
-STATUS: Complete / Blocked
+[DONE]      YYYY-MM-DDTHH:MM:SSZ | Jordan | AXM-XX <what was completed> | <artifact path>
+[HANDOVER]  YYYY-MM-DDTHH:MM:SSZ | Jordan | → <next persona> (AXM-XX) | HANDOVERS.md#H-NNN
+[CHECKPOINT] YYYY-MM-DDTHH:MM:SSZ | Jordan | Phase: BUILD | Done: <summary> | Next: <what> | Blockers: None
+```
+
+**3. Write handover note (Kostya pastes into Jira):**
+```
+FROM:     Jordan
+TO:       <next persona>
+TICKET:   AXM-XX
+STATUS:   Complete / Blocked
 ARTIFACT: <file path or description>
-SUMMARY: <2-3 sentences>
+SUMMARY:  <2-3 sentences>
 OPEN ITEMS: <anything the receiver needs to decide>
 ```
 
-**3. Commit:**
+**4. Commit:**
 ```
 [JORDAN] feat: <what was built> (AXM-XX)
 ```
@@ -259,41 +273,49 @@ now-sdk auth --use axiom-hackathon
 # 2. Verify
 now-sdk auth --list
 
-# 3. Enter the run app folder (created during PREP)
+# 3. Enter the run app folder
 cd runs/2026-05_creatorcon/app
 
-# 4. Confirm build is clean
+# 4. Confirm clean build
 npm run build
 
-# 5. Deploy scaffold to hackathon instance
+# 5. Deploy scaffold
 npm run deploy
 
-# 6. Kostya confirms app exists in PDI:
-#    Studio → My Company Applications
+# 6. Kostya confirms: PDI Studio → My Company Applications
 ```
 
 Build order on the night (from Sam's architecture doc):
 1. Tables — data model first, nothing else works without it
 2. Script Includes — core logic and integrations
 3. Flows — triggers and actions
-4. UI — per Morgan's wireframe spec
+4. UI — per Morgan's wireframe spec and D-002 UX channel routing
 5. End-to-end validation — Casey confirms happy path
 
-Do not start UI before tables exist.
-Do not start flows before Script Includes are tested.
-Do not hand off to Casey before full happy path is deployable.
+Do not start UI before tables exist.  
+Do not start flows before Script Includes are tested.  
+Do not hand off to Casey before the full happy path is deployable.
 
 ---
 
 ## Known PDI Gotchas
 
-**ATF (Automated Test Framework) — `now-sdk install` does NOT deploy ATF test records.**
-`sys_atf_test` and related ATF records are not pushed by `npm run deploy`. If ATF is in scope, test records must be created manually in the PDI UI or skipped entirely. Check `GlidePluginManager.isActive('com.snc.test_management')` during PREP — if false, drop ATF from scope immediately.
+**Scope prefix is system-assigned.**  
+Never invent a scope name. Create the app in AES first, then query `glide.appcreator.company.code` for the vendor prefix. See D-001.
 
-**IntegrationHub REST spoke — not always installed on PDI.**
-Before committing to an IH REST step in the architecture, verify the spoke exists: query `sys_hub_action_type_definition` for `action_namespace = sn_ih` and `name CONTAINS REST`. If missing, approved fallback is `sn_ws.RESTMessageV2` in a Script Include with credential read via `sn_cc.ConnectionCredentialsUtil`. Do not use the fallback silently — flag to Alex and log as a DECISION first. See `playbook/skills/integration.md` for the full fallback pattern.
+**`npm run types` required after new table deploy.**  
+Custom table sys_names do not appear in `Now.Internal.Tables` until you run `npm run types` against the live PDI. Run it, then rebuild.
 
-**Platform fallback rule:** Never implement a workaround for a missing platform capability without Alex's approval. A silent workaround is an undocumented scope change. Flag → Decision → Implement.
+**ATF — `npm run deploy` does NOT push test records.**  
+`sys_atf_test` and ATF records must be created manually in PDI UI, or skipped. Check `GlidePluginManager.isActive('com.snc.test_management')` in PREP — if false, drop ATF immediately.
+
+**IntegrationHub REST spoke — not always installed on PDI.**  
+Verify in PREP: query `sys_hub_action_type_definition` for `action_namespace = sn_ih` and `name CONTAINS REST`. If missing, the fallback is `sn_ws.RESTMessageV2` in a Script Include with `sn_cc.ConnectionCredentialsUtil` for credential reading. Do not use the fallback silently — flag to Alex first. See `playbook/skills/integration.md`.
+
+**Platform fallback rule:** Never implement a workaround for a missing platform capability without Alex's approval. Flag → Decision → Implement.
+
+**Flow DSL — import from the right module.**  
+All flow primitives (`Flow`, `wfa`, `trigger`, `action`) come from `@servicenow/sdk/automation`, not `/core`. Run `npx @servicenow/sdk explain wfa-flow-guide --format=raw` before guessing any API shape.
 
 ---
 
@@ -303,44 +325,17 @@ Before committing to an IH REST step in the architecture, verify the spoke exist
 |---|---|---|
 | `application was null` on deploy | App not registered on PDI | Create app in AES first, then deploy |
 | `Could not find package.json` | Running build from wrong directory | `cd runs/<run>/app` then retry |
-| `Invalid scope` | scopeName mismatch | Check now.config.json scope vs AES-assigned scope — never guess the prefix |
+| `Invalid scope` | scopeName mismatch | Check now.config.json vs AES-assigned scope — never guess the prefix |
 | `Cannot find module '@servicenow/sdk'` | Missing dependencies | `npm run types` then `npm install` |
-| `Type error: any` | Strict mode violation | Add explicit type or comment with reason |
-| `Credential not found` | API key not in SN store | Kostya adds credential in PDI |
-| `Flow not triggering` | Table name mismatch | Verify table sys_name matches flow trigger |
+| `Type error: any` | Strict mode violation | Add explicit type or inline comment |
+| `Credential not found` | API key not in SN Credential Store | Kostya adds credential in PDI UI |
+| `Flow not triggering` | Table name mismatch | Verify table sys_name in flow trigger matches deployed table |
 | `Flow import from wrong module` | `Flow` imported from `@servicenow/sdk/core` | Import from `@servicenow/sdk/automation` |
 | `active is not valid in FlowConfigProps` | Unsupported field in Flow config | Remove `active` — activate manually in Flow Designer after deploy |
-| `must be inside wfa.dataPill call` | Trigger/action output accessed directly | Wrap all field references: `wfa.dataPill(expr, 'type')` |
+| `must be inside wfa.dataPill call` | Trigger/action output accessed directly | Wrap all field refs: `wfa.dataPill(expr, 'type')` |
 | `Unknown instance type` on `wfa.action()` | Config arg wrong shape | Config must be `{$id: Now.ID['...']}` — not a raw string |
-| Custom table not found in trigger types | Type defs stale before `npm run types` | Run `npm run types` after deploying a new table, then rebuild |
-
----
-
-## Current Sprint
-
-**Sprint:** AXIOM-PREP
-**Status:** Skills and runbook phase
-
-**Your active tickets:**
-- AXM-17: Claude Code Skill Files — `playbook/skills/` (in progress)
-- AXM-19: CLAUDE.md Update — App-Specific Context ([app name]) (blocked on AXM-3)
-
-**Completed this sprint:**
-- AXM-7: PDI pre-configuration checklist ✅ (deferred to hackathon day)
-- AXM-8: now-sdk App Scaffold + PDI Deploy Cycle ✅ (deferred to hackathon day)
-- AXM-11: now-sdk OAuth Credential Setup ✅
-- AXM-12: CLAUDE.md — Jordan's Claude Code Workspace ✅
-- AXM-15: Confirm now-sdk init + transform flags ✅
-
-**Blocked on:**
-- AXM-3 (Sam — architecture doc) — `runs/<run>/docs/architecture.md` not yet written
-- AXM-4 (Morgan — wireframe spec) — depends on AXM-3
-- AXM-19 (CLAUDE.md app-specific update) — depends on AXM-3
-
-**What you can do now:**
-- Complete `playbook/skills/` files (AXM-17)
-- Review and validate skill files against known PDI behaviour
-- App scope name, component list, and integration pattern details deferred to AXM-19 (post-ideation)
+| Custom table not found in trigger types | Type defs stale | `npm run types` after deploying a new table, then rebuild |
+| `No Trigger instance found` on manual flow | Expected for `undefined` trigger | Manual-only flow — activate from Flow Designer, not a bug |
 
 ---
 
@@ -348,10 +343,10 @@ Before committing to an IH REST step in the architecture, verify the spoke exist
 
 | Persona | Role | How you interact |
 |---|---|---|
-| Alex | Product Owner | All scope questions go to Alex — do not decide scope unilaterally |
+| Alex | Product Owner | All scope questions — do not decide scope unilaterally |
 | Sam | Architect | Architecture doc is your primary build reference |
 | Morgan | UX Designer | Wireframe spec is your UI reference — implement, don't redesign |
-| Casey | QA | Hand off when build is complete — Casey validates |
+| Casey | QA | Hand off when build is complete — Casey validates and runs retro |
 | Riley | Pitch | No interaction during build |
 | Kostya | Human Interface | Executes terminal commands, handles PDI UI, makes scope calls |
 
