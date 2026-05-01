@@ -19,13 +19,60 @@ If the ticket cannot answer those four questions from the comment thread alone, 
 
 ---
 
-## 2. The three comment types
+## 2. Ticket Creation — Atomic Protocol
+
+Creating a ticket is not a single action. A ticket that exists without a Persona field
+and a START comment is incomplete. The three steps below are **one operation** — do not
+split them across turns or sessions.
+
+### Required fields at creation
+
+| Field | Value | How to set |
+|-------|-------|------------|
+| Summary | `[DR] <task name>` (dry run) or `<task name>` (real run) | At creation |
+| Issue type | Task | At creation |
+| Assignee | Kostya Bazanov (only real account available) | At creation or immediately after |
+| **Persona** | Alex / Sam / Morgan / Jordan / Casey / Riley | **Must set before leaving the ticket** |
+| Status | Correct initial state (see below) | Transition immediately after creation |
+
+### Initial status by ticket state
+
+| Ticket state | Jira status | Comment required |
+|---|---|---|
+| Already done when created | Done | Closure comment (see Section 4) |
+| Ready to start, persona active | In Progress | START comment (see below) |
+| Ready to start, persona not yet active | In Progress | START comment noting "waiting for persona activation" |
+| Blocked on a dependency | Blocked | START comment + BLOCKER comment |
+
+**Never leave a ticket in `To Do` / `Backlog` without a comment explaining why it hasn't started.**
+
+### START comment format
+
+```
+[AXM-XX] Starting — <one-line description>
+PERSONA: <Persona name> (<role>)
+STATUS: In Progress — <entry conditions met / blocked / waiting for persona>
+
+Entry conditions met:
+  <AXM-YY> (<dependency>) DONE ✅ — <artifact and commit>
+  <or: list what is still pending>
+
+Expected output: <file path>
+<Any specific instructions, edge cases, or warnings for this persona>
+
+Source artifact: <link to input doc>
+Activity log:    <link to ACTIVITY.log>
+```
+
+---
+
+## 3. The three comment types
 
 Every Jira ticket gets up to three comment types over its lifetime. Each has a fixed format. Do not improvise.
 
 | Type | When | Direction | Required? |
 |------|------|-----------|-----------|
-| **START** | When transitioning ticket to `In Progress` | Forward — "starting" | Yes |
+| **START** | When creating ticket or transitioning to `In Progress` | Forward — "starting" | Yes |
 | **HANDOVER** | When transitioning to `In Review` or another persona's queue | Forward — "to next" | Yes if not closing |
 | **CLOSURE** | When transitioning to `Done` / `Closed` / `Won't Do` | Backward — "what happened" | **Always — no exceptions** |
 
@@ -33,7 +80,7 @@ START and HANDOVER are documented in `WORKFLOW.md`. **This skill file owns the C
 
 ---
 
-## 3. Closure comment — mandatory format
+## 4. Closure comment — mandatory format
 
 Every ticket transitioned to `Done`, `Closed`, or `Won't Do` **must** receive a closure comment **before** the status change. No closure comment, no transition.
 
@@ -74,7 +121,7 @@ HANDOVER LOG:  <link to HANDOVERS.md entry if applicable>
 
 ---
 
-## 4. Worked examples
+## 5. Worked examples
 
 ### Example A — Standard close (delivered)
 
@@ -159,7 +206,7 @@ HANDOVER LOG:  HANDOVERS.md#H-007
 
 ---
 
-## 5. Closure ↔ logs ↔ HANDOVERS.md
+## 6. Closure ↔ logs ↔ HANDOVERS.md
 
 A closure is a logged event. The flow is:
 
@@ -175,7 +222,7 @@ Order matters. The Jira transition is the *last* action, not the first.
 
 ---
 
-## 6. What must never go in a closure comment
+## 7. What must never go in a closure comment
 
 - ❌ "See the artifact" with no link
 - ❌ "Done" with no takeaways
@@ -186,7 +233,7 @@ Order matters. The Jira transition is the *last* action, not the first.
 
 ---
 
-## 7. Closure for tickets you're taking over
+## 8. Closure for tickets you're taking over
 
 You may inherit a ticket someone else started. Two scenarios:
 
@@ -198,7 +245,7 @@ Use `RESOLUTION: Won't Do` or `RESOLUTION: Superseded by AXM-YY`. State explicit
 
 ---
 
-## 8. Closure-comment quality checklist
+## 9. Closure-comment quality checklist
 
 Before posting, scan your draft against this list. If any answer is "no," fix it before posting.
 
@@ -215,7 +262,7 @@ If all eight pass, post the comment, then transition the ticket.
 
 ---
 
-## 9. Casey's audit role
+## 10. Casey's audit role
 
 Casey audits closure comments at the end of each phase (PREP, BUILD, POLISH).
 
@@ -229,7 +276,7 @@ A clean Jira board at submission time is part of the deliverable. Judges will lo
 
 ---
 
-## 10. Quick reference — paste-able template
+## 11. Quick reference — paste-able template
 
 Keep this nearby. Copy, fill, post.
 

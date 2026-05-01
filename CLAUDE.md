@@ -148,14 +148,14 @@ runs/<run>/app/src/
 Follow this every time, without exception. Run from `runs/<run>/app/`.
 
 ```
-1. cd runs/<run>/app
-2. Write or modify source file in src/fluent/ or src/server/
-3. npm run build       — read ENTIRE output, fix all errors before step 4
-4. npm run deploy      — read ENTIRE output, fix all errors before step 5
-5. Validate on PDI (check record, flow, script behaviour)
-6. cd <repo root>
-7. git add runs/<run>/app/src/   git commit: [JORDAN] feat/fix: <description> (AXM-XX)
-8. Update runs/<run>/personas/jordan.md
+0. pwd → must end in runs/<run>/app/   cat now.config.json → confirm scope matches expected
+1. Write or modify source file in src/fluent/ or src/server/
+2. npm run build       — read ENTIRE output, fix all errors before step 3
+3. npm run deploy      — read ENTIRE output, fix all errors before step 4
+4. Validate on PDI (check record, flow, script behaviour)
+5. cd <repo root>
+6. git add runs/<run>/app/src/   git commit: [JORDAN] feat/fix: <description> (AXM-XX)
+7. Update runs/<run>/personas/jordan.md
 ```
 
 Never commit broken code.

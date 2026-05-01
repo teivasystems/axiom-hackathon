@@ -81,28 +81,81 @@ SUBMIT Phase
 ## Run Initialisation (do this once, before PREP work begins)
 
 **Who:** Kostya (or Alex if Kostya is unavailable)
-**When:** Before AXM-02 starts. Takes < 5 minutes.
+**When:** Before AXM-02 starts. Takes < 10 minutes.
+
+### Step 0 — Kostya Pre-flight Checklist
+
+Confirm these operational facts before touching the repo. Missing any one of these
+will stop the clock during the run.
+
+```
+[ ] PDI URL:              https://<instance>.service-now.com
+[ ] PDI admin username:   admin
+[ ] PDI admin password:   <confirm in password manager — do NOT store in repo>
+[ ] PDI vendor prefix:    query sys_properties (glide.appcreator.company.code)
+[ ] now-sdk auth alias:   confirm with: now-sdk auth --list → correct alias starred
+[ ] Jira site URL:        https://<site>.atlassian.net  (NOT assumed from username)
+[ ] Jira project key:     AXM (confirm project exists)
+[ ] Jira API token:       confirm valid (test: GET /rest/api/3/myself → 200)
+[ ] Jira account email:   confirm matches the API token owner
+[ ] Claude API key:       confirm in SN Credential Store on PDI (not shell env)
+[ ] Git remote:           confirm push access: git push --dry-run
+[ ] MCP servers:          if Jira MCP configured, restart Claude Code session to activate
+```
+
+If any item is red before the clock starts: stop. Fix it. The hackathon cannot
+absorb a 20-minute credential hunt at hour zero.
+
+### Step 1 — Create Run Folder Structure
 
 ```bash
-# 1. Create the run folder and log directory
-mkdir -p runs/[run]/logs
+# 1. Create folder structure
+mkdir -p runs/[run]/{logs,ideation,docs/decisions,personas,pitch,app}
 
-# 2. Copy log templates into the run
+# 2. Copy log templates
 cp playbook/log-templates/ACTIVITY.log  runs/[run]/logs/ACTIVITY.log
 cp playbook/log-templates/DECISIONS.md  runs/[run]/logs/DECISIONS.md
 cp playbook/log-templates/HANDOVERS.md  runs/[run]/logs/HANDOVERS.md
 
-# 3. Seed the activity log
+# 3. Create README for this run
+cat > runs/[run]/README.md << 'EOF'
+# Run: [run]
+
+## Ticket Status
+
+| Ticket | Summary | Persona | Status | Artifact |
+|--------|---------|---------|--------|----------|
+| AXM-XX | Ideation Session | Alex | Backlog | — |
+| AXM-XX | Architecture Doc | Sam | Backlog | — |
+| AXM-XX | UX Wireframe Spec | Morgan | Backlog | — |
+| AXM-XX | Test Case Draft | Casey | Backlog | — |
+| AXM-XX | Pitch Outline | Riley | Backlog | — |
+| AXM-XX | Scaffold + Build | Jordan | Backlog | — |
+
+## Key Paths
+- Ideation: runs/[run]/ideation/session.md
+- Architecture: runs/[run]/docs/architecture.md
+- Wireframes: runs/[run]/docs/wireframes.md
+- App: runs/[run]/app/ (now-sdk project)
+- Logs: runs/[run]/logs/
+
+## PDI
+- Instance: https://<instance>.service-now.com
+- Scope: x_<prefix>_<appname>  (confirmed after now-sdk init)
+- App URL: (populated after first deploy)
+EOF
+
+# 4. Seed the activity log
 echo "[INIT] $(date -u +%Y-%m-%dT%H:%M:%SZ) | Kostya | Run [run] initialised. Repo: https://github.com/teivasystems/axiom-hackathon" \
   >> runs/[run]/logs/ACTIVITY.log
 
-# 4. Commit
-git add runs/[run]/logs/
-git commit -m "[INIT] Run [run] log infrastructure created"
+# 5. Commit
+git add runs/[run]/
+git commit -m "[INIT] Run [run] infrastructure created"
 git push
 ```
 
-**The logs must exist before any persona posts their first Jira comment.**
+**The logs and README must exist before any persona posts their first Jira comment.**
 If they don't, create them before doing anything else.
 
 ---

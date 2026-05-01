@@ -21,12 +21,52 @@ Alex completes the ideation decision document (AXM-02 complete).
 
 ---
 
+## Pre-Writing Checklist (Sam must complete before naming anything)
+
+Before writing a single table name, flow name, or scope name, confirm these facts.
+Every name in the architecture doc derives from them. Wrong answers here cascade into
+find-and-replace sessions during the build.
+
+```
+[ ] 1. PDI vendor prefix confirmed
+        GET https://<pdi>/api/now/table/sys_properties
+            ?sysparm_query=name=glide.appcreator.company.code
+            &sysparm_fields=value
+        → value is the prefix (e.g. 9274)
+        Full scope format: x_<prefix>_<appname>  (max 18 chars total)
+
+[ ] 2. Scope name checked for length
+        x_ (2) + prefix (N) + _ (1) + appname (M) ≤ 18 chars
+        If over: shorten appname, not prefix
+
+[ ] 3. Plugins confirmed available on PDI
+        Flow Designer:    GET .../api/now/table/sys_plugins?sysparm_query=source_name=com.glide.hub.flow_designer
+        IntegrationHub:   same pattern with com.glide.hub.integrations
+        Service Portal:   same pattern with com.glide.service-portal
+
+[ ] 4. PDI instance URL and sys_id noted
+        Used in Artifact Link fields and DECISIONS.md
+```
+
+Do not proceed to Section 1 until all four boxes are checked.
+If any item is unknown, raise it as a blocker in Jira before writing the doc.
+
+---
+
 ## Required Sections
 
 ### 1. App Scope
 
 What the app does and — equally important — what it does not do.
 This should match Alex's scope lock from the ideation decision exactly.
+
+**Required fields at the top of Section 1:**
+```
+App name:    <display name>
+Scope:       x_<prefix>_<appname>   ← confirmed from pre-writing checklist
+Scope ID:    <populated after now-sdk init>
+PDI:         https://<instance>.service-now.com
+```
 
 ### 2. Table Schema
 
@@ -37,6 +77,8 @@ Every custom table in the app. For each table:
 | field_name | string / integer / reference / boolean | Yes/No | — | constraints, validation |
 
 Include: table `sys_name` (must match Flow Designer trigger), display name, parent table if extending.
+
+**All table sys_names must use the confirmed scope prefix.** Never invent a prefix.
 
 ### 3. OOB Tables Used
 
