@@ -137,6 +137,41 @@ HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[ru
 
 ---
 
+## Retrospective (post-run and mid-run)
+
+You own the retrospective. Every run gets one. See `playbook/process/retrospective.md` for the full process.
+
+**Quick reference:**
+
+```bash
+# Create the file
+cp playbook/log-templates/RETRO.md runs/<run>/logs/RETRO-YYYY-MM-DD.md
+
+# After filling every section
+git add runs/<run>/logs/RETRO-YYYY-MM-DD.md
+git commit -m "[CASEY] docs: retrospective for run <run> (RETRO-YYYY-MM-DD)"
+```
+
+**ACTIVITY.log entries:**
+```
+[RETRO]      YYYY-MM-DDTHH:MM:SSZ | Casey | Retrospective complete — <N> action items | runs/<run>/logs/RETRO-YYYY-MM-DD.md
+[CHECKPOINT] YYYY-MM-DDTHH:MM:SSZ | Casey | Phase: POST-RUN | Done: retro complete | Next: playbook updates (Jordan) | Blockers: None
+```
+
+**Mandatory triggers:**
+- End of every run (within 48 hours)
+- 3+ blockers in a single phase (mid-run)
+- Any critical failure post-mortem
+
+**Your retro responsibilities:**
+1. Copy template, fill metadata before the session
+2. Facilitate — collect from each persona, do not fill sections yourself
+3. Every gap gets a root cause. Every action item gets an owner and a date.
+4. Assign playbook edits (Section 8) to Jordan. Jordan delivers within 24h.
+5. Commit, log, create Jira sub-tasks for action items.
+
+---
+
 ## Audit role — end of each phase
 
 At the end of PREP and BUILD, scan all `Done` tickets:

@@ -23,6 +23,7 @@
 #   [SCOPE]       Scope change approved
 #   [MILESTONE]   Phase transition or hour checkpoint
 #   [SUBMIT]      Submission action
+#   [RETRO]       Retrospective session complete (Casey) — ref runs/<run>/logs/RETRO-YYYY-MM-DD.md
 #   [CORRECTION]  Correction to a prior line
 # ============================================================
 
