@@ -61,17 +61,30 @@ question. Every ambiguity you leave creates a blocker at BUILD time.
 
 **Output:** `runs/[run]/docs/architecture.md` — committed and pushed
 
-**Also append a build manifest at the end:**
-```markdown
-## Build Manifest (Jordan ticks these off in order)
+**Section 12 — Build Manifest (mandatory — Jordan's primary build guide):**
 
-| # | Type | Name | sys_name | Depends on | ✓ |
-|---|------|------|----------|------------|---|
-| 1 | Table | <display name> | x_<prefix>_<name> | — | [ ] |
-| 2 | Script Include | <name> | — | Table | [ ] |
-| 3 | Flow | <name> | — | Script Include | [ ] |
-| 4 | UI Widget | <name> | — | Flow | [ ] |
+One row per deployable artifact in strict dependency order. Every row must be
+self-contained. Jordan builds top-to-bottom without reading prose sections.
+
+Row formats by type — see `playbook/process/architecture.md` Section 12 for full column specs:
+
+```markdown
+## 12. Build Manifest
+
+| # | Type | Display name | sys_name | Source file | Key info | Depends on | PDI validate | ✓ |
+|---|------|--------------|----------|-------------|----------|------------|--------------|---|
+| 1 | Table | <name> | x_<prefix>_<name> | src/fluent/<name>.now.ts | field1 (string,M), field2 (ref:task,O) | — | Studio → Tables → confirm exists | [ ] |
+| 2 | Script Include | <name> | <name> | src/server/<name>.ts | method1(arg): Type, method2(): void | #1 | Scripts → Script Includes → name present | [ ] |
+| 3 | Flow | <name> | — | src/fluent/flows/<name>.now.ts | Trigger: record insert x_<prefix>_<name> | #1 #2 | Flow Designer → activate → test insert | [ ] |
+| 4 | Claude integration | <name> | — | src/server/<name>.ts | credential: claude_api, output: <table>.<field> | #2 | Run manually → confirm response + field set | [ ] |
+| 5 | UI Widget | <name> | — | src/fluent/widgets/<name>.now.ts | Screen: <Morgan wireframe name>, role: itil | #1 #3 | Service Portal → renders + data loads | [ ] |
 ```
+
+**Manifest rules:**
+- No blank columns — if unknown, it is a blocker before handover
+- `sys_name` must exactly match what Flow Designer triggers and Script Include calls use
+- `PDI validate` must be a specific, actionable check
+- Jordan checks off `[ ]` → `[x]` after each deploy and commits
 
 ---
 

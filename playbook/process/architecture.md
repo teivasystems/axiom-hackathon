@@ -149,6 +149,59 @@ Each item: question, who decides, by when.
 
 ---
 
+### 12. Build Manifest ← mandatory, Jordan-facing
+
+**This section is Jordan's primary build guide.** Jordan reads the manifest,
+not Sections 2–9 prose. The manifest must be complete and accurate before
+the architecture doc is handed over.
+
+One row per deployable artifact, in strict build order. Every row must be
+self-contained — Jordan should be able to build the component from the row
+alone, consulting the prose section only for edge-case detail.
+
+#### Table row format
+
+| # | Type | Display name | sys_name | Source file | Key fields | Depends on | PDI validate | ✓ |
+|---|------|--------------|----------|-------------|------------|------------|--------------|---|
+| 1 | Table | `<display>` | `x_<prefix>_<name>` | `src/fluent/<name>.now.ts` | field1 (string, M), field2 (ref:table, O) | — | Studio → Tables → confirm exists | [ ] |
+
+**Field abbreviations:** M = mandatory, O = optional, ref:table = reference field
+
+#### Script Include row format
+
+| # | Type | Name | sys_name | Source file | Public methods | Depends on | PDI validate | ✓ |
+|---|------|------|----------|-------------|----------------|------------|--------------|---|
+| 2 | Script Include | `<name>` | `<name>` | `src/server/<name>.ts` | `method1(args): ReturnType`, `method2(args): ReturnType` | #1 (table) | Scripts → Script Includes → confirm name + test call | [ ] |
+
+#### Flow row format
+
+| # | Type | Name | Trigger | Source file | Actions (summary) | Depends on | PDI validate | ✓ |
+|---|------|------|---------|-------------|-------------------|------------|--------------|---|
+| 3 | Flow | `<name>` | Record inserted: `x_<prefix>_<name>` | `src/fluent/flows/<name>.now.ts` | 1. Get record, 2. Call ScriptInclude, 3. Send notification | #1 #2 | Flow Designer → activate → test with record insert | [ ] |
+
+#### UI Widget row format
+
+| # | Type | Name | Screen (Morgan ref) | Source file | Data source | Role | Depends on | PDI validate | ✓ |
+|---|------|------|---------------------|-------------|-------------|------|------------|--------------|---|
+| 4 | UI Widget | `<name>` | `<screen name in wireframes.md>` | `src/fluent/widgets/<name>.now.ts` | `x_<prefix>_<name>` | itil / admin / public | #1 #3 | Service Portal → confirm renders + data loads | [ ] |
+
+#### Claude integration row format
+
+| # | Type | Name | Credential alias | Endpoint | Prompt template location | Output field | Depends on | PDI validate | ✓ |
+|---|------|------|-----------------|----------|--------------------------|--------------|------------|--------------|---|
+| N | Claude integration | `<name>` | `claude_api` | `https://api.anthropic.com/v1/messages` | `src/server/<name>.ts` line N | `x_<prefix>_<table>.<field>` | #N (Script Include) | Run manually, confirm response parses + field populated | [ ] |
+
+#### Manifest rules
+
+- Rows are numbered in strict dependency order — Jordan builds top to bottom, no skipping
+- `Depends on` lists row numbers that must be ✓ before this row can start
+- `PDI validate` is a specific, actionable check — not "confirm it works"
+- `sys_name` must match exactly what appears in Flow Designer triggers and Script Include calls
+- No row may be left blank in any column — if unknown, raise a blocker before handing over
+- Jordan checks off each row (changes `[ ]` to `[x]`) and commits after each deploy
+
+---
+
 ## Prompt Template
 
 ```
@@ -169,6 +222,7 @@ Produce the architecture document (AXM-03). Include all required sections:
 9. Build sequence (numbered, in dependency order)
 10. Known risks (table format with mitigation)
 11. Open questions (with decision owner)
+12. Build manifest (one row per artifact, in build order — see format in process/architecture.md Section 12)
 
 Platform: ServiceNow Yokohama. SDK: now-sdk 4.6.0. TypeScript strict mode.
 No OOB table modifications. Claude API key in SN Credential Store only.

@@ -50,15 +50,18 @@ git commit -m "[JORDAN] feat: <what> (AXM-XX)"
 ## AXM-08 — Scaffold
 
 **Entry conditions:**
-- `runs/[run]/docs/architecture.md` committed
+- `runs/[run]/docs/architecture.md` committed with Section 12 (build manifest) complete
 - PDI build/deploy cycle confirmed clean
 
 **What you do:**
-1. Read architecture doc Sections 2, 6, 9 (schema, Script Includes, build sequence)
-2. Read the build manifest at the end of the architecture doc
-3. Create empty file shells — one per component in the manifest — no logic yet
-4. Confirm all file names match the `sys_name` values in Sam's schema
+1. Read the build manifest (Section 12 of architecture.md) — this is your build plan
+2. Read wireframes.md fully
+3. Create empty file shells — one per manifest row, using the `Source file` column for paths
+4. Confirm all file names and `sys_name` values match the manifest exactly
 5. Build and deploy the shells — must be clean before you commit
+
+**If the manifest has blank columns or missing rows: do not scaffold. Post a Jira blocker
+to Sam — the handover is incomplete.**
 
 ---
 
@@ -66,33 +69,34 @@ git commit -m "[JORDAN] feat: <what> (AXM-XX)"
 
 ```
 0. pwd → ends in runs/[run]/app/   cat now.config.json → scope correct
-1. Write or modify source in src/fluent/ or src/server/
-2. npm run build    — read ENTIRE output. Fix all errors. Do not proceed with errors.
-3. npm run deploy   — read ENTIRE output. Fix all errors. Do not proceed with errors.
-4. Validate on PDI  — open browser, confirm the artifact exists and behaves
-5. git commit       — [JORDAN] feat: <description> (AXM-XX)
-6. Update personas/jordan.md — move item from In Progress to Completed
-7. Append to ACTIVITY.log   — [COMMIT] and [DEPLOY] entries
+1. Find the next unchecked row in the build manifest — confirm all its dependencies are [x]
+2. Write or modify source in src/fluent/ or src/server/ (use manifest Source file path)
+3. npm run build    — read ENTIRE output. Fix all errors. Do not proceed with errors.
+4. npm run deploy   — read ENTIRE output. Fix all errors. Do not proceed with errors.
+5. Validate on PDI  — run the specific check in the manifest PDI validate column
+6. Tick the manifest row: change [ ] to [x] in architecture.md
+7. git commit       — [JORDAN] feat: <manifest row name> (AXM-BUILD) — include manifest tick
+8. Update personas/jordan.md — move item from In Progress to Completed
+9. Append to ACTIVITY.log   — [COMMIT] and [DEPLOY] entries
 ```
 
-**Never commit broken code. Never skip step 4. Never proceed with an unresolved error.**
+**Never commit broken code. Never skip step 5. Never proceed with an unresolved error.
+Never start a row whose dependencies are not all [x].**
 
 ---
 
 ## Build sequence
 
-Follow Sam's architecture doc Section 9 and the build manifest exactly.
-General order — do not deviate:
+The build manifest IS the sequence. Follow it row by row, top to bottom.
+Do not reorder. Do not skip. The dependency column tells you what must be [x] first.
 
+General order Sam will always follow in the manifest:
 ```
-1. Tables          — data model first. Nothing else works without it.
-2. Script Includes — logic before anything that calls it.
-3. Flows           — triggers and actions. Test Claude call independently first.
-4. UI              — per Morgan's wireframe spec. Cannot start before flows are tested.
+Tables → Script Includes → Flows (+ Claude integration) → UI Widgets
 ```
 
-Do not start UI before flows are tested.
-Do not start flows before Script Includes are tested.
+If you receive the architecture doc without a complete Section 12 manifest:
+post a Jira blocker immediately — do not start building from prose sections.
 
 ---
 
