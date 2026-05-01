@@ -7,23 +7,27 @@
 #          This is the FIRST file to read when orienting after a session drop.
 # ============================================================
 # Tags:
-#   [INIT]       Run initialised
-#   [START]      Ticket / sub-task started
-#   [DONE]       Ticket / sub-task completed
-#   [HANDOVER]   Handover posted (Jira + HANDOVERS.md)
-#   [BLOCKER]    Blocker raised
-#   [UNBLOCK]    Blocker resolved
-#   [DECISION]   Decision recorded in DECISIONS.md
-#   [COMMIT]     Significant git commit
-#   [DEPLOY]     Successful npm run deploy
-#   [VALIDATE]   Casey test result
-#   [SCOPE]      Scope change approved
-#   [MILESTONE]  Phase transition or hour checkpoint
-#   [SUBMIT]     Submission action
-#   [CORRECTION] Correction to a prior line
+#   [INIT]        Run initialised
+#   [START]       Ticket / sub-task started
+#   [DONE]        Ticket / sub-task completed
+#   [HANDOVER]    Handover posted (Jira + HANDOVERS.md)
+#   [CHECKPOINT]  State snapshot — written after every HANDOVER. Read this to recover.
+#                 Format: Phase: X | Done: Y | Next: Z | Blockers: None/description
+#                 Recovery: grep "\[CHECKPOINT\]" ACTIVITY.log | tail -1
+#   [BLOCKER]     Blocker raised
+#   [UNBLOCK]     Blocker resolved
+#   [DECISION]    Decision recorded in DECISIONS.md
+#   [COMMIT]      Significant git commit
+#   [DEPLOY]      Successful npm run deploy
+#   [VALIDATE]    Casey test result
+#   [SCOPE]       Scope change approved
+#   [MILESTONE]   Phase transition or hour checkpoint
+#   [SUBMIT]      Submission action
+#   [CORRECTION]  Correction to a prior line
 # ============================================================
 
-[INIT]      YYYY-MM-DDTHH:MM:SSZ | Kostya  | Run [RUN_ID] initialised. Repo: https://github.com/teivasystems/axiom-hackathon
+[INIT]       YYYY-MM-DDTHH:MM:SSZ | Kostya  | Run [RUN_ID] initialised. Repo: https://github.com/teivasystems/axiom-hackathon
+[CHECKPOINT] YYYY-MM-DDTHH:MM:SSZ | Kostya  | Phase: PREP | Done: run init | Next: Alex ideation | Blockers: None
 
 # ── PREP Phase ──────────────────────────────────────────────
 # Add entries below as work proceeds.

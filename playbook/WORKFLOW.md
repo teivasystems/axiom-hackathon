@@ -227,38 +227,54 @@ One line per event. Append-only. Written by every persona at every meaningful ac
 
 **Tags:**
 
-| Tag         | Used when                                          |
-|-------------|----------------------------------------------------|
-| `[START]`   | Persona begins work on a ticket                    |
-| `[DONE]`    | Ticket or sub-task completed                       |
-| `[HANDOVER]`| Handover posted to Jira and HANDOVERS.md           |
-| `[BLOCKER]` | Blocker raised                                     |
-| `[UNBLOCK]` | Blocker resolved                                   |
-| `[DECISION]`| Decision recorded in DECISIONS.md                 |
-| `[COMMIT]`  | Significant git commit (build milestones only)     |
-| `[DEPLOY]`  | Successful `npm run deploy`                        |
-| `[VALIDATE]`| Casey passes or fails a test case                  |
-| `[SCOPE]`   | Scope change approved                              |
-| `[INIT]`    | Run initialised                                    |
-| `[SUBMIT]`  | Submission action taken                            |
-| `[MILESTONE]`| Phase transition or named checkpoint              |
+| Tag            | Used when                                                    |
+|----------------|--------------------------------------------------------------|
+| `[START]`      | Persona begins work on a ticket                              |
+| `[DONE]`       | Ticket or sub-task completed                                 |
+| `[HANDOVER]`   | Handover posted to Jira and HANDOVERS.md                     |
+| `[BLOCKER]`    | Blocker raised                                               |
+| `[UNBLOCK]`    | Blocker resolved                                             |
+| `[DECISION]`   | Decision recorded in DECISIONS.md                            |
+| `[COMMIT]`     | Significant git commit (build milestones only)               |
+| `[DEPLOY]`     | Successful `npm run deploy`                                  |
+| `[VALIDATE]`   | Casey passes or fails a test case                            |
+| `[SCOPE]`      | Scope change approved                                        |
+| `[INIT]`       | Run initialised                                              |
+| `[SUBMIT]`     | Submission action taken                                      |
+| `[MILESTONE]`  | Phase transition or named checkpoint                         |
+| `[CHECKPOINT]` | **State snapshot — written at every handover. Read this first when recovering.** |
+
+**`[CHECKPOINT]` format — one line, written immediately after every `[HANDOVER]`:**
+```
+[CHECKPOINT] YYYY-MM-DDTHH:MM:SSZ | <Persona> | Phase: <PREP/BUILD/PITCH/SUBMIT> | Done: <what just completed> | Next: <who does what> | Blockers: <None or description>
+```
+
+**To recover after any session drop — run this one command:**
+```bash
+grep "\[CHECKPOINT\]" runs/[run]/logs/ACTIVITY.log | tail -1
+```
+→ That single line tells you phase, last completed item, next action, and open blockers.
+Full session recovery in under 30 seconds.
 
 **Example entries:**
 ```
-[START]     2026-05-19T09:00:00Z | Alex    | AXM-02 Ideation started
-[DONE]      2026-05-19T09:45:00Z | Alex    | AXM-02 Ideation complete | runs/[run]/ideation/session.md
-[HANDOVER]  2026-05-19T09:46:00Z | Alex    | Handed AXM-03 to Sam | Jira: AXM-02 comment#4
-[START]     2026-05-19T09:50:00Z | Sam     | AXM-03 Architecture started
-[BLOCKER]   2026-05-19T10:20:00Z | Jordan  | AXM-07 PDI plugin missing: Flow Designer | Escalated to Kostya
-[DECISION]  2026-05-19T10:35:00Z | Kostya  | Use IntegrationHub workaround for Flow | DECISIONS.md#D-003
-[UNBLOCK]   2026-05-19T10:36:00Z | Jordan  | AXM-07 unblocked — continuing
-[COMMIT]    2026-05-19T11:00:00Z | Jordan  | Tables created: AxiomRequest, AxiomResult | sha: a1b2c3d
-[DEPLOY]    2026-05-19T11:05:00Z | Jordan  | Tables deployed to hackathon PDI — clean
-[MILESTONE] 2026-05-19T11:05:00Z | Jordan  | BUILD Hour 2 checkpoint: tables done ✅
+[START]      2026-05-19T09:00:00Z | Alex    | AXM-IDEATION started
+[DONE]       2026-05-19T09:45:00Z | Alex    | AXM-IDEATION complete | runs/[run]/ideation/session.md
+[HANDOVER]   2026-05-19T09:46:00Z | Alex    | → Sam/Morgan/Casey/Riley | HANDOVERS.md#H-001
+[CHECKPOINT] 2026-05-19T09:46:00Z | Alex    | Phase: PREP | Done: AXM-IDEATION | Next: Sam AXM-ARCH + Morgan/Casey/Riley parallel | Blockers: None
+[START]      2026-05-19T09:50:00Z | Sam     | AXM-ARCH started
+[BLOCKER]    2026-05-19T10:20:00Z | Jordan  | PDI plugin missing: Flow Designer | Escalated to Kostya
+[DECISION]   2026-05-19T10:35:00Z | Kostya  | IntegrationHub workaround approved | DECISIONS.md#D-001
+[UNBLOCK]    2026-05-19T10:36:00Z | Jordan  | AXM-PDI unblocked — continuing
+[COMMIT]     2026-05-19T11:00:00Z | Jordan  | Tables deployed | sha: a1b2c3d
+[MILESTONE]  2026-05-19T11:05:00Z | Jordan  | BUILD Hour 2: tables ✅ Script Includes ✅
+[HANDOVER]   2026-05-19T13:30:00Z | Jordan  | → Casey (validation) | HANDOVERS.md#H-004
+[CHECKPOINT] 2026-05-19T13:30:00Z | Jordan  | Phase: BUILD | Done: Jordan handoff 4/5 features | Next: Casey validation | Blockers: None
 ```
 
 **Rules:**
 - Write the entry **at the moment the event happens**, not retrospectively.
+- `[CHECKPOINT]` is written immediately after every `[HANDOVER]` — same persona, same moment.
 - Keep each line under 200 characters (use refs for detail).
 - Never delete or edit existing entries. Append corrections as new `[CORRECTION]` lines.
 - Commit the log alongside every significant git commit.
@@ -1163,56 +1179,43 @@ DECISIONS LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[r
 ## Agent State Awareness and Recovery
 
 When a persona starts a new session in Claude.ai or Claude Code, orient before acting.
-This procedure recovers full context in under 2 minutes.
+This procedure recovers full context in under 60 seconds.
 
-### Orientation checklist (run at the start of every session)
+### Orientation — 3 steps, in order
 
 ```
-1. Read runs/[run]/logs/ACTIVITY.log (last 20 lines)
-   → What is the current phase?
-   → What is the last completed item?
-   → Are there open [BLOCKER] entries without a matching [UNBLOCK]?
-
-2. Read runs/[run]/README.md
-   → Confirm ticket status table matches ACTIVITY.log
-
-3. Read my persona's log: runs/[run]/personas/[me].md
+1. Read your persona file: runs/[run]/personas/[me].md
    → What did I complete last session?
-   → What was I in the middle of?
-   → What blockers did I log?
+   → What am I mid-way through?
+   → Any open blockers I logged?
 
-4. Read runs/[run]/logs/HANDOVERS.md (last entry addressed to me)
-   → What does the sender say I need to know?
-   → Follow the RELATED_FILES links — read those files.
-   → Check OPEN ITEMS — what must I decide before starting?
+2. Get current project state — one command:
+   grep "\[CHECKPOINT\]" runs/[run]/logs/ACTIVITY.log | tail -1
+   → Phase, last completed item, next action, open blockers — all in one line.
+   → If a [BLOCKER] has no matching [UNBLOCK]: do not start, escalate first.
 
-5. Read runs/[run]/logs/DECISIONS.md
-   → Have any scope changes affected my work?
-   → Are there decisions I need to respect?
-
-6. Confirm my entry conditions are met (see Phase sections above)
-   → If not: write [BLOCKER] to ACTIVITY.log and escalate before starting.
-
-7. CHECK THE CLOCK (BUILD phase only)
-   → What hour is it?
-   → Am I behind the hour-by-hour plan?
-   → If behind: write [MILESTONE BEHIND] to ACTIVITY.log, flag to Kostya.
+3. Confirm your entry conditions are met (see your operation card)
+   → If not met: write [BLOCKER] to ACTIVITY.log and escalate before starting.
+   → BUILD phase only: check the hour. If behind, write [MILESTONE BEHIND] and flag Kostya.
 ```
 
-### Recovery order when state is uncertain
+**That's it. Three reads. Under 60 seconds.**
 
-Use this order — each step is faster and more reliable than the next:
+If after these three steps the state is still unclear — read HANDOVERS.md last entry
+addressed to you, then DECISIONS.md. Those are the next most informative sources.
 
-| Priority | Source | Why |
-|----------|--------|-----|
-| 1st | `runs/[run]/logs/ACTIVITY.log` | Append-only, chronological, always current |
-| 2nd | `runs/[run]/logs/HANDOVERS.md` | Full context of what was passed and what is expected |
-| 3rd | `runs/[run]/logs/DECISIONS.md` | Scope and design changes that override earlier docs |
-| 4th | Jira ticket statuses | Authoritative for current status, but harder to scan than logs |
-| 5th | `git log --oneline -20` | Shows what Jordan has actually built and committed |
-| 6th | `runs/[run]/personas/jordan.md` | Jordan's build log — most detailed view of current build state |
+### Recovery order when the 3-step orientation isn't enough
 
-If after all six sources the state is still unclear:
+| Priority | Source | Command | Why |
+|----------|--------|---------|-----|
+| 1st | Last CHECKPOINT | `grep "\[CHECKPOINT\]" runs/[run]/logs/ACTIVITY.log \| tail -1` | Phase + state in one line |
+| 2nd | Persona file | `runs/[run]/personas/[me].md` | What I was doing and what I completed |
+| 3rd | HANDOVERS.md | last entry addressed to me | Full handover context from sender |
+| 4th | DECISIONS.md | `runs/[run]/logs/DECISIONS.md` | Scope changes that override earlier docs |
+| 5th | Jira tickets | In Progress tickets | Authoritative status, slower to scan |
+| 6th | git log | `git log --oneline -20` | What Jordan actually built and committed |
+
+If after all six the state is still unclear:
 ```
 Post [STATUS CHECK] on the most recent In Progress Jira ticket.
 Ask Kostya to confirm. Do not start work until confirmed.

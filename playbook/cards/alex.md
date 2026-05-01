@@ -6,6 +6,16 @@
 
 ---
 
+## Before every session — orient in 60 seconds
+
+```
+1. Read runs/[run]/personas/alex.md — what did I complete? any open blockers?
+2. grep "\[CHECKPOINT\]" runs/[run]/logs/ACTIVITY.log | tail -1 — current project state
+3. Confirm your entry conditions are met before starting any work
+```
+
+---
+
 ## Your one job
 
 Select one app concept. Lock the scope. Hand off to Sam, Morgan, Casey, and Riley

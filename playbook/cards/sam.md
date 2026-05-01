@@ -6,6 +6,16 @@
 
 ---
 
+## Before every session — orient in 60 seconds
+
+```
+1. Read runs/[run]/personas/sam.md — what did I complete? any open blockers?
+2. grep "\[CHECKPOINT\]" runs/[run]/logs/ACTIVITY.log | tail -1 — current project state
+3. Confirm your entry conditions are met before starting any work
+```
+
+---
+
 ## Your one job
 
 Produce an architecture document Jordan can build from without asking a single
