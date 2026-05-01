@@ -120,7 +120,23 @@ cp playbook/log-templates/ACTIVITY.log  runs/[run]/logs/ACTIVITY.log
 cp playbook/log-templates/DECISIONS.md  runs/[run]/logs/DECISIONS.md
 cp playbook/log-templates/HANDOVERS.md  runs/[run]/logs/HANDOVERS.md
 
-# 3. Create README for this run
+# 3. Create persona files (required — empty stubs, personas fill them in)
+for p in alex sam morgan jordan casey riley; do
+  cat > runs/[run]/personas/$p.md << EOF
+# $p — Session Log — Run [run]
+
+## Completed
+(none yet)
+
+## In Progress
+(none yet)
+
+## Blockers
+None
+EOF
+done
+
+# 4. Create README (ticket IDs filled in after Step 2)
 cat > runs/[run]/README.md << 'EOF'
 # Run: [run]
 
@@ -128,12 +144,13 @@ cat > runs/[run]/README.md << 'EOF'
 
 | Ticket | Summary | Persona | Status | Artifact |
 |--------|---------|---------|--------|----------|
-| AXM-XX | Ideation Session | Alex | Backlog | — |
-| AXM-XX | Architecture Doc | Sam | Backlog | — |
-| AXM-XX | UX Wireframe Spec | Morgan | Backlog | — |
-| AXM-XX | Test Case Draft | Casey | Backlog | — |
-| AXM-XX | Pitch Outline | Riley | Backlog | — |
-| AXM-XX | Scaffold + Build | Jordan | Backlog | — |
+| — | Ideation Session | Alex | In Progress | — |
+| — | Architecture Doc | Sam | Backlog | — |
+| — | UX Wireframe Spec | Morgan | In Progress | — |
+| — | Test Case Draft | Casey | In Progress | — |
+| — | Pitch Script | Riley | In Progress | — |
+| — | PDI Pre-configuration | Jordan | In Progress | — |
+| — | Scaffold + Build | Jordan | Backlog | — |
 
 ## Key Paths
 - Ideation: runs/[run]/ideation/session.md
@@ -148,18 +165,49 @@ cat > runs/[run]/README.md << 'EOF'
 - App URL: (populated after first deploy)
 EOF
 
-# 4. Seed the activity log
+# 5. Seed the activity log
 echo "[INIT] $(date -u +%Y-%m-%dT%H:%M:%SZ) | Kostya | Run [run] initialised. Repo: https://github.com/teivasystems/axiom-hackathon" \
   >> runs/[run]/logs/ACTIVITY.log
 
-# 5. Commit
+# 6. Commit
 git add runs/[run]/
 git commit -m "[INIT] Run [run] infrastructure created"
 git push
 ```
 
-**The logs and README must exist before any persona posts their first Jira comment.**
-If they don't, create them before doing anything else.
+**The logs, persona files, and README must exist before any persona posts their first Jira comment.**
+
+---
+
+### Step 2 — Create All Jira Tickets
+
+Run this immediately after Step 1. All tickets are created with full descriptions
+before ideation starts. No persona creates tickets mid-run.
+
+```bash
+# Set credentials (one time per shell session)
+export JIRA_URL="https://teiva.atlassian.net"
+export JIRA_EMAIL="k.bazanov@teivasys.com"
+export JIRA_TOKEN="<your-api-token>"
+export JIRA_PROJECT="AXM"
+
+# Create all 7 tickets
+./playbook/jira/create-tickets.sh [run]
+
+# → prints ticket IDs + a ready-to-paste README table
+# Copy the output table into runs/[run]/README.md and commit
+```
+
+For dry runs, add `--dry-run` to preview without creating:
+```bash
+./playbook/jira/create-tickets.sh [run] --dry-run
+```
+
+Ticket descriptions: `playbook/jira/ticket-descriptions.md`
+Creation script:     `playbook/jira/create-tickets.sh`
+
+**Do not start ideation until all 7 tickets exist in Jira with full descriptions.**
+The ideation ticket being In Progress is how Alex knows to begin.
 
 ---
 
