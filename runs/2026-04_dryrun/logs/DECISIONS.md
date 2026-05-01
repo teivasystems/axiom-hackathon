@@ -9,6 +9,8 @@
 
 | ID    | Phase | Type   | Summary                        | Made by | Status    |
 |-------|-------|--------|--------------------------------|---------|-----------|
+| D-001 | PREP→BUILD | ARCHITECTURE | Scope prefix system-assigned — use x_9274_kudos | Kostya | Resolved ✅ |
+| D-002 | CROSS-RUN | ARCHITECTURE — UX Channel Routing | Employee/end-user → SP/EC; Manager/fulfiller → Workspace; Mobile → avoid; Now Assist → either | Kostya | Signed off ✅ |
 
 *(Update this table when adding each entry below.)*
 
@@ -63,4 +65,52 @@ RESOLUTION:
   Build clean. Deployed to https://dev390976.service-now.com/sys_app.do?sys_id=8f59e7b4aa4a42c79236d248bd1672a3
   architecture.md updated — all x_axiom_kudos references replaced with x_9274_kudos.
   CLAUDE.md updated — per-run app folder structure documented, scope prefix procedure added.
+```
+
+---
+
+### D-002
+
+```
+ID:          D-002
+DATE:        2026-05-02T00:00:00Z
+PHASE:       CROSS-RUN (applies to all future runs — not run-specific)
+TYPE:        ARCHITECTURE — UX Channel Routing
+RAISED BY:   Kostya
+DECIDED BY:  Kostya
+SIGNED OFF:  Sam (architecture)
+
+CONTEXT:
+  No team-wide principle existed for which ServiceNow UI channel to use for a given
+  user type. Without this, each run risks building in the wrong channel (e.g. a
+  fulfiller workspace in Service Portal, or an employee form in UI Builder), wasting
+  build time or producing a weak demo.
+
+DECISION:
+  The following routing applies to all AXIOM runs:
+
+  Employee / end-user self-service    → Employee Center or custom SP portal
+  Customer / external user            → Customer Service Portal (CSM plugin)
+  Manager / fulfiller / agent         → UI Builder Workspace
+  Admin / internal tooling            → UI Builder or SP (build-time dependent)
+  Now Assist / Voice AI               → Applicable to both Workspace and Portal
+                                        (Workspace OOB sidebar preferred; VA topic for SP)
+  Mobile                              → Avoid in hackathon unless pitch is mobile-first
+                                        AND Alex explicitly approves it as a scope item.
+
+RATIONALE:
+  Employee Center and SP are optimised for self-service UX — low friction, accessible,
+  mobile-friendly. UI Builder Workspaces are designed for agent productivity — queue
+  management, activity feeds, Now Assist integration. Mixing channels creates an awkward
+  UX that weakens the demo. Mobile is architecturally sound but takes 3–4h minimum to
+  build and test — too costly for a hackathon unless it IS the differentiator.
+
+IMPACT:
+  Sam must name the UX channel explicitly in architecture.md Section 1 for every run.
+  Jordan must not start UI work until the channel is confirmed.
+  The full routing guide and per-channel build patterns live in:
+    playbook/skills/ui.md — UX Channel Routing section (canonical reference)
+
+PLAYBOOK REF: playbook/skills/ui.md — "UX Channel Routing — Architectural Decision (D-002)"
+STATUS:       Signed off ✅
 ```

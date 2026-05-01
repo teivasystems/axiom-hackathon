@@ -33,3 +33,4 @@
 [COMMIT]     2026-05-02T00:00:00Z | Jordan  | Rows 2-8 built — KudosService, ClaudeDigest, Notification Flow, Digest Flow, Submit Widget, Feed Widget
 [DEPLOY]     2026-05-02T00:00:00Z | Jordan  | Rows 2-8 deployed clean | notification flow active; digest flow awaits manual trigger; Row 4 Claude REST pending credential setup
 [CHECKPOINT] 2026-05-02T00:00:00Z | Jordan  | Phase: BUILD complete (7/8 rows) | Row 4 blocked on Claude API credential alias | Next: Kostya configures credential, then wire REST step in digest flow
+[DECISION]   2026-05-02T00:00:00Z | Sam     | D-002 logged — UX channel routing signed off | runs/2026-04_dryrun/logs/DECISIONS.md | playbook/skills/ui.md updated
