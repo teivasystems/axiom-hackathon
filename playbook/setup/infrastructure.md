@@ -14,7 +14,7 @@
 | Source Control | GitHub — teivasystems/axiom-hackathon | — | ✅ Created |
 | Task Management | Jira — AXIOM project | — | Pending |
 | Documentation | Confluence — AXIOM space | — | Pending |
-| Design | Figma — RetroNow UX Spec | — | Pending |
+| Design | Figma | — | Pending |
 | Pitch | HeyGen | — | Pending |
 | AI Runtime | Anthropic API (Claude) | — | Pending credential setup |
 | Team Context | Claude.ai Project — AXIOM | — | Pending |
@@ -449,17 +449,17 @@ Every Jira ticket: paste Confluence page URL into Artifact Link field.
 
 ## 6. Figma Setup
 
-**File name:** `RetroNow — UX Spec (AXM-04)`
+**File name:** `<App Name> — UX Spec (AXM-04)`
 
 **Pages (create now, Morgan fills during AXM-04):**
 
 ```
 00 Design System
-01 Submit Retro Item (mobile form)
-02 Session Dashboard (scrum master)
-03 Claude Summary Reveal
-04 Action Items View
-05 Historical Comparison (last sprint)
+01 <Primary user screen>
+02 <Admin / operator screen>
+03 <AI reveal / output screen>
+04 <Secondary view>
+05 <Historical / comparison view>
 06 Empty States
 ```
 
@@ -583,7 +583,7 @@ Step  Est.    Task                                          Status
   2   Done    OAuth axiom-pdi configured                   ✅
   3   Done    now-sdk init / transform flags confirmed      ✅
   4   Done    CLAUDE.md written                            ✅
-  5   Done    Ideation session complete (RetroNow)          ✅
+  5   Done    Ideation session complete                     ✅
   6   Done    GitHub repo created                          ✅
   7   15min   GitHub repo structure + initial commit        ← Next
   8   20min   Jira project + fields + 15 tickets
@@ -611,7 +611,7 @@ in place. Infrastructure comes first.
 [✅] now-sdk init flags confirmed
 [✅] now-sdk transform flags confirmed
 [✅] CLAUDE.md written and ready to commit
-[✅] Ideation session complete — RetroNow selected
+[✅] Ideation session complete — app selected
 [✅] GitHub repo created (teivasystems/axiom-hackathon)
 [ ] GitHub repo structure committed and pushed
 [ ] Jira: AXIOM project, 15 tickets, 3 sprints

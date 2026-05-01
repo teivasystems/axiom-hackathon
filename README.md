@@ -14,13 +14,9 @@ Six AI specialists. One human interface. Fully documented process.
 - **Riley** — Pitch & Marketing
 - **Kostya** — Human Interface & Executive Sponsor
 
-## Current Run
+## Runs
 
-**App:** RetroNow — AI-powered sprint retrospective tool
-**Event:** CreatorCon Hackathon, Knowledge Las Vegas 2026
-**Status:** Infrastructure phase — Sam writing architecture doc (AXM-03)
-
-→ [Run artifacts](runs/2026-05_creatorcon/)
+Each hackathon or dry run has its own folder under `runs/`. See the [runs index](runs/README.md) for status of each.
 
 ## Repository Structure
 

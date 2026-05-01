@@ -293,7 +293,7 @@ E4 (Memory Lane): User seat — the reveal (agent recognises returning customer)
 
 6. **The Provenance Trail** — An audit and reasoning-chain visibility app for multi-agent pipelines: every agent action tagged with its source, confidence, and grounding record — one workspace showing the full decision chain.
 
-7. **RetroNow** — Anonymous sprint retrospective submission, Claude clustering and theme surfacing, action item auto-creation, and a "last sprint comparison" — the AI shows teams what they said they would fix and whether they did.
+7. **Sprint Retro** — Anonymous sprint retrospective submission, Claude clustering and theme surfacing, action item auto-creation, and a "last sprint comparison" — the AI shows teams what they said they would fix and whether they did.
 
 8. **Momentum Maker** — Identifies the maintenance/admin work drowning a knowledge worker, automates it, and shows the maintenance-to-momentum ratio improving in real time on a Performance Analytics dashboard.
 
@@ -315,7 +315,7 @@ E4 (Memory Lane): User seat — the reveal (agent recognises returning customer)
 | KB Pulse | ✅ Advances | Now Assist dependency risk noted. Score accordingly. |
 | Circuit Breaker | ✅ Advances | Viable. Lower resonance floor. |
 | The Provenance Trail | ✅ Advances | Multi-agent complexity is real. Flag build risk. |
-| RetroNow | ✅ Advances | Strong audience fit for agile practitioners. |
+| Sprint Retro | ✅ Advances | Strong audience fit for agile practitioners. |
 | Momentum Maker | ✅ Advances | Universal pain strong. Scope definition is the risk. |
 | The Intake Alchemist | ✅ Advances | Viable. Lower meta-story fit. |
 | Shadow Skill Finder | ✅ Advances | HRSD dependency risk noted. |
@@ -336,7 +336,7 @@ All 11 advance. No hard constraint violations. Minimum 8-concept pool met.
 | Confidence Gate | 4 (12) | 5 (15) | 4 (12) | 5 (10) | 5 (10) | 5 (10) | 5 (10) | 5 (5) | **84** |
 | The Handoff Package | 5 (15) | 5 (15) | 4 (12) | 4 (8) | 4 (8) | 4 (8) | 5 (10) | 4 (4) | **80** |
 | Memory Lane | 5 (15) | 4 (12) | 5 (15) | 4 (8) | 4 (8) | 3 (6) | 5 (10) | 4 (4) | **78** |
-| RetroNow | 5 (15) | 4 (12) | 4 (12) | 4 (8) | 4 (8) | 3 (6) | 3 (6) | 4 (4) | **71** |
+| Sprint Retro | 5 (15) | 4 (12) | 4 (12) | 4 (8) | 4 (8) | 3 (6) | 3 (6) | 4 (4) | **71** |
 | KB Pulse | 4 (12) | 4 (12) | 4 (12) | 5 (10) | 3 (6) | 4 (8) | 3 (6) | 5 (5) | **71** |
 | Quiet Colleague | 4 (12) | 3 (9) | 4 (12) | 5 (10) | 4 (8) | 3 (6) | 2 (4) | 3 (3) | **64** |
 | The Provenance Trail | 3 (9) | 3 (9) | 3 (9) | 5 (10) | 3 (6) | 5 (10) | 4 (8) | 4 (4) | **65** |
@@ -355,7 +355,7 @@ All 11 advance. No hard constraint violations. Minimum 8-concept pool met.
 
 **Memory Lane (78):** Emotional resonance also revised to 4. The strongest consumer-seat reveal of the three, but the concept novelty is the lowest — "persistent memory for AI agents" is in every Gartner report this panel has read. Expert judges will recognise it immediately as the expected solution. Platform depth is the material limitation: all Tier 1, no AI Agent Studio. For a Round 2 panel of platform architects, the depth gap is visible.
 
-**RetroNow (71):** Strong audience fit for agile practitioners, but neither the meta-story connection nor the platform depth competes with the top 3. Scores well on clarity and buildability. Does not generate the "I have to vote for this" energy in Round 2 deliberation for a platform-expert panel.
+**Sprint Retro (71):** Strong audience fit for agile practitioners, but neither the meta-story connection nor the platform depth competes with the top 3. Scores well on clarity and buildability. Does not generate the "I have to vote for this" energy in Round 2 deliberation for a platform-expert panel.
 
 **Eliminations below 70: all documented.** KB Pulse, Quiet Colleague, Provenance Trail, Circuit Breaker, Momentum Maker, Intake Alchemist, Shadow Skill Finder — each has a clear strength that does not aggregate into a competitive total against the top 3. Full scores retained for record.
 
