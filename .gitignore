@@ -21,4 +21,10 @@ Thumbs.db
 # Temporary
 *.tmp
 .cache/
-.claude/
+
+# Claude Code — local settings only (settings.json is committed, settings.local.json is not)
+.claude/settings.local.json
+.claude/worktrees/
+
+# Generated persona bundles — rebuilt by generate_bundles.sh, not tracked
+playbook/personas/bundles/

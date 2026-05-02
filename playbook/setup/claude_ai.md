@@ -1,158 +1,186 @@
 # Setup: Claude.ai Project
 
-## Purpose
+## The Problem This Solves
 
-Claude.ai hosts all persona conversations that are NOT Jordan's build sessions.
-Alex, Sam, Morgan, Casey, and Riley each operate in dedicated Claude.ai conversations
-within a shared project that holds the team context.
+Jordan (Claude Code) reads playbook files live from disk — always current.  
+Every other persona (Alex, Sam, Morgan, Casey, Riley) operates in Claude.ai, which only knows what you manually upload. As the playbook evolves, Claude.ai gets stale, and personas produce inconsistent results.
 
-Jordan (Claude Code) operates separately via the CLI — not in Claude.ai.
+**Solution:** Compiled per-persona knowledge bundles. One script assembles everything each persona needs into a single file. Upload that file once. Re-run the script whenever the playbook changes.
 
 ---
 
-## Project Setup
+## Persona Bundles — How They Work
 
-**Project name:** `AXIOM — [Event Name] [Year]`
+The script `playbook/setup/generate_bundles.sh` compiles one bundle per persona:
 
-### Project Instructions
+| Bundle file | Contains |
+|---|---|
+| `alex.bundle.md` | Team Charter + Alex persona profile + Alex card + Ideation process |
+| `sam.bundle.md` | Team Charter + Sam persona profile + Sam card + Architecture process + all skill files |
+| `morgan.bundle.md` | Team Charter + Morgan persona profile + Morgan card + UI skills (UX routing, SP, Workspace, Now Assist) |
+| `casey.bundle.md` | Team Charter + Casey persona profile + Casey card + Retrospective process + Retro template |
+| `riley.bundle.md` | Team Charter + Riley persona profile + Riley card + Pitch process |
 
-Paste the following into the project instructions field:
+Sam's bundle includes all skill files because Sam designs what Jordan builds — Sam must know every platform constraint (flow DSL, IH availability, credential patterns, UX routing) to produce an architecture Jordan can actually implement.
+
+**Generate bundles:**
+```bash
+# From anywhere in the repo
+bash playbook/setup/generate_bundles.sh
+```
+
+**Auto-generation:** A Claude Code hook in `.claude/settings.json` automatically re-runs the script whenever a file in `playbook/` or `docs/` is edited. Bundles are always current when working in Claude Code.
+
+---
+
+## One-Time Project Setup
+
+### Step 1 — Create the Claude.ai Project
+
+**Project name:** `AXIOM — [Event] [Year]`  
+e.g. `AXIOM — CreatorCon 2026`
+
+**Project Instructions** (paste this into the project instructions field):
 
 ```
 You are a member of Team AXIOM — an AI-native software development team
-competing at the ServiceNow CreatorCon Hackathon [YEAR].
+competing at the ServiceNow CreatorCon Hackathon 2026.
 
 The team has six specialist personas:
   Alex    — Product Owner
   Sam     — Platform Architect
   Morgan  — UX/UI Designer
-  Jordan  — Lead Developer (operates in Claude Code, not here)
+  Jordan  — Lead Developer (operates in Claude Code only — not here)
   Casey   — QA & Documentation
   Riley   — Pitch & Marketing
 
-When starting a conversation, identify which persona you are operating as
-based on context or explicit instruction. Remain in that persona for the
-full conversation. Produce structured artifacts with handover notes.
-Follow the operating protocol in the Team Charter.
+When Kostya starts a conversation, he will tell you which persona to be.
+Remain in that persona for the full conversation.
 
-Platform: ServiceNow Now Platform (Zurich / Australia release)
+Platform: ServiceNow Now Platform (Zurich / Australia)
 SDK: now-sdk 4.6.0
 Repository: https://github.com/teivasystems/axiom-hackathon
 
-Every artifact is written as a markdown file destined for the GitHub repo.
-Every handover uses the standard format:
-FROM / TO / TICKET / STATUS / ARTIFACT / SUMMARY / OPEN ITEMS
+Every artifact is a markdown file committed to the repo.
+Every handover uses the standard AXIOM format:
+  FROM / TO / TICKET / STATUS / ARTIFACT / SUMMARY / OPEN ITEMS
 
-Reference the Team Charter for full persona definitions and handover format.
+Your full knowledge — persona profile, operation card, skills, process guides —
+is in your persona bundle uploaded to this project's knowledge.
+Read it before acting on any task.
 ```
 
-### Knowledge Documents (upload in this order)
+### Step 2 — Upload initial knowledge documents
 
-| Document | Source | When to upload |
-|---|---|---|
-| Team Charter | `playbook/team_charter.md` | At project creation |
-| Infrastructure Setup | `playbook/setup/infrastructure.md` | At project creation |
-| CLAUDE.md | `CLAUDE.md` | At project creation |
-| Ideation Session | `runs/[run]/ideation/session.md` | After ideation complete |
-| Architecture Doc | `runs/[run]/docs/architecture.md` | After Sam completes AXM-03 |
-| Wireframe Spec | `runs/[run]/docs/wireframes.md` | After Morgan completes AXM-04 |
+```bash
+bash playbook/setup/generate_bundles.sh
+```
 
-Update knowledge documents as they are produced — do not wait until the end.
+Upload these to the project knowledge (Settings → Knowledge):
+
+| File | When |
+|---|---|
+| `playbook/personas/bundles/alex.bundle.md` | At project creation |
+| `playbook/personas/bundles/sam.bundle.md` | At project creation |
+| `playbook/personas/bundles/morgan.bundle.md` | At project creation |
+| `playbook/personas/bundles/casey.bundle.md` | At project creation |
+| `playbook/personas/bundles/riley.bundle.md` | At project creation |
 
 ---
 
-## Per-Persona Conversation Setup
+## Per-Run Knowledge — Upload as Produced
 
-Create one conversation per phase, named clearly. Start each by invoking the persona explicitly.
+These docs are run-specific and uploaded separately (not bundled — they change per run):
 
-### Ideation (Alex → all → Alex)
+| Document | Path | Upload when |
+|---|---|---|
+| Ideation session | `runs/<run>/ideation/session.md` | After AXM-02 complete |
+| Architecture doc | `runs/<run>/docs/architecture.md` | After AXM-03 complete |
+| Wireframe spec | `runs/<run>/docs/wireframes.md` | After AXM-04 complete |
+| Casey test cases | `runs/<run>/personas/casey.md` | After AXM-05 complete |
+| Jordan build log | `runs/<run>/personas/jordan.md` | Night of — hour 6:30, for Riley's Section 2 |
 
-**Conversation name:** `AXM-02 — Ideation Session`
+---
 
-Opening prompt:
+## Opening a Persona Conversation
+
+Start every conversation the same way. The bundle does the heavy lifting — the opening prompt just needs to orient and task.
+
+**Template:**
 ```
-You are Alex, Product Owner for Team AXIOM. Begin the ideation session.
-[Paste Alex's brief prompt from process/ideation.md with hackathon details filled in]
+You are [Persona], [Role] for Team AXIOM.
+Your full knowledge bundle is loaded in this project's knowledge — read it before acting.
+
+Current run: [run folder name, e.g. 2026-05_creatorcon]
+App: [app name]
+Task: [AXM-XX — one sentence description]
+
+[Paste any run-specific inputs the persona needs — scope lock, architecture doc excerpt, etc.]
 ```
 
-Then run Sam, Morgan, Riley proposals in subsequent turns or new conversations.
+**Examples:**
 
-### Architecture (Sam)
+Alex — Ideation:
+```
+You are Alex, Product Owner for Team AXIOM.
+Your knowledge bundle is loaded. Begin the ideation session (AXM-02).
 
-**Conversation name:** `AXM-03 — Architecture`
+Event: ServiceNow Knowledge 2026 — CreatorCon Hackathon
+Category target: GenAI
+Build window: 8 hours, one human executing
+Hard constraint: no live external data in demo conditions
+```
 
-Opening prompt:
+Sam — Architecture:
 ```
 You are Sam, Platform Architect for Team AXIOM.
-[Paste Sam architecture prompt from process/architecture.md with app details filled in]
+Your knowledge bundle is loaded. Produce the architecture doc (AXM-03).
+
+App: RetroNow — AI sprint retrospective tool
+Scope lock (from Alex's ideation output):
+[paste scope lock section from ideation/session.md]
 ```
 
-### Wireframes (Morgan)
-
-**Conversation name:** `AXM-04 — Wireframes`
-
-Opening prompt:
-```
-You are Morgan, UX/UI Designer for Team AXIOM.
-Architecture doc is complete: [paste or upload architecture.md]
-[Paste wireframe instruction]
-```
-
-### Test Cases (Casey)
-
-**Conversation name:** `AXM-05 — Test Cases`
-
-Opening prompt:
+Casey — Test cases:
 ```
 You are Casey, QA specialist for Team AXIOM.
-Alex's scope: [paste scope from ideation decision]
-Casey's job: draft test cases (AXM-05) against the acceptance criteria.
-[Paste Casey prompt from personas/casey.md]
-```
+Your knowledge bundle is loaded. Draft test cases (AXM-05).
 
-### Pitch (Riley)
-
-**Conversation name:** `AXM-06 — Pitch`
-
-Opening prompt:
-```
-You are Riley, Pitch & Marketing for Team AXIOM.
-[Paste Riley pitch prompt from process/pitch.md with app and validated features]
-```
-
-### Jordan pre-build (pre-hackathon only)
-
-**Conversation name:** `AXM-07/08 — Component pre-build`
-
-Jordan's actual build happens in Claude Code. Use Claude.ai only for pre-build
-planning (component shells, Script Include structure) in the PREP sprint.
-
-Opening prompt:
-```
-You are Jordan, Lead Developer for Team AXIOM.
-We are in the PREP sprint — no hackathon clock running.
-Architecture doc: [paste or upload]
-Task: [specific AXM ticket from CLAUDE.md current sprint]
+Scope lock:
+[paste scope lock from ideation/session.md]
 ```
 
 ---
 
-## Conversation Management Tips
+## Keeping Claude.ai in Sync
 
-- **One conversation per major artifact.** Do not mix Sam's architecture and Morgan's wireframes in one conversation — context bleed causes persona drift.
-- **Start each conversation with the persona name explicitly.** Claude needs the anchor. "You are Sam..." not just "continue the architecture."
-- **Upload the latest docs each time.** If architecture.md was updated since the last conversation, upload the new version before continuing.
-- **Keep conversations focused.** A conversation that runs past ~20 turns starts to lose coherence. If the artifact is long, split it into a fresh conversation with context.
-- **Save artifacts to the repo immediately.** Copy the markdown output to the correct file in `runs/[run]/` before the conversation ends. Do not rely on being able to find it later.
+When playbook files change (skills updated, new process added, decisions logged):
+
+1. Claude Code auto-regenerates bundles via the PostToolUse hook — no action needed during active sessions.
+2. Before the next Claude.ai session, re-upload the affected persona's bundle:
+   - Delete the old bundle from project knowledge
+   - Upload the new `playbook/personas/bundles/<persona>.bundle.md`
+
+**Trigger:** Re-upload any persona's bundle after:
+- A skill file was updated or added (`playbook/skills/`)
+- A new architectural decision was made (`DECISIONS.md` or `playbook/skills/ui.md`)
+- A process doc was changed (`playbook/process/` or `playbook/cards/`)
+- The Team Charter was updated
+
+You do not need to re-upload for run-specific file changes (ideation, architecture) — those are managed separately.
 
 ---
 
-## Knowledge Update Schedule
+## Conversation Management
 
-| When | What to update |
-|---|---|
-| After AXM-02 complete | Upload `ideation/session.md` |
-| After AXM-03 complete | Upload `docs/architecture.md` |
-| After AXM-04 complete | Upload `docs/wireframes.md` |
-| After AXM-05 complete | Upload `personas/casey.md` (test cases) |
-| Night of — hour 6:30 | Upload updated `personas/jordan.md` (build log) for Riley's Section 2 update |
+- **One conversation per major artifact.** Do not mix Sam's architecture and Morgan's wireframes — context bleed causes persona drift.
+- **Start with the persona explicitly.** "You are Sam..." anchors the persona at the top of context.
+- **Conversations decay after ~20 turns.** If the artifact is long, start a fresh conversation with the same opening prompt and attach the output so far.
+- **Save artifacts immediately.** Copy output to `runs/<run>/` before the conversation ends.
+- **Re-upload run docs when they update.** If architecture.md was revised since last conversation, replace it in project knowledge.
+
+---
+
+## Why Jordan is separate
+
+Jordan operates in Claude Code, not Claude.ai. Claude Code reads files live from disk — no upload, no sync, always current. Jordan doesn't need a bundle because the entire repo is the bundle. Other personas use Claude.ai because their work is conversational and document-centric, not terminal-and-build-loop.

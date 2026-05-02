@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // empty' 2>/dev/null); if [[ -n \"$file\" ]] && echo \"$file\" | grep -qE '/(playbook|docs)/'; then bash /Users/kostya/axiom-hackathon/playbook/setup/generate_bundles.sh > /dev/null 2>&1 || true; fi",
+            "statusMessage": "Refreshing persona bundles..."
+          }
+        ]
+      }
+    ]
+  }
+}
