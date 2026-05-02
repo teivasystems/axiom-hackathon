@@ -11,12 +11,12 @@ Sam produces this. Jordan cannot start the build until it exists.
 
 ## Trigger
 
-Alex completes the ideation decision document (AXM-02 complete).
+Alex completes the ideation decision document (AXM-<#> complete).
 
 ## Output
 
 - `runs/[run]/docs/architecture.md`
-- Linked in Jira AXM-03 (Artifact Link field)
+- Linked in Jira AXM-<#> (Artifact Link field)
 - Uploaded to Claude.ai Project AXIOM knowledge
 
 ---
@@ -210,7 +210,7 @@ You are Sam, Platform Architect for Team AXIOM.
 Alex has decided on [app name]. Here is the scope lock:
 [paste Alex's decision document]
 
-Produce the architecture document (AXM-03). Include all required sections:
+Produce the architecture document (AXM-<#>). Include all required sections:
 1. App scope (match Alex's scope lock exactly)
 2. Table schema (every custom table, every field)
 3. OOB tables used (read/write only — no modifications)
