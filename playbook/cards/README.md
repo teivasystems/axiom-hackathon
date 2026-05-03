@@ -3,6 +3,18 @@
 Each card is the **sole runtime reference** for that persona during a session.  
 Load your card at session start. Do not load `WORKFLOW.md` as a startup read — it is a reference document for edge cases and conflicts.
 
+---
+
+## personas/ vs cards/ — which file to use
+
+| File location | Used by | Purpose |
+|---|---|---|
+| `playbook/cards/<name>.md` | **CLAUDE Code** (this workspace) | In-session operation guide — commands, build loop, handover format, blocker protocol. Load at session start. |
+| `playbook/personas/<name>.md` | **Claude.ai Project AXIOM** | System prompt — persona identity, voice, backstory, and capabilities. Load once into the Claude.ai Project knowledge base. |
+| `playbook/personas/bundles/<name>.bundle.md` | **Claude.ai Project AXIOM** | Auto-generated bundle combining persona + key playbook sections. Use instead of the raw persona file when context is tight. |
+
+**Rule:** If you are in CLAUDE Code, use a card. If you are in Claude.ai, use a persona or bundle. Never mix them.
+
 | Card | Persona | Role | Loads at start | On-demand references |
 |---|---|---|---|---|
 | [alex.md](alex.md) | Alex | Product Owner | `ideation/session.md` | `process/ideation.md` |

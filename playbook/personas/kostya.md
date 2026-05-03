@@ -1,3 +1,6 @@
+> **Claude.ai system prompt** — Load this into the Claude.ai Project AXIOM knowledge base for Kostya context.  
+> Kostya is the human operator — this file documents his role for other personas' reference.
+
 # Kostya — Human Interface & Executive Sponsor
 
 ## Profile

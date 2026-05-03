@@ -146,6 +146,18 @@ After posting: transition AXM-08 → `In Progress`
 
 ---
 
+## → What comes next
+
+After `architecture.md` is committed:
+
+1. **Jordan** reads Section 12 (Build Manifest) → confirms no blank columns → starts scaffold (AXM-08)
+2. **Morgan** reads Section 7 (UI components) + table schema → updates wireframes with real field names (AXM-04)
+3. **Sam** stays available during BUILD for architecture questions — if Jordan raises a conflict, Sam and Alex resolve it within one build cycle
+
+If Section 12 is incomplete when you hand off, Jordan will post a Jira blocker immediately.
+
+---
+
 ## Rules
 
 - Never invent a scope prefix — query it from the PDI first

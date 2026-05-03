@@ -39,9 +39,9 @@ Verify the Zurich / Australia instance is accessible, now-sdk 4.6.0 is configure
 ### Step 3 — Instantiate the backlog (Alex, ≤10 min) ⚠️ mandatory
 **This step is required before any build or design work begins.**
 
-1. Copy the backlog template to the live backlog file:
+1. Copy the backlog template to the run docs folder:
    ```
-   cp docs/BACKLOG_TEMPLATE.md docs/BACKLOG.md
+   cp playbook/docs/BACKLOG_TEMPLATE.md runs/<run>/docs/BACKLOG.md
    ```
 2. Fill in the **Product context** table (section 1 of the backlog).
 3. Use the seed prompt in section 6 of the template to generate an initial set of stories with Claude.
@@ -66,17 +66,32 @@ Walk the P0 stories. Confirm every persona knows their first task. Agree on a ch
 
 ## 5. Artifact standards
 
-All artifacts produced during the hackathon are markdown files committed to `docs/` unless otherwise noted below.
+**Team-level artifacts** (cross-run, committed to `docs/`):
 
 | Artifact | File | Owner |
 |---|---|---|
 | Team Charter | `docs/TEAM_CHARTER.md` | Alex |
-| Backlog template | `docs/BACKLOG_TEMPLATE.md` | Alex |
-| Live backlog | `docs/BACKLOG.md` | Alex |
-| Architecture decision records | `docs/adr/ADR-NNN.md` | Sam |
-| UX specs / wireframe notes | `docs/ux/` | Morgan |
-| QA test log | `docs/QA_LOG.md` | Casey |
-| Pitch script | `docs/PITCH_SCRIPT.md` | Riley |
+| Platform Decisions | `docs/PLATFORM_DECISIONS.md` | Alex / Kostya |
+| Branding guide | `docs/branding/` | Riley |
+
+**Reusable templates** (committed to `playbook/docs/`):
+
+| Template | File | Use |
+|---|---|---|
+| Backlog template | `playbook/docs/BACKLOG_TEMPLATE.md` | Copy to `runs/<run>/docs/BACKLOG.md` at kick-off |
+| PRD template | `playbook/docs/PRD_TEMPLATE.md` | Copy to `runs/<run>/docs/prd.md` at kick-off |
+
+**Per-run artifacts** (committed to `runs/<run>/docs/` — one set per run):
+
+| Artifact | File | Owner |
+|---|---|---|
+| Product requirements | `runs/<run>/docs/prd.md` | Alex |
+| Live backlog | `runs/<run>/docs/BACKLOG.md` | Alex |
+| Architecture doc | `runs/<run>/docs/architecture.md` | Sam |
+| Wireframes | `runs/<run>/docs/wireframes.md` | Morgan |
+| Hackathon day runbook | `runs/<run>/docs/hackathon_day_runbook.md` | Alex |
+| QA test cases | `runs/<run>/personas/casey.md` | Casey |
+| Pitch script | `runs/<run>/pitch/script_draft.md` | Riley |
 | README | `README.md` | Casey (with input from all) |
 
 Every artifact must include a **handover note** at the bottom in this format:

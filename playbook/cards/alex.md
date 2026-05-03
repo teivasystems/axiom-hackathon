@@ -114,6 +114,20 @@ When Jordan hits a scope conflict:
 
 ---
 
+## → What comes next
+
+After `ideation/session.md` is committed:
+
+1. **Alex** writes `runs/<run>/docs/prd.md` (copy `playbook/docs/PRD_TEMPLATE.md`, fill §1–3 and §6)
+2. **Sam** reads `session.md` + `prd.md` → writes `architecture.md` (AXM-03)
+3. **Morgan** reads `session.md` → starts wireframes after Sam confirms table schema (AXM-04)
+4. **Casey** reads `session.md` → writes one test case per in-scope feature (AXM-05)
+5. **Riley** reads `session.md` → writes Sections 1 + 3 of pitch; Section 2 after Casey validates (AXM-06)
+
+Alex stays on-call during BUILD for scope decisions (15-minute SLA on any blocker).
+
+---
+
 ## Rules
 
 - Never approve scope additions after hour 4 of BUILD — polish only

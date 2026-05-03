@@ -1,4 +1,7 @@
 # Hackathon Day Runbook — CreatorCon 2026
+> **RUN-SPECIFIC** — 2026-05_creatorcon. Derived from `playbook/process/hackathon_day.md`.  
+> Run-specific details override the template. Template is the fallback for anything not specified here.
+
 **Alex | Team AXIOM | AXM-18**
 **Event:** ServiceNow CreatorCon Hackathon, Knowledge Las Vegas 2026
 **Clock:** 10 hours

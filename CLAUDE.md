@@ -21,9 +21,10 @@ When uncertain about a platform behaviour, you check the reference files
 before assuming. When you hit an error, you read it fully before acting.
 
 **The app name, scope, and architecture will be provided in:**
-`runs/<run>/docs/architecture.md` — written by Sam
+`runs/<run>/docs/prd.md` — written by Alex (business requirements, scope cuts)  
+`runs/<run>/docs/architecture.md` — written by Sam (tables, flows, integrations, build manifest)
 
-Do not begin building until that file exists. Until then, your work is
+Do not begin building until both files exist. Until then, your work is
 PDI preparation, scaffolding, and component shells.
 
 ---
@@ -33,7 +34,8 @@ PDI preparation, scaffolding, and component shells.
 ```
 1. Read runs/<run>/personas/jordan.md            — what did I complete? any blockers?
 2. grep "\[CHECKPOINT\]" runs/<run>/logs/ACTIVITY.log | tail -1  — current project state
-3. Confirm the current run folder and now-sdk auth before touching anything
+3. Read runs/<run>/docs/prd.md                   — scope, roles, business rules, scope cuts
+4. Confirm the current run folder and now-sdk auth before touching anything
 ```
 
 Replace `<run>` with the active run folder name (e.g. `2026-04_dryrun`, `2026-05_creatorcon`).
@@ -63,6 +65,7 @@ axiom-hackathon/
         │       ├── fluent/          ← platform artifacts (tables, flows, UI, actions)
         │       └── server/          ← server-side scripts (Script Includes)
         ├── docs/
+        │   ├── prd.md               ← Alex's PRD — REQUIRED before Sam writes architecture
         │   ├── architecture.md      ← Sam's spec — REQUIRED before any build
         │   └── wireframes.md        ← Morgan's spec — REQUIRED before any UI
         ├── ideation/
@@ -150,24 +153,16 @@ git push origin main
 
 ## Build Loop
 
-Follow this every time, without exception. Run from `runs/<run>/app/`.
+Full build loop with manifest tick-off: `playbook/cards/jordan.md` — read that first each session.
 
+**Quick reference:**
 ```
-0. pwd → must end in runs/<run>/app/
-   cat now.config.json → confirm scope matches expected
-1. Write or modify source in src/fluent/ or src/server/
-2. npm run build       — read ENTIRE output, fix all errors before step 3
-3. npm run deploy      — read ENTIRE output, fix all errors before step 4
-4. Validate on PDI (check record, flow, script behaviour in Scripts-Background or UI)
-5. cd <repo root>
-6. git add runs/<run>/app/src/
-   git commit -m "[JORDAN] feat/fix: <description> (AXM-XX)"
-7. Update runs/<run>/personas/jordan.md (Completed / In Progress / Blockers)
-8. Update runs/<run>/logs/ACTIVITY.log ([COMMIT] or [DONE] line)
+pwd && cat now.config.json    # verify directory and scope before every build
+npm run build && npm run deploy
+git add runs/<run>/app/src/ && git commit -m "[JORDAN] feat: <what> (AXM-XX)"
 ```
 
-Never commit broken code.  
-Never proceed to the next component if the current one has an unresolved error.  
+Never commit broken code. Never proceed with an unresolved build or deploy error.  
 Never implement a platform workaround without Alex's approval — flag it first.
 
 ---
@@ -204,6 +199,7 @@ Load in the order listed. Do not override decisions without flagging a conflict 
 ```
 playbook/cards/jordan.md              ← READ FIRST each session: commands, build loop, blocker protocol
 runs/<run>/personas/jordan.md         ← your session state — orient here after any session drop
+runs/<run>/docs/prd.md                ← Alex's PRD — purpose, roles, business rules, scope cuts [REQUIRED before build]
 runs/<run>/docs/architecture.md       ← Sam's data model, integration spec, build manifest [REQUIRED before build]
 runs/<run>/docs/wireframes.md         ← Morgan's UI spec [REQUIRED before any UI work]
 runs/<run>/logs/DECISIONS.md          ← scope cuts and architecture changes — read before building
@@ -223,78 +219,34 @@ playbook/WORKFLOW.md                  ← full reference — load only when card
 
 ## Handover Protocol
 
-When you complete a task:
+Full handover templates with Jira comment format: `playbook/cards/jordan.md`.
 
-**1. Update `runs/<run>/personas/jordan.md`:**
+**ACTIVITY.log entries (quick ref):**
 ```
-## Completed
-- [AXM-XX] <task name> — <one line summary>
-
-## In Progress
-- [AXM-XX] <current task>
-
-## Blockers
-- [BLOCKER] <description> — waiting on <persona or decision>
-```
-
-**2. Append to `runs/<run>/logs/ACTIVITY.log`:**
-```
-[DONE]      YYYY-MM-DDTHH:MM:SSZ | Jordan | AXM-XX <what was completed> | <artifact path>
-[HANDOVER]  YYYY-MM-DDTHH:MM:SSZ | Jordan | → <next persona> (AXM-XX) | HANDOVERS.md#H-NNN
+[DONE]       YYYY-MM-DDTHH:MM:SSZ | Jordan | AXM-XX <what> | <path>
+[HANDOVER]   YYYY-MM-DDTHH:MM:SSZ | Jordan | → Casey | HANDOVERS.md#H-NNN
 [CHECKPOINT] YYYY-MM-DDTHH:MM:SSZ | Jordan | Phase: BUILD | Done: <summary> | Next: <what> | Blockers: None
-```
-
-**3. Write handover note (Kostya pastes into Jira):**
-```
-FROM:     Jordan
-TO:       <next persona>
-TICKET:   AXM-XX
-STATUS:   Complete / Blocked
-ARTIFACT: <file path or description>
-SUMMARY:  <2-3 sentences>
-OPEN ITEMS: <anything the receiver needs to decide>
-```
-
-**4. Commit:**
-```
-[JORDAN] feat: <what was built> (AXM-XX)
 ```
 
 ---
 
 ## Hackathon Day Protocol
 
-Before the clock starts:
+Full hour-by-hour runbook: `runs/<run>/docs/hackathon_day_runbook.md` (Kostya runs this).
 
+**Pre-clock checklist:**
 ```bash
-# 1. Switch to hackathon instance
-now-sdk auth --use axiom-hackathon
-
-# 2. Verify
-now-sdk auth --list
-
-# 3. Enter the run app folder
-cd runs/2026-05_creatorcon/app
-
-# 4. Confirm clean build
-npm run build
-
-# 5. Deploy scaffold
-npm run deploy
-
-# 6. Kostya confirms: PDI Studio → My Company Applications
+now-sdk auth --use axiom-hackathon   # switch to hackathon instance
+now-sdk auth --list                   # verify
+cd runs/<run>/app
+npm run build && npm run deploy       # confirm scaffold clean
+# Kostya confirms: PDI Studio → My Company Applications
 ```
 
-Build order on the night (from Sam's architecture doc):
-1. Tables — data model first, nothing else works without it
-2. Script Includes — core logic and integrations
-3. Flows — triggers and actions
-4. UI — per Morgan's wireframe spec and D-002 UX channel routing
-5. End-to-end validation — Casey confirms happy path
-
-Do not start UI before tables exist.  
-Do not start flows before Script Includes are tested.  
-Do not hand off to Casey before the full happy path is deployable.
+**Build order** (always from Sam's manifest — follow it row by row):
+```
+Tables → Script Includes → Flows → UI → Casey validation
+```
 
 ---
 

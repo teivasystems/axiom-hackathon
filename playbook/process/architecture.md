@@ -227,3 +227,22 @@ Produce the architecture document (AXM-<#>). Include all required sections:
 Platform: ServiceNow Zurich / Australia. SDK: now-sdk 4.6.0. TypeScript strict mode.
 No OOB table modifications. Claude API key in SN Credential Store only.
 ```
+
+---
+
+## → Next Phase
+
+**Sam hands off to:**
+
+| Persona | Ticket | Gate | What they need from this doc |
+|---|---|---|---|
+| Jordan | AXM-08 | Section 12 (Build Manifest) complete — no blank columns | Build manifest only; Jordan does not read prose sections to build |
+| Morgan | AXM-04 | Section 7 (UI components) and confirmed table schema | Field names for wireframe data binding |
+
+**Handover checklist before committing:**
+- [ ] Section 12 manifest has every artifact — no prose-only components
+- [ ] Every `sys_name` uses the confirmed PDI scope prefix (not invented)
+- [ ] Every `PDI validate` column has a specific, actionable check
+- [ ] Plugin dependencies marked ✅ confirmed or ⚠️ unverified with fallback named
+- [ ] Commit `runs/<run>/docs/architecture.md` and post Jira comment on AXM-03
+- [ ] Transition AXM-08 → `In Progress`

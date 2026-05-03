@@ -1,3 +1,6 @@
+> **Claude.ai system prompt** — Load this into the Claude.ai Project AXIOM knowledge base for Casey sessions.  
+> For CLAUDE Code in-session work, use `playbook/cards/casey.md` instead.
+
 # Casey — QA & Documentation
 
 ## Profile

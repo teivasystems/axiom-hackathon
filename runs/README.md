@@ -12,54 +12,40 @@ Every run is self-contained: its own now-sdk app, its own PDI, its own scope pre
 
 ## Starting a New Run
 
-**Before creating the folder:** Kostya must create the app in AES and confirm the system-assigned scope prefix. Do not name any artifact before this is known.
+**Step 1 — Kostya creates the app in AES** and confirms the system-assigned scope prefix. Do not name any artifact before this is known (D-001).
 
-1. Create: `runs/YYYY-MM_eventname/`
-2. Copy this structure:
+**Step 2 — Run the init script** from the repo root:
 
-```
-YYYY-MM_eventname/
-├── README.md                  ← run summary (fill in as you go)
-│
-├── app/                       ← now-sdk app (one per run — different PDI, different scope)
-│   ├── now.config.json        ← scope must match AES exactly
-│   ├── package.json
-│   ├── .gitignore             ← node_modules/, dist/, target/, *.token
-│   └── src/
-│       ├── fluent/            ← platform artifacts (tables, flows, UI, actions)
-│       └── server/            ← Script Includes and server-side logic
-│
-├── docs/
-│   ├── architecture.md        ← Sam (AXM-03) — REQUIRED before Jordan builds anything
-│   └── wireframes.md          ← Morgan (AXM-04) — REQUIRED before Jordan builds UI
-│
-├── ideation/
-│   └── session.md             ← Alex (AXM-02) — app concept, scope lock, constraints
-│
-├── logs/
-│   ├── ACTIVITY.log           ← copy from playbook/log-templates/ACTIVITY.log
-│   ├── DECISIONS.md           ← copy from playbook/log-templates/DECISIONS.md
-│   ├── HANDOVERS.md           ← copy from playbook/log-templates/HANDOVERS.md
-│   └── RETRO-YYYY-MM-DD.md    ← created by Casey post-run (template: playbook/log-templates/RETRO.md)
-│
-├── personas/
-│   ├── alex.md                ← Alex's decision log
-│   ├── sam.md                 ← Sam's architecture notes
-│   ├── morgan.md              ← Morgan's design notes
-│   ├── jordan.md              ← Jordan's build log: completed / in progress / blockers
-│   ├── casey.md               ← Casey's test cases and validation results
-│   └── riley.md               ← Riley's pitch notes and script status
-│
-└── pitch/
-    ├── script_draft.md        ← Riley (AXM-06)
-    └── heygen_storyboard.md   ← demo sequence and HeyGen assembly notes
+```bash
+bash playbook/setup/run-init.sh YYYY-MM_eventname
 ```
 
-3. Copy log templates from `playbook/log-templates/` into `logs/`. Fill the ACTIVITY.log `[INIT]` line.
-4. Update this `runs/README.md` table.
-5. Update the root `README.md` Runs table.
-6. CLAUDE.md does not need editing per-run — it uses `<run>` placeholders throughout. Jordan substitutes the active run folder name at session start.
-7. Follow `playbook/process/ideation.md` to start.
+This creates the full folder structure, copies log templates (including cross-run decisions D-001/D-002), writes the `[INIT]` ACTIVITY.log line, and prints a next-steps checklist.
+
+**Step 3 — Complete the stubs:**
+
+| File | Owner | Ticket |
+|---|---|---|
+| `runs/<run>/docs/prd.md` | Alex | AXM-01 |
+| `runs/<run>/ideation/session.md` | Alex | AXM-02 |
+| `runs/<run>/docs/architecture.md` | Sam | AXM-03 |
+| `runs/<run>/docs/wireframes.md` | Morgan | AXM-04 |
+| `runs/<run>/personas/casey.md` (test cases) | Casey | AXM-05 |
+
+**Step 4 — Update tables:**
+- Add this run to the `runs/README.md` table (below)
+- Add this run to the root `README.md` Runs table
+
+**Step 5 — Scaffold the now-sdk app** (Jordan, after architecture.md Section 12 is complete):
+```bash
+cd runs/<run>/app
+now-sdk init --appName "<App Display Name>" --scopeName "<x_prefix_appname>" \
+  --template typescript.basic --auth axiom-pdi
+npm run build
+npm run deploy
+```
+
+> CLAUDE.md uses `<run>` placeholders throughout — no per-run edits needed. Jordan substitutes the active run folder name at session start.
 
 ---
 

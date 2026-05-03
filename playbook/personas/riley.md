@@ -1,3 +1,6 @@
+> **Claude.ai system prompt** — Load this into the Claude.ai Project AXIOM knowledge base for Riley sessions.  
+> For CLAUDE Code in-session work, use `playbook/cards/riley.md` instead.
+
 # Riley — Pitch & Marketing
 
 ## Profile

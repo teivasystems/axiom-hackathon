@@ -12,22 +12,35 @@
 
 ---
 
-## Decision Index
+## Inherited Cross-Run Decisions
+
+These apply to this run without re-decision. Full records in `docs/PLATFORM_DECISIONS.md`.
+
+| ID | Summary | Canonical ref |
+|---|---|---|
+| D-001 | Scope prefix is PDI-assigned — never invent it | `docs/PLATFORM_DECISIONS.md#D-001` |
+| D-002 | UX channel routing — SP for employee, Workspace for fulfiller | `docs/PLATFORM_DECISIONS.md#D-002` |
+
+---
+
+## Run-Specific Decision Index
+
+New decisions for this run start at D-003.
 
 | ID    | Phase | Type   | Summary                        | Made by | Status    |
 |-------|-------|--------|--------------------------------|---------|-----------|
-| D-001 |       |        |                                |         |           |
+| D-003 |       |        |                                |         |           |
 
 *(Update this table when adding each entry below.)*
 
 ---
 
-## Decisions
+## Run-Specific Decisions
 
-### D-001
+### D-003
 
 ```
-ID:          D-001
+ID:          D-003
 DATE:        YYYY-MM-DDTHH:MM:SSZ
 PHASE:       [PREP / BUILD / PITCH / SUBMIT]
 TYPE:        [SCOPE / ARCHITECTURE / DESIGN / PROCESS / BLOCKER-RESOLUTION]

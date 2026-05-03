@@ -863,3 +863,19 @@ Memory Lane is the second fallback if both Confidence Gate and The Handoff Packa
 *Framework: AXIOM Hackathon Ideation Framework v1.2*
 *Next: Sam produces AXM-03. Morgan begins AXM-04 in parallel after table schema confirmed.*
 *Fallback trigger and decision chain documented. No further ideation.*
+
+---
+
+## → Next Phase
+
+**Alex hands off to:**
+
+| Persona | Ticket | What they need | Gate |
+|---|---|---|---|
+| Alex | — | Write `runs/<run>/docs/prd.md` from `playbook/docs/PRD_TEMPLATE.md` | Before Sam starts |
+| Sam | AXM-03 | `ideation/session.md` committed + `prd.md` committed | Read both before naming anything |
+| Morgan | AXM-04 | `ideation/session.md` + wait for Sam's table schema | Wireframes after schema confirmed |
+| Casey | AXM-05 | `ideation/session.md` | One test case per in-scope feature |
+| Riley | AXM-06 | `ideation/session.md` | Sections 1 + 3 now; Section 2 after Casey validates |
+
+**Alex remains on-call during BUILD** for scope decisions. No persona should silently de-scope — all changes go through Alex.

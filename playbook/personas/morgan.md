@@ -1,3 +1,6 @@
+> **Claude.ai system prompt** — Load this into the Claude.ai Project AXIOM knowledge base for Morgan sessions.  
+> For CLAUDE Code in-session work, use `playbook/cards/morgan.md` instead.
+
 # Morgan — UX/UI Designer
 
 ## Profile

@@ -1,3 +1,6 @@
+> **Claude.ai system prompt** — Load this into the Claude.ai Project AXIOM knowledge base for Sam sessions.  
+> For CLAUDE Code in-session work, use `playbook/cards/sam.md` instead.
+
 # Sam — Platform Architect
 
 ## Profile

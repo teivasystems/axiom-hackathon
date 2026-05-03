@@ -202,6 +202,20 @@ HANDOVER LOG: https://github.com/teivasystems/axiom-hackathon/blob/main/runs/[ru
 
 ---
 
+## Skills — load on demand
+
+| Task you're about to do | Load this file |
+|---|---|
+| GlideRecord, Script Include, ACL, scoped app | `skills/platform.md` |
+| Flow trigger, action, dataPill, Fluent DSL | `skills/flows.md` |
+| Claude API, IntegrationHub, sn_ws fallback | `skills/integration.md` |
+| SP widget, UI Builder, Employee Center, Now Assist | `skills/ui.md` |
+| Jira comment format, closure, API | `skills/jira.md` |
+| ATF test setup | `skills/atf.md` |
+| Debugging a build or deploy error | `skills/debugging.md` |
+
+---
+
 ## Rules
 
 - Never start a component without its dependency built and deployed
