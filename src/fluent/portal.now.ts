@@ -59,7 +59,7 @@ const registerWidget = SPWidget({
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
-const districtMapPage = SPPage({
+SPPage({
     pageId: 'apoc-map',
     title: 'Las Vegas District Status Map',
     public: true,
@@ -91,7 +91,7 @@ const districtMapPage = SPPage({
     ],
 })
 
-SPPage({
+const zonesPage = SPPage({
     pageId: 'apoc-zones',
     title: 'Evacuation Zone Status',
     public: true,
@@ -162,7 +162,7 @@ ServicePortal({
     urlSuffix: 'apoc',
     title: 'ApocalypseNow — Emergency Response',
     theme: apocTheme,
-    homePage: districtMapPage,
+    homePage: zonesPage,
     // zonesPage and registerPage referenced here so they are included in the build
     loginPage: registerPage,
 })
