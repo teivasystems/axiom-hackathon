@@ -503,6 +503,34 @@ declare global {
                         table: 'sys_app_category'
                         id: '8ff5796350d941af9bf2caa4e0f516df'
                     }
+                    apoc_rpt_html_civilian: {
+                        table: 'par_dashboard_widget'
+                        id: '51716daa00e94d5aab2f6e407c6d43cf'
+                    }
+                    apoc_rpt_html_mission: {
+                        table: 'par_dashboard_widget'
+                        id: '0f5687990994422e86a32480b9751e34'
+                    }
+                    apoc_rpt_html_overview: {
+                        table: 'par_dashboard_widget'
+                        id: '7b6b3582d6424935bebd728f2ad25e38'
+                    }
+                    apoc_rpt_html_quarantine: {
+                        table: 'par_dashboard_widget'
+                        id: '73cc3e1287bd4117b1a21757fbebb62a'
+                    }
+                    apoc_rpt_html_rescue: {
+                        table: 'par_dashboard_widget'
+                        id: '25140864a2f7483a8753b09ccaf22c45'
+                    }
+                    apoc_rpt_html_supply: {
+                        table: 'par_dashboard_widget'
+                        id: 'f823535a8cd642c8982d2370d1d6f485'
+                    }
+                    apoc_rpt_html_zones: {
+                        table: 'par_dashboard_widget'
+                        id: 'fc15009c7c0b419fb80d217a8eb4bd31'
+                    }
                     bom_json: {
                         table: 'sys_module'
                         id: '639ed5e163cd4fab9980c40db44028d2'
@@ -530,6 +558,86 @@ declare global {
                     cs0: {
                         table: 'sys_script_client'
                         id: '0823659d30e34c719ad0714b27696b38'
+                    }
+                    kb_art_cm_channels: {
+                        table: 'kb_knowledge'
+                        id: '8c61a3ffbea042b9b999ebbe0c53228c'
+                    }
+                    kb_art_cm_report: {
+                        table: 'kb_knowledge'
+                        id: 'a2480456d6f644eb876135ae0e6d05f6'
+                    }
+                    kb_art_cm_rumour: {
+                        table: 'kb_knowledge'
+                        id: 'd82d63b001c147be8ae7439c18237890'
+                    }
+                    kb_art_er_72h: {
+                        table: 'kb_knowledge'
+                        id: '217bbf3ab1da4d2bb017637b9970ee8f'
+                    }
+                    kb_art_er_fire: {
+                        table: 'kb_knowledge'
+                        id: '16e95b3da63344a287305914c5e485bd'
+                    }
+                    kb_art_er_signal: {
+                        table: 'kb_knowledge'
+                        id: 'fcf1496a4c9c4b54a8666ec342e01c31'
+                    }
+                    kb_art_ev_how: {
+                        table: 'kb_knowledge'
+                        id: '6313e36164c14e188c6275fcd159b68d'
+                    }
+                    kb_art_ev_pack: {
+                        table: 'kb_knowledge'
+                        id: '1d1048db959a4f40b74eb8d35cc6360a'
+                    }
+                    kb_art_ev_vulnerable: {
+                        table: 'kb_knowledge'
+                        id: 'fc1b886420ab48c79ecc1cf4bfb91d88'
+                    }
+                    kb_art_log_meds: {
+                        table: 'kb_knowledge'
+                        id: '352bf672a238478f9ad5c74d7b332896'
+                    }
+                    kb_art_log_supplies: {
+                        table: 'kb_knowledge'
+                        id: '1d33ab2479fb4de39dafa3ee7b0c978e'
+                    }
+                    kb_art_log_water: {
+                        table: 'kb_knowledge'
+                        id: '1789ec3255f24db287101be1368090f1'
+                    }
+                    kb_art_med_quarantine: {
+                        table: 'kb_knowledge'
+                        id: 'f0e5608a3ca44ab6b9430aeec6321c91'
+                    }
+                    kb_art_med_symptoms: {
+                        table: 'kb_knowledge'
+                        id: '7cb6f1609cf34d66acafa18a2b2f0b64'
+                    }
+                    kb_art_med_triage: {
+                        table: 'kb_knowledge'
+                        id: '1e6253c5ffe34cedbf7beda48a3db2ba'
+                    }
+                    kb_base_comms: {
+                        table: 'kb_knowledge_base'
+                        id: '273be320b3a44341ba3c7cd4a1da2296'
+                    }
+                    kb_base_emergency: {
+                        table: 'kb_knowledge_base'
+                        id: '5e9338d3623446a6ab870847055b4c20'
+                    }
+                    kb_base_evacuation: {
+                        table: 'kb_knowledge_base'
+                        id: 'cf57c8ae17254f6da73f6d07ddd8ae37'
+                    }
+                    kb_base_logistics: {
+                        table: 'kb_knowledge_base'
+                        id: '14a3a19857474d8ca8d31a3b7fd9270b'
+                    }
+                    kb_base_medical: {
+                        table: 'kb_knowledge_base'
+                        id: '823b9d882b0f41299bc80c7165392d25'
                     }
                     package_json: {
                         table: 'sys_module'
@@ -688,6 +796,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: '588bca8cd0e24013ae2b790a5ede696f'
                     }
+                    sp_col_kb: {
+                        table: 'sp_column'
+                        id: 'b540822558834863989d6374ca6e12db'
+                    }
                     sp_col_map: {
                         table: 'sp_column'
                         id: '8cafeafd280c44358baaee3a754ba5af'
@@ -700,6 +812,10 @@ declare global {
                         table: 'sp_column'
                         id: 'e9c2657524bf4d6394eedf77ad27e8d9'
                     }
+                    sp_cont_kb: {
+                        table: 'sp_container'
+                        id: '2ba267502be84474a91077ba480ee8cb'
+                    }
                     sp_cont_map: {
                         table: 'sp_container'
                         id: 'c44b762b81e34915bf03bd8f95b37500'
@@ -711,6 +827,10 @@ declare global {
                     sp_cont_zones: {
                         table: 'sp_container'
                         id: 'd355e5982fcd4178a5e2ac3966fccedf'
+                    }
+                    sp_inst_kb: {
+                        table: 'sp_instance'
+                        id: 'c1fb62cf912b4c4c8221756ba41044dd'
                     }
                     sp_inst_map: {
                         table: 'sp_instance'
@@ -727,6 +847,10 @@ declare global {
                     sp_portal_apoc: {
                         table: 'sp_portal'
                         id: '5b59bb60a49d433e952f6ad305da4fbb'
+                    }
+                    sp_row_kb: {
+                        table: 'sp_row'
+                        id: '4db5ba3e211a488aad6136505d4e0480'
                     }
                     sp_row_map: {
                         table: 'sp_row'
@@ -747,6 +871,10 @@ declare global {
                     sp_widget_district_map: {
                         table: 'sp_widget'
                         id: 'a6fac874dfb54dbda8addb28f766f44f'
+                    }
+                    sp_widget_kb: {
+                        table: 'sp_widget'
+                        id: '0fd0e3b4a1c9451bb2faafd4b6ad0c30'
                     }
                     sp_widget_register: {
                         table: 'sp_widget'
@@ -779,6 +907,14 @@ declare global {
                     'src_server_sp-district-map_server_js': {
                         table: 'sys_module'
                         id: '2bdd059e91fa457d9d5e3d66112c2c25'
+                    }
+                    'src_server_sp-kb_client_js': {
+                        table: 'sys_module'
+                        id: '5b737b5f840a40148c129452176865cc'
+                    }
+                    'src_server_sp-kb_server_js': {
+                        table: 'sys_module'
+                        id: '7f7549d9765c4515a47f061bad318e22'
                     }
                     'src_server_sp-register_client_js': {
                         table: 'sys_module'
@@ -1458,6 +1594,13 @@ declare global {
                             }
                             element: 'request_type'
                             position: '3'
+                        }
+                    },
+                    {
+                        table: 'sp_page'
+                        id: '21b1982163964ae98277c67bd2437fcf'
+                        key: {
+                            id: 'apoc-kb'
                         }
                     },
                     {

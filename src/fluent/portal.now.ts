@@ -45,6 +45,18 @@ const districtMapWidget = SPWidget({
     public: true,
 })
 
+const kbWidget = SPWidget({
+    $id: Now.ID['sp_widget_kb'],
+    id: 'apoc-kb',
+    name: 'Apoc Knowledge Base',
+    description: 'Self-help articles across the 5 emergency knowledge bases. Accordion browse — no login required.',
+    serverScript: Now.include('../server/sp-kb.server.js'),
+    clientScript: Now.include('../server/sp-kb.client.js'),
+    htmlTemplate: Now.include('../server/sp-kb.html'),
+    customCss: Now.include('../server/sp-kb.css'),
+    public: true,
+})
+
 const registerWidget = SPWidget({
     $id: Now.ID['sp_widget_register'],
     id: 'apoc-register-form',
@@ -58,6 +70,38 @@ const registerWidget = SPWidget({
 })
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
+
+SPPage({
+    pageId: 'apoc-kb',
+    title: 'Emergency Self-Help',
+    public: true,
+    containers: [
+        {
+            $id: Now.ID['sp_cont_kb'],
+            order: 1,
+            rows: [
+                {
+                    $id: Now.ID['sp_row_kb'],
+                    order: 1,
+                    columns: [
+                        {
+                            $id: Now.ID['sp_col_kb'],
+                            sizeSm: 12,
+                            order: 1,
+                            instances: [
+                                {
+                                    $id: Now.ID['sp_inst_kb'],
+                                    widget: kbWidget,
+                                    order: 1,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+})
 
 SPPage({
     pageId: 'apoc-map',

@@ -1,0 +1,235 @@
+/* ── Nav (shared pattern) ────────────────────────────────────── */
+.apoc-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #1c1c1e;
+  border-bottom: 1px solid #374151;
+  padding: 0 16px;
+}
+.apoc-nav-brand {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ef4444;
+  margin-right: 8px;
+  padding: 12px 8px;
+  white-space: nowrap;
+}
+.apoc-nav-link {
+  display: inline-block;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.apoc-nav-link:hover { color: #f9fafb; text-decoration: none; }
+.apoc-nav-active { color: #f9fafb !important; border-bottom-color: #ef4444; }
+.apoc-nav-cta {
+  margin-left: auto;
+  background: #dc2626;
+  color: #fff !important;
+  border-radius: 4px;
+  padding: 6px 14px;
+  border-bottom: none !important;
+}
+.apoc-nav-cta:hover { background: #b91c1c; }
+
+/* ── Page shell ──────────────────────────────────────────────── */
+.apoc-kb {
+  background: #0f0f0f;
+  min-height: 100vh;
+  color: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.kb-header {
+  text-align: center;
+  padding: 40px 24px 28px;
+  border-bottom: 1px solid #1f1f1f;
+}
+.kb-header-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+.kb-header-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #f9fafb;
+  margin: 0 0 8px;
+}
+.kb-header-sub {
+  font-size: 15px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ── KB list ─────────────────────────────────────────────────── */
+.kb-list {
+  max-width: 860px;
+  margin: 32px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── KB base card ────────────────────────────────────────────── */
+.kb-base-card {
+  background: #1c1c1e;
+  border-radius: 10px;
+  border: 1px solid #2a2a2e;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.kb-base-card.kb-base-open {
+  border-color: #ef4444;
+}
+
+.kb-base-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+.kb-base-header:hover { background: #222226; }
+
+.kb-base-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.kb-base-info {
+  flex: 1;
+  min-width: 0;
+}
+.kb-base-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f9fafb;
+  margin-bottom: 3px;
+}
+.kb-base-desc {
+  font-size: 13px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kb-base-count {
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.kb-chevron {
+  font-size: 11px;
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* ── Article list ────────────────────────────────────────────── */
+.kb-article-list {
+  border-top: 1px solid #2a2a2e;
+  padding: 8px 0;
+  background: #161618;
+}
+.kb-no-articles {
+  padding: 16px 24px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ── Article row ─────────────────────────────────────────────── */
+.kb-article {
+  border-bottom: 1px solid #1f1f1f;
+}
+.kb-article:last-child { border-bottom: none; }
+
+.kb-article-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+.kb-article-header:hover { background: #1c1c1e; }
+.kb-article-open .kb-article-header { background: #1c1c1e; }
+
+.kb-article-icon { font-size: 16px; flex-shrink: 0; }
+.kb-article-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e5e7eb;
+}
+.kb-article-chevron {
+  font-size: 10px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* ── Article body ────────────────────────────────────────────── */
+.kb-article-body {
+  padding: 0 24px 20px 50px;
+  background: #111113;
+}
+.kb-article-content {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #d1d5db;
+}
+.kb-article-content h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f9fafb;
+  margin: 16px 0 10px;
+}
+.kb-article-content p {
+  margin: 0 0 12px;
+}
+.kb-article-content ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+.kb-article-content li {
+  margin-bottom: 8px;
+}
+.kb-article-content strong {
+  color: #f9fafb;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.kb-footer {
+  text-align: center;
+  padding: 32px 24px 48px;
+  font-size: 14px;
+  color: #6b7280;
+}
+.kb-footer a {
+  color: #ef4444;
+  text-decoration: none;
+}
+.kb-footer a:hover { text-decoration: underline; }
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.kb-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .kb-base-desc { display: none; }
+  .kb-article-body { padding-left: 24px; }
+}
