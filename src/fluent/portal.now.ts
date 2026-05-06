@@ -33,6 +33,18 @@ const zoneGridWidget = SPWidget({
     public: true,
 })
 
+const districtMapWidget = SPWidget({
+    $id: Now.ID['sp_widget_district_map'],
+    id: 'apoc-district-map',
+    name: 'Apoc District Map',
+    description: 'Live Las Vegas district map with colour-coded zone statuses, active alerts, and civilian CTA. Auto-refreshes every 15s.',
+    serverScript: Now.include('../server/sp-district-map.server.js'),
+    clientScript: Now.include('../server/sp-district-map.client.js'),
+    htmlTemplate: Now.include('../server/sp-district-map.html'),
+    customCss: Now.include('../server/sp-district-map.css'),
+    public: true,
+})
+
 const registerWidget = SPWidget({
     $id: Now.ID['sp_widget_register'],
     id: 'apoc-register-form',
@@ -47,7 +59,39 @@ const registerWidget = SPWidget({
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
-const zonesPage = SPPage({
+const districtMapPage = SPPage({
+    pageId: 'apoc-map',
+    title: 'Las Vegas District Status Map',
+    public: true,
+    containers: [
+        {
+            $id: Now.ID['sp_cont_map'],
+            order: 1,
+            rows: [
+                {
+                    $id: Now.ID['sp_row_map'],
+                    order: 1,
+                    columns: [
+                        {
+                            $id: Now.ID['sp_col_map'],
+                            sizeSm: 12,
+                            order: 1,
+                            instances: [
+                                {
+                                    $id: Now.ID['sp_inst_map'],
+                                    widget: districtMapWidget,
+                                    order: 1,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+})
+
+SPPage({
     pageId: 'apoc-zones',
     title: 'Evacuation Zone Status',
     public: true,
@@ -118,7 +162,7 @@ ServicePortal({
     urlSuffix: 'apoc',
     title: 'ApocalypseNow — Emergency Response',
     theme: apocTheme,
-    homePage: zonesPage,
-    // registerPage referenced here so it is included in the build
+    homePage: districtMapPage,
+    // zonesPage and registerPage referenced here so they are included in the build
     loginPage: registerPage,
 })
