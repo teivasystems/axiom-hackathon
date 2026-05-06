@@ -1,0 +1,189 @@
+.apoc-register {
+  background: #0f0f0f;
+  min-height: 100vh;
+  padding: 24px;
+  color: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.apoc-header {
+  text-align: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.apoc-logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+.apoc-subtitle {
+  font-size: 16px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.apoc-back {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  font-size: 13px;
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.apoc-back:hover { color: #f9fafb; }
+
+.reg-form-wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  background: #1c1c1e;
+  border-radius: 10px;
+  padding: 32px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d1d5db;
+  margin-bottom: 6px;
+}
+
+.req     { color: #ef4444; }
+.req-opt { color: #6b7280; font-weight: 400; font-size: 12px; }
+
+.form-control {
+  background: #111827;
+  border: 1px solid #374151;
+  color: #f9fafb;
+  border-radius: 6px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  border-color: #ef4444;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.form-control option {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.has-error .form-control {
+  border-color: #ef4444;
+}
+
+.help-block {
+  font-size: 12px;
+  color: #f87171;
+  margin-top: 4px;
+}
+
+.char-count {
+  font-size: 11px;
+  color: #6b7280;
+  float: right;
+  margin-top: 4px;
+}
+
+.form-actions {
+  margin-top: 28px;
+}
+
+.btn-danger {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+  font-size: 15px;
+  padding: 12px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reg-disclaimer {
+  font-size: 11px;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+.reg-alert {
+  background: #7f1d1d;
+  border: 1px solid #dc2626;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #fca5a5;
+}
+
+/* Confirmation state */
+.reg-confirm {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  background: #1c1c1e;
+  border-radius: 10px;
+  padding: 48px 32px;
+  border: 1px solid #166534;
+}
+
+.confirm-icon {
+  font-size: 48px;
+  color: #22c55e;
+  margin-bottom: 16px;
+}
+
+.reg-confirm h2 {
+  color: #f9fafb;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.confirm-number {
+  font-size: 18px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.confirm-number strong {
+  color: #22c55e;
+  font-size: 22px;
+}
+
+.confirm-msg {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.btn-outline-light {
+  border: 1px solid #4b5563;
+  color: #d1d5db;
+  background: transparent;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-outline-light:hover {
+  background: #374151;
+  color: #fff;
+}
