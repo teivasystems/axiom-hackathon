@@ -142,8 +142,8 @@
       <div class="apoc-map-title">District Status</div>
       <div class="status-list">
         <div class="status-row" ng-repeat="zone in c.sortedZones()"
-             ng-click="c.selectDistrict(zone.district)"
-             ng-class="{'status-row-selected': c.selectedDistrict === zone.district}">
+             ng-click="c.selectDistrict(zone.districtKey)"
+             ng-class="{'status-row-selected': c.selectedDistrict === zone.districtKey}">
           <span class="status-dot" ng-style="{background: c.statusColor(zone.status)}"></span>
           <span class="status-district">{{zone.name}}</span>
           <span class="status-chip" ng-class="c.statusClass(zone.status)">

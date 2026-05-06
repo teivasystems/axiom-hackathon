@@ -15,10 +15,12 @@ function controller($scope, spUtil, $interval) {
 
     c.selectedDistrict = null;
 
-    // Build a keyed map of district → zone for fast SVG lookup
+    // Build a keyed map of districtKey → zone for SVG lookup
     c.zoneByDistrict = function() {
         var map = {};
-        (c.data.zones || []).forEach(function(z) { map[z.district] = z; });
+        (c.data.zones || []).forEach(function(z) {
+            if (z.districtKey) map[z.districtKey] = z;
+        });
         return map;
     };
 
