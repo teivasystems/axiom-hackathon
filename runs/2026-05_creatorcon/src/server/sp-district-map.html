@@ -1,0 +1,209 @@
+<div class="apoc-map-page">
+
+  <!-- ── Nav ───────────────────────────────────────────────── -->
+  <nav class="apoc-nav">
+    <span class="apoc-nav-brand">⚠ APOC</span>
+    <a href="?id=apoc-zones"    class="apoc-nav-link">Zone Status</a>
+    <a href="?id=apoc-map"      class="apoc-nav-link apoc-nav-active">District Map</a>
+    <a href="?id=apoc-kb"       class="apoc-nav-link">Help</a>
+    <a href="?id=apoc-register" class="apoc-nav-link apoc-nav-cta">Register</a>
+  </nav>
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="apoc-map-header">
+    <div class="apoc-map-logo">⚠ APOC EMERGENCY OPERATIONS</div>
+    <div class="apoc-map-tagline">Las Vegas Emergency Management System</div>
+    <div class="apoc-map-updated">Last updated: {{c.data.lastUpdated}} &nbsp;·&nbsp; Auto-refresh every 15 s</div>
+  </div>
+
+  <!-- ── Main grid: map + status list ──────────────────────── -->
+  <div class="apoc-map-grid">
+
+    <!-- Left: SVG district map -->
+    <div class="apoc-map-panel">
+      <div class="apoc-map-title">District Map</div>
+      <div class="apoc-svg-wrap">
+        <svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" class="apoc-svg">
+
+          <!-- North Las Vegas -->
+          <rect x="200" y="0" width="200" height="100"
+                ng-attr-fill="{{c.districtFill('north_lv')}}"
+                ng-attr-stroke="{{c.districtStroke('north_lv')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('north_lv')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'north_lv'}"
+                ng-click="c.selectDistrict('north_lv')" />
+          <text x="300" y="44" class="district-label">North Las Vegas</text>
+          <text x="300" y="62" class="district-sublabel">{{c.statusLabel(c.districtStatus('north_lv'))}}</text>
+
+          <!-- Summerlin -->
+          <rect x="0" y="100" width="180" height="180"
+                ng-attr-fill="{{c.districtFill('summerlin')}}"
+                ng-attr-stroke="{{c.districtStroke('summerlin')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('summerlin')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'summerlin'}"
+                ng-click="c.selectDistrict('summerlin')" />
+          <text x="90" y="184" class="district-label">Summerlin</text>
+          <text x="90" y="202" class="district-sublabel">{{c.statusLabel(c.districtStatus('summerlin'))}}</text>
+
+          <!-- Downtown -->
+          <rect x="180" y="100" width="120" height="120"
+                ng-attr-fill="{{c.districtFill('downtown')}}"
+                ng-attr-stroke="{{c.districtStroke('downtown')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('downtown')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'downtown'}"
+                ng-click="c.selectDistrict('downtown')" />
+          <text x="240" y="154" class="district-label">Downtown</text>
+          <text x="240" y="172" class="district-sublabel">{{c.statusLabel(c.districtStatus('downtown'))}}</text>
+
+          <!-- The Strip -->
+          <rect x="180" y="220" width="120" height="120"
+                ng-attr-fill="{{c.districtFill('the_strip')}}"
+                ng-attr-stroke="{{c.districtStroke('the_strip')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('the_strip')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'the_strip'}"
+                ng-click="c.selectDistrict('the_strip')" />
+          <text x="240" y="274" class="district-label">The Strip</text>
+          <text x="240" y="292" class="district-sublabel">{{c.statusLabel(c.districtStatus('the_strip'))}}</text>
+
+          <!-- East Las Vegas -->
+          <rect x="300" y="100" width="300" height="140"
+                ng-attr-fill="{{c.districtFill('east_lv')}}"
+                ng-attr-stroke="{{c.districtStroke('east_lv')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('east_lv')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'east_lv'}"
+                ng-click="c.selectDistrict('east_lv')" />
+          <text x="450" y="164" class="district-label">East Las Vegas</text>
+          <text x="450" y="182" class="district-sublabel">{{c.statusLabel(c.districtStatus('east_lv'))}}</text>
+
+          <!-- Spring Valley -->
+          <rect x="180" y="340" width="140" height="140"
+                ng-attr-fill="{{c.districtFill('spring_valley')}}"
+                ng-attr-stroke="{{c.districtStroke('spring_valley')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('spring_valley')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'spring_valley'}"
+                ng-click="c.selectDistrict('spring_valley')" />
+          <text x="250" y="404" class="district-label">Spring Valley</text>
+          <text x="250" y="422" class="district-sublabel">{{c.statusLabel(c.districtStatus('spring_valley'))}}</text>
+
+          <!-- Henderson -->
+          <rect x="320" y="240" width="280" height="240"
+                ng-attr-fill="{{c.districtFill('henderson')}}"
+                ng-attr-stroke="{{c.districtStroke('henderson')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('henderson')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'henderson'}"
+                ng-click="c.selectDistrict('henderson')" />
+          <text x="460" y="354" class="district-label">Henderson</text>
+          <text x="460" y="372" class="district-sublabel">{{c.statusLabel(c.districtStatus('henderson'))}}</text>
+
+          <!-- Enterprise -->
+          <rect x="0" y="280" width="180" height="200"
+                ng-attr-fill="{{c.districtFill('enterprise')}}"
+                ng-attr-stroke="{{c.districtStroke('enterprise')}}"
+                ng-attr-stroke-width="{{c.districtStrokeWidth('enterprise')}}"
+                class="district-path"
+                ng-class="{'district-selected': c.selectedDistrict === 'enterprise'}"
+                ng-click="c.selectDistrict('enterprise')" />
+          <text x="90" y="374" class="district-label">Enterprise</text>
+          <text x="90" y="392" class="district-sublabel">{{c.statusLabel(c.districtStatus('enterprise'))}}</text>
+
+        </svg>
+      </div>
+
+      <!-- Selected district detail card -->
+      <div class="district-detail-card" ng-if="c.selectedZone()">
+        <div class="detail-header">
+          <span class="detail-name">{{c.selectedZone().name}}</span>
+          <span class="detail-badge" ng-class="c.statusClass(c.selectedZone().status)">
+            {{c.statusLabel(c.selectedZone().status)}}
+          </span>
+        </div>
+        <div class="detail-body">
+          <div class="detail-district">District: {{c.selectedZone().district}}</div>
+          <div class="detail-capacity">
+            <div class="cap-bar">
+              <div class="cap-fill" ng-class="c.fillClass(c.selectedZone().fillPct)"
+                   ng-style="{width: c.selectedZone().fillPct + '%'}"></div>
+            </div>
+            <span class="cap-numbers">
+              {{c.selectedZone().headcount}} / {{c.selectedZone().capacity}} civilians
+              ({{c.selectedZone().fillPct}}% full)
+            </span>
+          </div>
+          <div class="detail-notes" ng-if="c.selectedZone().publicNotes">
+            {{c.selectedZone().publicNotes}}
+          </div>
+        </div>
+      </div>
+      <div class="district-detail-hint" ng-if="!c.selectedZone()">
+        Tap a district to see details
+      </div>
+    </div>
+
+    <!-- Right: status list -->
+    <div class="apoc-status-panel">
+      <div class="apoc-map-title">District Status</div>
+      <div class="status-list">
+        <div class="status-row" ng-repeat="zone in c.sortedZones()"
+             ng-click="c.selectDistrict(zone.districtKey)"
+             ng-class="{'status-row-selected': c.selectedDistrict === zone.districtKey}">
+          <span class="status-dot" ng-style="{background: c.statusColor(zone.status)}"></span>
+          <span class="status-district">{{zone.name}}</span>
+          <span class="status-chip" ng-class="c.statusClass(zone.status)">
+            {{c.statusLabel(zone.status)}}
+          </span>
+        </div>
+        <div class="status-empty" ng-if="!c.data.zones.length">
+          No active zones found.
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="apoc-legend">
+        <div class="legend-row"><span class="legend-dot" style="background:#22c55e"></span> Safe</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#f59e0b"></span> At Risk</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#ef4444"></span> Evacuated</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#6b7280"></span> Closed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Active alerts ──────────────────────────────────────── -->
+  <div class="apoc-alerts-section">
+    <div class="apoc-map-title">Active Alerts &amp; Notices</div>
+    <div class="alert-list" ng-if="c.alertZones().length">
+      <div class="alert-card" ng-repeat="zone in c.alertZones()"
+           ng-class="{'alert-evacuated': zone.status === 'evacuated', 'alert-at-risk': zone.status === 'at_risk'}">
+        <span class="alert-icon" ng-if="zone.status === 'evacuated'">🔴</span>
+        <span class="alert-icon" ng-if="zone.status === 'at_risk'">🟠</span>
+        <div class="alert-body">
+          <div class="alert-district">{{zone.name}}</div>
+          <div class="alert-text">{{zone.publicNotes}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="alerts-clear" ng-if="!c.alertZones().length">
+      ✓ No active alerts. Conditions are currently stable across all districts.
+    </div>
+  </div>
+
+  <!-- ── CTA ────────────────────────────────────────────────── -->
+  <div class="apoc-cta-section">
+    <a href="?id=apoc-register" class="btn btn-danger btn-lg apoc-cta-btn">
+      Register as Civilian →
+    </a>
+    <div class="apoc-cta-sub">Self-registration for evacuation zone placement and triage</div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <div class="apoc-map-footer">
+    ApocalypseNow · Las Vegas Emergency Management · Powered by ServiceNow · Data refreshes every 15 s
+  </div>
+
+</div>

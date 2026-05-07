@@ -7,6 +7,9 @@ now.config.local.json
 dist/
 build/
 *.pkg
+target/
+*.tsbuildinfo
+.jest_cache
 
 # Node
 node_modules/
@@ -22,9 +25,19 @@ Thumbs.db
 *.tmp
 .cache/
 
+# now-sdk session state
+.now/
+
 # Claude Code — local settings only (settings.json is committed, settings.local.json is not)
 .claude/settings.local.json
 .claude/worktrees/
 
 # Generated persona bundles — rebuilt by generate_bundles.sh, not tracked
 playbook/personas/bundles/
+
+# SDK app files must live in runs/<run>/, not at repo root
+/src/
+/@types/
+/now.config.json
+/package.json
+/package-lock.json
